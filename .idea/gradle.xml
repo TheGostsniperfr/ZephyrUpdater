@@ -9,9 +9,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/ZephyrUpdate-client" />
-            <option value="$PROJECT_DIR$/ZephyrUpdate-common" />
-            <option value="$PROJECT_DIR$/ZephyrUpdate-server" />
+            <option value="$PROJECT_DIR$/ZephyrUpdater-client" />
+            <option value="$PROJECT_DIR$/ZephyrUpdater-common" />
+            <option value="$PROJECT_DIR$/ZephyrUpdater-server" />
           </set>
         </option>
       </GradleProjectSettings>

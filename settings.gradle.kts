@@ -1,4 +1,4 @@
 rootProject.name = "ZephyrUpdater"
-include("ZephyrUpdate-common")
-include("ZephyrUpdate-server")
-include("ZephyrUpdate-client")
+include("ZephyrUpdater-common")
+include("ZephyrUpdater-server")
+include("ZephyrUpdater-client")
