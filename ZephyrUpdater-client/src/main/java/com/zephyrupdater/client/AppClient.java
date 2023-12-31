@@ -34,6 +34,7 @@ public class AppClient {
                 }
             }
         } catch (IOException e){
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -54,6 +55,7 @@ public class AppClient {
                 System.out.println("Server Resp: " + serverResp);
             }
         }catch (IOException e){
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

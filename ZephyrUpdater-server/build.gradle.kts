@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":ZephyrUpdater-common"))
 
+    implementation("org.reflections:reflections:0.9.12")
 }
 
 tasks.test {
