@@ -12,10 +12,22 @@ public class CmdStop implements ServerCmd {
 
     @Override
     public void execute() {
-        System.out.println("Closing server.");
-        AppServer.isServerRunning = false;
-        new CmdCloseAllConnections().execute();
-        System.out.println("Server Close.\nSee you soon.");
+        System.out.println("Closing server...");
+        informClientsAboutShutdown();
+        System.out.println("Server closed, see you.");
         System.exit(0);
+    }
+
+    private void informClientsAboutShutdown() {
+        String shutdownMessage = "serverStop\n";
+
+        for (AppServer.ClientHandler client : AppServer.clients) {
+            try {
+                client.sendMessage(shutdownMessage);
+                System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been forcibly disconnected.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -13,10 +13,10 @@ public class CmdListAllConnexions implements ServerCmd {
 
     @Override
     public void execute() {
-        System.out.println("Total connections: " + AppServer.activeConnections.size());
+        System.out.println("Total connections: " + AppServer.clients.size());
         int nb = 0;
-        for(Socket socket : AppServer.activeConnections){
-            System.out.printf("Client %02d: %s%n", nb++, socket.getInetAddress().getHostAddress());
+        for (AppServer.ClientHandler client:  AppServer.clients) {
+            System.out.printf("Client %02d: %s%n", nb++, client.clientSocket.getInetAddress().getHostAddress());
         }
     }
 }

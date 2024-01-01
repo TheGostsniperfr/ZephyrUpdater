@@ -14,19 +14,14 @@ public class CmdCloseAllConnections implements ServerCmd {
 
     @Override
     public void execute() {
-        for (Socket socket : AppServer.activeConnections) {
+        for (AppServer.ClientHandler client:  AppServer.clients) {
             try {
-                System.out.println("closing: " + socket.getInetAddress().getHostAddress());
-
-                if (!socket.isClosed()) {
-                    socket.close();
-                }
-            } catch (IOException e) {
-                //pass
+                System.out.println("closing: " + client.clientSocket.getInetAddress().getHostAddress());
+                //client.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
-        AppServer.activeConnections.clear();
     }
 }
 

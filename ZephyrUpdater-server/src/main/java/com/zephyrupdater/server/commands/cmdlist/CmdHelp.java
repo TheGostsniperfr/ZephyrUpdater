@@ -25,7 +25,6 @@ public class CmdHelp implements ServerCmd {
                 System.out.println(n++ + ": " + clazz.getDeclaredConstructor().newInstance().getCmdName());
             } catch (Exception e){
                 e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
             }
 
         }

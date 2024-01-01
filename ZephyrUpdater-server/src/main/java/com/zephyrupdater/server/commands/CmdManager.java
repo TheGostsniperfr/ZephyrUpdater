@@ -31,7 +31,6 @@ public class CmdManager {
                 clazz.getDeclaredConstructor().newInstance().execute();
             } catch (Exception e){
                 e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
             }
         }
     }
@@ -56,7 +55,6 @@ public class CmdManager {
                 }
             }catch (Exception e){
                 e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
             }
         }
 
@@ -64,15 +62,11 @@ public class CmdManager {
     }
 
     public static void sendCmdToAllClients(String cmd) {
-        for(Socket socket : AppServer.activeConnections){
+        for (AppServer.ClientHandler client:  AppServer.clients) {
             try{
-                if (!socket.isClosed()) {
-                    OutputStream outputStream = socket.getOutputStream();
-                    outputStream.write(cmd.getBytes(StandardCharsets.UTF_8));
-                }
-            } catch (IOException e){
+                client.sendMessage(cmd);
+            } catch (Exception e){
                 e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
             }
         }
     }

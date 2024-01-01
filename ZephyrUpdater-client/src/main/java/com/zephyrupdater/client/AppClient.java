@@ -46,17 +46,15 @@ public class AppClient {
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 String serverResp = new String(buffer, 0, bytesRead);
-
                 if(serverResp.trim().equals("serverStop")){
-                    System.out.println("You have been forcibly disconnected.");
+                    System.out.println("Server close.");
                     System.exit(0);
                 }
 
                 System.out.println("Server Resp: " + serverResp);
             }
-        }catch (IOException e){
+        }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
         }
     }
 }

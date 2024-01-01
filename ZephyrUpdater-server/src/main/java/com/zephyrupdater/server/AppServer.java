@@ -17,11 +17,8 @@ import java.util.List;
 
 public class AppServer {
     private static final int BUFFER_SIZE = 1024;
-
-    public static boolean isServerRunning = true;
-
-    public static final List<Socket> activeConnections = new ArrayList<>();
-    public static void launchServer() {
+    public static List<ClientHandler> clients = new ArrayList<>();
+    public void launchServer() {
         try {
             ServerSocket serverSocket = new ServerSocket(CommonUtil.SERVER_PORT);
             System.out.println("Waiting for connexion...");
@@ -30,16 +27,15 @@ public class AppServer {
             Thread consoleListenerThread = new Thread(() -> CmdManager.listenToConsole(serverSocket));
             consoleListenerThread.start();
 
-            while (isServerRunning) {
+            while (true) {
                 //wait client conn:
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New connexion: " + clientSocket.getInetAddress());
 
-                activeConnections.add(clientSocket);
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                clients.add(clientHandler);
 
-                //create thread:
-                Thread clientThread = new Thread(() -> handleClient(clientSocket));
-                clientThread.start();
+                new Thread(clientHandler).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,54 +44,67 @@ public class AppServer {
     }
 
 
-    private static void handleClient(Socket clientSocket){
-        try {
-            InputStream inputStream = clientSocket.getInputStream();
-            OutputStream outputSteam = clientSocket.getOutputStream();
+    public class ClientHandler implements Runnable{
+        public Socket clientSocket;
+        public ClientHandler(Socket socket){
+            this.clientSocket = socket;
+        }
+
+        public void sendMessage(String message) throws IOException {
+            OutputStream outputStream = clientSocket.getOutputStream();
+            outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+        }
+        @Override
+        public void run() {
+            try{
+                InputStream inputStream = clientSocket.getInputStream();
+                OutputStream outputSteam = clientSocket.getOutputStream();
 
 
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bytesRead;
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int bytesRead;
 
-            while(isServerRunning && !clientSocket.isClosed() && (bytesRead = inputStream.read(buffer)) != -1)
-            {
-                String data = new String(buffer, 0, bytesRead);
+                while((bytesRead = inputStream.read(buffer)) != -1)
+                {
+                    String data = new String(buffer, 0, bytesRead);
 
-                Date currentDate = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
+                    Date currentDate = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
 
-                if(data.trim().equals("exit")){
-                    System.out.println(
-                        dateFormat.format(currentDate)
-                        + clientSocket.getInetAddress()
-                        + " Disconnected."
+                    if(data.trim().equals("exit")){
+                        break;
+                    }
+
+                    String rep = (
+                            dateFormat.format(currentDate)
+                                    + " from "
+                                    + clientSocket.getInetAddress()
+                                    + " -> " + data
                     );
 
-                    break;
+                    System.out.println(rep);
+                    outputSteam.write(rep.getBytes(StandardCharsets.UTF_8));
+
                 }
-
-                String rep = (
-                    dateFormat.format(currentDate)
-                    + " Msg from "
-                    + clientSocket.getInetAddress()
-                    + " -> " + data
-                );
-
-                System.out.println(rep);
-                outputSteam.write(rep.getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e){
+                e.printStackTrace();
+            } finally {
+                disconnect();
             }
 
-            if(!clientSocket.isClosed()) {
-                inputStream.close();
-                outputSteam.close();
+        }
+
+        public void disconnect(){
+            try {
+                System.out.println("Test msg deco");
+                sendMessage("serverStop\n");
                 clientSocket.close();
-                activeConnections.remove(clientSocket);
+                clients.remove(this);
+                System.out.println("Client: " + clientSocket.getInetAddress() + " has been disconnected.");
+                System.out.flush();
+            } catch (Exception e){
+                e.printStackTrace();
             }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
         }
     }
 }
