@@ -1,7 +1,7 @@
 package com.zephyrupdater.server.commands.cmdlist;
 
-import com.zephyrupdater.server.AppServer;
 import com.zephyrupdater.server.commands.ServerCmd;
+import com.zephyrupdater.server.AppServer;
 
 public class CmdStop implements ServerCmd {
 

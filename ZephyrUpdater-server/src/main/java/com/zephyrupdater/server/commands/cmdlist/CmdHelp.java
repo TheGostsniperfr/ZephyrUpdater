@@ -3,7 +3,6 @@ package com.zephyrupdater.server.commands.cmdlist;
 import com.zephyrupdater.server.commands.CmdManager;
 import com.zephyrupdater.server.commands.ServerCmd;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class CmdHelp implements ServerCmd {

@@ -3,8 +3,6 @@ package com.zephyrupdater.server.commands.cmdlist;
 import com.zephyrupdater.server.AppServer;
 import com.zephyrupdater.server.commands.ServerCmd;
 
-import java.net.Socket;
-
 public class CmdListAllConnexions implements ServerCmd {
     @Override
     public String getCmdName() {

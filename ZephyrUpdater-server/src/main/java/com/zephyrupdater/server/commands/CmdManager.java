@@ -1,18 +1,14 @@
 package com.zephyrupdater.server.commands;
 
-import com.zephyrupdater.server.AppServer;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import org.reflections.Reflections;
+
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.reflections.Reflections;
 public class CmdManager {
 
     public static void listenToConsole(ServerSocket serverSocket) {
@@ -35,14 +31,6 @@ public class CmdManager {
         }
     }
 
-    public static List<Class<? extends ServerCmd>> getAllServerCmdClasses() {
-        Reflections reflections = new Reflections("com.zephyrupdater.server.commands");
-
-        Set<Class<? extends ServerCmd>> allClasses = reflections.getSubTypesOf(ServerCmd.class);
-
-        return new ArrayList<>(allClasses);
-    }
-
     public static Class<? extends ServerCmd> findCmdByName(String cmdName){
         List<Class<? extends ServerCmd>> allClasses = getAllServerCmdClasses();
 
@@ -61,13 +49,11 @@ public class CmdManager {
         return null;
     }
 
-    public static void sendCmdToAllClients(String cmd) {
-        for (AppServer.ClientHandler client:  AppServer.clients) {
-            try{
-                client.sendMessage(cmd);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+    public static List<Class<? extends ServerCmd>> getAllServerCmdClasses() {
+        Reflections reflections = new Reflections("com.zephyrupdater.server.commands");
+
+        Set<Class<? extends ServerCmd>> allClasses = reflections.getSubTypesOf(ServerCmd.class);
+
+        return new ArrayList<>(allClasses);
     }
 }

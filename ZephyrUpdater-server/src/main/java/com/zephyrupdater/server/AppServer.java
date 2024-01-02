@@ -107,4 +107,14 @@ public class AppServer {
             }
         }
     }
+
+    public static void sendCmdToAllClients(String cmd) {
+        for (AppServer.ClientHandler client: AppServer.clients) {
+            try{
+                client.sendMessage(cmd);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
