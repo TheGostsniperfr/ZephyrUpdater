@@ -1,6 +1,7 @@
 package com.zephyrupdater.server;
 
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.ZUProtocol.ZUPManager;
 import com.zephyrupdater.server.commands.CmdManager;
 
 import java.io.IOException;
@@ -56,39 +57,14 @@ public class AppServer {
         }
         @Override
         public void run() {
-            try{
-                InputStream inputStream = clientSocket.getInputStream();
-                OutputStream outputSteam = clientSocket.getOutputStream();
-
-
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int bytesRead;
-
-                while((bytesRead = inputStream.read(buffer)) != -1)
-                {
-                    String data = new String(buffer, 0, bytesRead);
-
-                    Date currentDate = new Date();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
-
-                    if(data.trim().equals("exit")){
-                        break;
-                    }
-
-                    String rep = (
-                            dateFormat.format(currentDate)
-                                    + " from "
-                                    + clientSocket.getInetAddress()
-                                    + " -> " + data
-                    );
-
-                    System.out.println(rep);
-                    outputSteam.write(rep.getBytes(StandardCharsets.UTF_8));
-
-                }
-            } catch (IOException e){
+            try {
+                ZUPManager.readData(clientSocket);
+            }catch (Exception e)
+            {
                 e.printStackTrace();
-            } finally {
+            }
+
+            finally {
                 disconnect();
             }
 

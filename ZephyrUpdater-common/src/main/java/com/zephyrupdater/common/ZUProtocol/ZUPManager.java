@@ -1,10 +1,10 @@
 package com.zephyrupdater.common.ZUProtocol;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,19 +14,22 @@ import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPMessage;
 
 public class ZUPManager {
+    private static int BUFFER_SIZE = 1024;
+
+
     /**
      * Send data to a specific socket with type header
      *
      * @param socket socket to send data
      * @param data data to send.
      */
-
-    private static int BUFFER_SIZE = 1024;
     public static void sendData(Socket socket, ZUPStruct data){
         try {
             OutputStream outputStream = socket.getOutputStream();
             //get data header
             String dataToSend = data.getJson();
+            System.out.println("Data to send: " + dataToSend);
+
             outputStream.write(dataToSend.getBytes(StandardCharsets.UTF_8));
 
             if(data.isMultiChunks){
@@ -57,9 +60,16 @@ public class ZUPManager {
         }
     }
 
-    public static void readData(InputStream inputStream){
+    public static void readData(Socket socket){
+        InputStream inputStream;
+        try {
+            inputStream = socket.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         JsonObject dataHeader = readJsonFromStream(inputStream);
-        String dataStrType = ZUPStruct.getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
+        String dataStrType = ZUPStruct.getValueFromJson(ZUPKeys.STRUCT_TYPE.getKey(), dataHeader, String.class);
 
         ZUPTypes dataType = null;
 
@@ -78,7 +88,14 @@ public class ZUPManager {
         switch (dataType){
             case MESSAGE:
                 ZUPMessage zupMessage = new ZUPMessage(dataHeader);
-                System.out.println(zupMessage.content);
+
+                Date currentDate = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
+
+                System.out.println(dateFormat.format(currentDate)
+                        + " from "
+                        + socket.getInetAddress()
+                        + " -> " + zupMessage.content);
                 break;
 
             case COMMAND:
