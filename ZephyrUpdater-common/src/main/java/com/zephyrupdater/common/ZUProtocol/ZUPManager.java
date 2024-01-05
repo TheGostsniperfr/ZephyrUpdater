@@ -61,104 +61,10 @@ public class ZUPManager {
     }
 
     public static void readData(Socket socket){
-        InputStream inputStream;
-        try {
-            inputStream = socket.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        JsonObject dataHeader = readJsonFromStream(inputStream);
-        String dataStrType = ZUPStruct.getValueFromJson(ZUPKeys.STRUCT_TYPE.getKey(), dataHeader, String.class);
-
-        ZUPTypes dataType = null;
-
-        for(ZUPTypes cType : ZUPTypes.values()){
-            if(cType.toString().equals(dataStrType)){
-                dataType = cType;
-                break;
-            }
-        }
-
-        if(dataType == null){
-            System.err.println("Unknown ZUPStruct type: " + dataStrType);
-            return;
-        }
-
-        switch (dataType){
-            case MESSAGE:
-                ZUPMessage zupMessage = new ZUPMessage(dataHeader);
-
-                Date currentDate = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
-
-                System.out.println(dateFormat.format(currentDate)
-                        + " from "
-                        + socket.getInetAddress()
-                        + " -> " + zupMessage.content);
-                break;
-
-            case COMMAND:
-                ZUPCommand zupCommand = new ZUPCommand(dataHeader);
-
-                /* TODO */
-                System.out.println(zupCommand.content);
-                break;
-
-            case FILE:
-                ZUPFile zupFile = new ZUPFile(dataHeader);
-                long totalBytes = 0;
-
-                //get multi chunks data
-                try {
-                    byte[] buffer = new byte[BUFFER_SIZE];
-                    int bytesRead;
-
-                    FileOutputStream fileOutputStream = new FileOutputStream(zupFile.fileName);
-
-
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        String serverResp = new String(buffer, 0, bytesRead);
-                        if(serverResp.trim().equals(ZUPEndPoint.endPointFlag)){
-                            break;
-                        }
-
-                        totalBytes += bytesRead;
-                        fileOutputStream.write(buffer, 0, bytesRead);
-
-                        /*
-                        //Echo debug
-                        System.out.println("Server Resp: " + serverResp);
-                        */
-                    }
-
-                    fileOutputStream.close();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                if(totalBytes != zupFile.dataSize){
-                    /*
-                        TODO
-
-                        Delete the file or create a tmp folder (if the data is corrupted)
-                    */
-
-                    System.err.println("Error: Data corrupted: " + (zupFile.dataSize - totalBytes) + " bytes missing");
-                }
-
-                break;
-
-            case END_POINT:
-                System.err.println("Invalid end point transfer detect.");
-                break;
-
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 
-    private static JsonObject readJsonFromStream(InputStream inputStream) {
+    public static JsonObject readJsonFromStream(InputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[BUFFER_SIZE];
         int bytesRead;

@@ -1,19 +1,33 @@
 package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
+import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 
 import java.nio.charset.StandardCharsets;
 public class ZUPCommand extends ZUPStruct {
-    public String command; /* TODO */
+    public ZUCTypes cmdStructType; /* TODO */
     public String content;
     public ZUPCommand(JsonObject dataHeader){
-        this.structType = ZUPTypes.MESSAGE;
-        this.command = "";
+        this.structType = ZUPTypes.COMMAND;
         this.dataSize = getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
         this.content = getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
+
+        String cmdTypeStr = getValueFromJson(ZUPKeys.COMMAND.getKey(), dataHeader, String.class);
+        for(ZUCTypes cmdType : ZUCTypes.values()){
+            if(cmdType.toString().equals(cmdTypeStr)){
+                this.cmdStructType = cmdType;
+                break;
+            }
+        }
+
+        if(cmdStructType == null){
+            System.err.println("Unknown ZUCStruct type: " + cmdTypeStr);
+            return;
+        }
+
 
         //check if we lost byte during data transfer:
         if(dataSize != -1 && dataSize != content.getBytes(StandardCharsets.UTF_8).length){
@@ -26,16 +40,19 @@ public class ZUPCommand extends ZUPStruct {
             );
         }
     }
-    public ZUPCommand(String command, String message){
+    public ZUPCommand(ZUCTypes cmdStructType, String content){
         this.structType = ZUPTypes.MESSAGE;
-        this.dataSize = message.getBytes(StandardCharsets.UTF_8).length;
+        this.cmdStructType = cmdStructType;
+
         this.content = message;
-        this.command = command;
+        this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
     }
-    public ZUPCommand(String command){
+    public ZUPCommand(ZUCTypes cmdStructType){
         this.structType = ZUPTypes.MESSAGE;
-        this.dataSize = -1;
+        this.cmdStructType = cmdStructType;
+
         this.content = "";
-        this.command = command;
+        this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
+
     }
 }

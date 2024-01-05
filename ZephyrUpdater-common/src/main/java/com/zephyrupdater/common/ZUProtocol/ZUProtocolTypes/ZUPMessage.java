@@ -8,7 +8,7 @@ import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 import java.nio.charset.StandardCharsets;
 
 public class ZUPMessage extends ZUPStruct {
-    public String content = null;
+    public String content;
     public ZUPMessage(JsonObject dataHeader){
         this.structType = ZUPTypes.MESSAGE;
         this.dataSize = getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);

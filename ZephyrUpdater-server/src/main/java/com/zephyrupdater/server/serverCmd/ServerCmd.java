@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.commands;
+package com.zephyrupdater.server.serverCmd;
 
 public interface ServerCmd {
     String getCmdName();

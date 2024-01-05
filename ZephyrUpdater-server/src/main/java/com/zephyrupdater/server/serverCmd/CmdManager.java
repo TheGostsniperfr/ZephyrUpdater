@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.commands;
+package com.zephyrupdater.server.serverCmd;
 
 
 import org.reflections.Reflections;
