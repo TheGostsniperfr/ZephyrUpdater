@@ -23,7 +23,7 @@ public class CmdStop implements ServerCmd {
 
         for (AppServer.ClientHandler client : AppServer.clients) {
             try {
-                client.sendMessage(shutdownMessage);
+                AppServer.sendMessage(client.clientSocket, shutdownMessage);
                 System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been forcibly disconnected.");
             } catch (Exception e) {
                 e.printStackTrace();

@@ -37,7 +37,6 @@ public class CmdManager {
         for (Class<? extends ServerCmd> clazz : allClasses){
             try{
                 ServerCmd instance = clazz.getDeclaredConstructor().newInstance();
-
                 if(cmdName.trim().equals(instance.getCmdName())){
                     return clazz;
                 }
@@ -50,7 +49,7 @@ public class CmdManager {
     }
 
     public static List<Class<? extends ServerCmd>> getAllServerCmdClasses() {
-        Reflections reflections = new Reflections("com.zephyrupdater.server.commands");
+        Reflections reflections = new Reflections("com.zephyrupdater.server.serverCmd");
 
         Set<Class<? extends ServerCmd>> allClasses = reflections.getSubTypesOf(ServerCmd.class);
 

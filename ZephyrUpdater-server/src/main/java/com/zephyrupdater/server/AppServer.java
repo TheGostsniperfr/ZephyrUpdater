@@ -1,7 +1,11 @@
 package com.zephyrupdater.server;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLogin;
+import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessage;
+import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
 import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
@@ -9,7 +13,6 @@ import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPMessage;
 import com.zephyrupdater.server.serverCmd.CmdManager;
 
 import java.io.FileOutputStream;
@@ -33,7 +36,7 @@ public class AppServer {
             ServerSocket serverSocket = new ServerSocket(CommonUtil.SERVER_PORT);
             System.out.println("Waiting for connexion...");
 
-            //commande server thread:
+            //command server thread:
             Thread consoleListenerThread = new Thread(() -> CmdManager.listenToConsole(serverSocket));
             consoleListenerThread.start();
 
@@ -59,11 +62,6 @@ public class AppServer {
         public ClientHandler(Socket socket){
             this.clientSocket = socket;
         }
-
-        public void sendMessage(String message) throws IOException {
-            OutputStream outputStream = clientSocket.getOutputStream();
-            outputStream.write(message.getBytes(StandardCharsets.UTF_8));
-        }
         @Override
         public void run() {
             try {
@@ -75,7 +73,11 @@ public class AppServer {
                 }
                 do {
                     JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
-                    String dataStrType = ZUPStruct.getValueFromJson(ZUPKeys.STRUCT_TYPE.getKey(), dataHeader, String.class);
+                    String dataStrType = CommonUtil.getValueFromJson(
+                            ZUPKeys.STRUCT_TYPE.getKey(),
+                            dataHeader,
+                            String.class
+                    );
 
                     ZUPTypes dataType = null;
 
@@ -92,23 +94,8 @@ public class AppServer {
                     }
 
                     switch (dataType) {
-                        case MESSAGE:
-                            ZUPMessage zupMessage = new ZUPMessage(dataHeader);
-
-                            Date currentDate = new Date();
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
-
-                            System.out.println(dateFormat.format(currentDate)
-                                    + " from "
-                                    + clientSocket.getInetAddress()
-                                    + " -> " + zupMessage.content);
-                            break;
-
                         case COMMAND:
-                            ZUPCommand zupCommand = new ZUPCommand(dataHeader);
-
-                            /* TODO */
-                            System.out.println(zupCommand.content);
+                            executeClientCmd(this, new ZUPCommand(dataHeader));
                             break;
 
                         case FILE:
@@ -158,35 +145,76 @@ public class AppServer {
                             throw new IllegalArgumentException();
                     }
                 }while(true);
+
             }catch (Exception e)
             {
                 e.printStackTrace();
             }
-
             finally {
-                disconnect();
-            }
-
-        }
-
-        public void disconnect(){
-            try {
-                System.out.println("Test msg deco");
-                sendMessage("serverStop\n");
-                clientSocket.close();
-                clients.remove(this);
-                System.out.println("Client: " + clientSocket.getInetAddress() + " has been disconnected.");
-                System.out.flush();
-            } catch (Exception e){
-                e.printStackTrace();
+                disconnect(this);
             }
         }
+    }
+
+    public static void sendMessage(Socket clientSocket, String message)  {
+        try {
+            OutputStream outputStream = clientSocket.getOutputStream();
+            outputStream.write(new ZUCMessage(message).getJson().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void disconnect(ClientHandler client){
+        try {
+            System.out.println("Test msg deco");
+            sendMessage(client.clientSocket, "serverStop\n");
+            client.clientSocket.close();
+            clients.remove(client);
+            System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been disconnected.");
+            System.out.flush();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void executeClientCmd(ClientHandler client, ZUPCommand zupCommand){
+        System.out.println(zupCommand.content);
+        ZUCTypes zucTypes = zupCommand.cmdStructType;
+        JsonObject data = JsonParser.parseString(zupCommand.content).getAsJsonObject();
+
+        switch (zucTypes){
+            case LOGIN:
+                if(!isValidAccount(new ZUCLogin(data))){
+                    disconnect(client);
+                }
+                break;
+            case MESSAGE:
+                ZUCMessage zucMessage = new ZUCMessage(data);
+
+                Date currentDate = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
+
+                System.out.println(dateFormat.format(currentDate)
+                        + " from "
+                        + client.clientSocket.getInetAddress()
+                        + " -> " + zucMessage.content);
+
+                break;
+            case DISCONNECTION:
+                disconnect(client);
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+    private static Boolean isValidAccount(ZUCLogin zucLogin){
+        return true;
     }
 
     public static void sendCmdToAllClients(String cmd) {
         for (AppServer.ClientHandler client: AppServer.clients) {
             try{
-                client.sendMessage(cmd);
+                sendMessage(client.clientSocket, cmd);
             } catch (Exception e){
                 e.printStackTrace();
             }

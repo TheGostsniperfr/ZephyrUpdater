@@ -1,6 +1,7 @@
 package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
+import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
@@ -11,13 +12,23 @@ public class ZUPFile extends ZUPStruct {
     public String fileName;
 
     public ZUPFile(JsonObject dataHeader){
-        this.structType = ZUPTypes.MESSAGE;
-        this.dataSize = getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
+        this.structType = ZUPTypes.FILE;
+        this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
         this.isMultiChunks = true;
     }
     public ZUPFile(String message){
-        this.structType = ZUPTypes.MESSAGE;
+        this.structType = ZUPTypes.FILE;
         this.dataSize = message.getBytes(StandardCharsets.UTF_8).length;
         this.isMultiChunks = true;
+    }
+
+    @Override
+    public String getJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.FILE.toString());
+        jsonObject.addProperty(ZUPKeys.FILE_NAME.getKey(), this.fileName);
+        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), -1); // TODO
+
+        return jsonObject.toString();
     }
 }

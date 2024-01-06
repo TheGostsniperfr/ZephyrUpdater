@@ -16,4 +16,12 @@ public class ZUPEndPoint extends ZUPStruct {
         this.structType = ZUPTypes.END_POINT;
         this.dataSize = -1;
     }
+
+    @Override
+    public String getJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.END_POINT.toString());
+
+        return jsonObject.toString();
+    }
 }

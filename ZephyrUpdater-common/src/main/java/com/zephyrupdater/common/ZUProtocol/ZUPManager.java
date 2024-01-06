@@ -3,18 +3,14 @@ package com.zephyrupdater.common.ZUProtocol;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPMessage;
 
 public class ZUPManager {
-    private static int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024;
 
 
     /**

@@ -1,6 +1,8 @@
 package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
+import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.ZUCommand.ZUCStruct;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
@@ -8,14 +10,14 @@ import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 
 import java.nio.charset.StandardCharsets;
 public class ZUPCommand extends ZUPStruct {
-    public ZUCTypes cmdStructType; /* TODO */
+    public ZUCTypes cmdStructType;
     public String content;
     public ZUPCommand(JsonObject dataHeader){
         this.structType = ZUPTypes.COMMAND;
-        this.dataSize = getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
-        this.content = getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
+        this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
+        this.content =  CommonUtil.getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
 
-        String cmdTypeStr = getValueFromJson(ZUPKeys.COMMAND.getKey(), dataHeader, String.class);
+        String cmdTypeStr = CommonUtil.getValueFromJson(ZUPKeys.COMMAND.getKey(), dataHeader, String.class);
         for(ZUCTypes cmdType : ZUCTypes.values()){
             if(cmdType.toString().equals(cmdTypeStr)){
                 this.cmdStructType = cmdType;
@@ -28,8 +30,7 @@ public class ZUPCommand extends ZUPStruct {
             return;
         }
 
-
-        //check if we lost byte during data transfer:
+        //check if we lost bytes during data transfer:
         if(dataSize != -1 && dataSize != content.getBytes(StandardCharsets.UTF_8).length){
             System.err.println(
                     "Error: size not match between: "
@@ -40,19 +41,21 @@ public class ZUPCommand extends ZUPStruct {
             );
         }
     }
-    public ZUPCommand(ZUCTypes cmdStructType, String content){
-        this.structType = ZUPTypes.MESSAGE;
-        this.cmdStructType = cmdStructType;
-
-        this.content = message;
+    public ZUPCommand(ZUCStruct cmd){
+        this.structType = ZUPTypes.COMMAND;
+        this.cmdStructType = cmd.structType;
+        this.content = cmd.getJson();
         this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
     }
-    public ZUPCommand(ZUCTypes cmdStructType){
-        this.structType = ZUPTypes.MESSAGE;
-        this.cmdStructType = cmdStructType;
 
-        this.content = "";
-        this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
+    @Override
+    public String getJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(ZUPKeys.COMMAND.getKey(), this.cmdStructType.toString());
+        jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.COMMAND.toString());
+        jsonObject.addProperty(ZUPKeys.CONTENT.getKey(), this.content);
+        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), this.content.getBytes(StandardCharsets.UTF_8).length);
 
+        return jsonObject.toString();
     }
 }
