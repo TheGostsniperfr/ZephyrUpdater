@@ -11,10 +11,15 @@ public class CmdCloseAllConnections implements ServerCmd {
 
     @Override
     public void execute() {
+        if(AppServer.clients.isEmpty()){
+            System.out.println("No client connected to the server.");
+            return;
+        }
+
         for (AppServer.ClientHandler client:  AppServer.clients) {
             try {
                 System.out.println("closing: " + client.clientSocket.getInetAddress().getHostAddress());
-                //client.disconnect();
+                //AppServer.disconnect(client);
             } catch (Exception e) {
                 e.printStackTrace();
             }

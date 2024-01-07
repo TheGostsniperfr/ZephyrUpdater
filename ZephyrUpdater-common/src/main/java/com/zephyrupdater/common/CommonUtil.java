@@ -8,6 +8,9 @@ public class CommonUtil {
     public static final String HOST = "localhost";
     public static final int SERVER_PORT  = 2048;
 
+    public static final long timeRetryInterval = 500;
+    public static final int nbTry = 5;
+
     public static String getFormatCmd(String str){
         return "@!@__" + str + "__@!@";
     }

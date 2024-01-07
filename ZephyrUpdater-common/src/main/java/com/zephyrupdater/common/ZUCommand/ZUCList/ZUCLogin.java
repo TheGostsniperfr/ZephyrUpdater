@@ -36,6 +36,6 @@ public class ZUCLogin extends ZUCStruct {
     }
 
     public static void printHelp(){
-        System.out.println("help [id] [password]");
+        System.out.println("login [id] [password]");
     }
 }

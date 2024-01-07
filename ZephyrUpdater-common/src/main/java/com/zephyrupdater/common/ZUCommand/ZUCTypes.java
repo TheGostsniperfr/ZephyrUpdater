@@ -1,14 +1,13 @@
 package com.zephyrupdater.common.ZUCommand;
 
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCHelp;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLogin;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessage;
+import com.zephyrupdater.common.ZUCommand.ZUCList.*;
 
 public enum ZUCTypes {
     LOGIN(ZUCLogin.class, "login"),
     DISCONNECTION(ZUCDisconnection.class, "exit"),
     MESSAGE(ZUCMessage.class, "msg"),
+    CONNECT(ZUCConnect.class, "connect"),
+    QUIT(ZUCQuit.class, "quit"),
     HELP(ZUCHelp.class, "help");
     private final Class <? extends ZUCStruct> associateClass;
     private final String cmdName;

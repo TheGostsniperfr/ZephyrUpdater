@@ -3,6 +3,7 @@ package com.zephyrupdater.server;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
 import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLogin;
 import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessage;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
@@ -59,6 +60,8 @@ public class AppServer {
 
     public class ClientHandler implements Runnable{
         public Socket clientSocket;
+
+        private Boolean isConnect = true;
         public ClientHandler(Socket socket){
             this.clientSocket = socket;
         }
@@ -144,7 +147,7 @@ public class AppServer {
                         default:
                             throw new IllegalArgumentException();
                     }
-                }while(true);
+                }while(isConnect);
 
             }catch (Exception e)
             {
@@ -166,8 +169,7 @@ public class AppServer {
     }
     public static void disconnect(ClientHandler client){
         try {
-            System.out.println("Test msg deco");
-            sendMessage(client.clientSocket, "serverStop\n");
+            ZUPManager.sendData(client.clientSocket, new ZUPCommand(new ZUCDisconnection()));
             client.clientSocket.close();
             clients.remove(client);
             System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been disconnected.");
@@ -185,7 +187,7 @@ public class AppServer {
         switch (zucTypes){
             case LOGIN:
                 if(!isValidAccount(new ZUCLogin(data))){
-                    disconnect(client);
+                    client.isConnect = false;
                 }
                 break;
             case MESSAGE:
@@ -201,7 +203,7 @@ public class AppServer {
 
                 break;
             case DISCONNECTION:
-                disconnect(client);
+                client.isConnect = false;
                 break;
             default:
                 throw new IllegalArgumentException();
