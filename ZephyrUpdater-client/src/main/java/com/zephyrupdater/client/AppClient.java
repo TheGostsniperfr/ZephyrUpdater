@@ -45,6 +45,10 @@ public class AppClient {
             }
             while(isConnect) {
                 JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
+                if(dataHeader == null){
+                    disconnectFromServer(false);
+                    break;
+                }
                 System.out.println("dataHeader: " + dataHeader.toString());
                 String dataStrType = CommonUtil.getValueFromJson(
                         ZUPKeys.STRUCT_TYPE.getKey(),
@@ -273,6 +277,7 @@ public class AppClient {
     }
 
     private static void disconnectFromServer(Boolean propagate){
+
         if(!isConnect){
             System.out.println("You are already disconnected.");
             return;
@@ -281,13 +286,13 @@ public class AppClient {
         System.out.println("Disconnecting from the server...");
 
         try{
+            if(listenToServerThread != null) {
+                listenToServerThread.interrupt();
+            }
             if (propagate) {
                 ZUPManager.sendData(serverSocket, new ZUPCommand(new ZUCDisconnection()));
             }
             isConnect = false;
-            if(listenToServerThread != null){
-                listenToServerThread.interrupt();
-            }
         } catch (Exception e){
             e.printStackTrace();
         }

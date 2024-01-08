@@ -15,15 +15,7 @@ public class CmdCloseAllConnections implements ServerCmd {
             System.out.println("No client connected to the server.");
             return;
         }
-
-        for (AppServer.ClientHandler client:  AppServer.clients) {
-            try {
-                System.out.println("closing: " + client.clientSocket.getInetAddress().getHostAddress());
-                //AppServer.disconnect(client);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        CmdStop.informClientsAboutShutdown();
     }
 }
 

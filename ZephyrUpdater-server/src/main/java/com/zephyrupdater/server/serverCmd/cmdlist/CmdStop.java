@@ -1,7 +1,13 @@
 package com.zephyrupdater.server.serverCmd.cmdlist;
 
+import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
+import com.zephyrupdater.common.ZUProtocol.ZUPManager;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
 import com.zephyrupdater.server.serverCmd.ServerCmd;
 import com.zephyrupdater.server.AppServer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CmdStop implements ServerCmd {
 
@@ -18,13 +24,11 @@ public class CmdStop implements ServerCmd {
         System.exit(0);
     }
 
-    private void informClientsAboutShutdown() {
-        String shutdownMessage = "serverStop\n";
-
-        for (AppServer.ClientHandler client : AppServer.clients) {
+    public static void informClientsAboutShutdown() {
+        List<AppServer.ClientHandler> clientsCopy = new ArrayList<>(AppServer.clients);
+        for (AppServer.ClientHandler client : clientsCopy) {
             try {
-                AppServer.sendMessage(client.clientSocket, shutdownMessage);
-                System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been forcibly disconnected.");
+                AppServer.disconnect(client, true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

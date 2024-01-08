@@ -2,6 +2,7 @@ package com.zephyrupdater.common.ZUProtocol;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
 import com.google.gson.JsonObject;
@@ -21,6 +22,7 @@ public class ZUPManager {
      */
     public static void sendData(Socket socket, ZUPStruct data){
         try {
+
             OutputStream outputStream = socket.getOutputStream();
             //get data header
             String dataToSend = data.getJson();
@@ -63,7 +65,7 @@ public class ZUPManager {
     public static JsonObject readJsonFromStream(InputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[BUFFER_SIZE];
-        int bytesRead;
+        int bytesRead = 0;
 
         try {
             while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -73,10 +75,16 @@ public class ZUPManager {
                     break;
                 }
             }
-        } catch (Exception e){
+        } catch (SocketException e){
+            return null;
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
-
+        if(bytesRead == -1 || bytesRead == 0){
+            return null;
+        }
+        System.out.println("Byte read: " + bytesRead);
         return JsonParser.parseString(byteArrayOutputStream.toString(StandardCharsets.UTF_8)).getAsJsonObject();
     }
 }

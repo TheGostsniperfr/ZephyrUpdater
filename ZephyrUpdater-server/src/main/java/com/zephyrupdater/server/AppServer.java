@@ -49,7 +49,9 @@ public class AppServer {
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 clients.add(clientHandler);
 
-                new Thread(clientHandler).start();
+                clientHandler.runningThread = new Thread(clientHandler);
+                clientHandler.runningThread.start();
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,8 +62,8 @@ public class AppServer {
 
     public class ClientHandler implements Runnable{
         public Socket clientSocket;
-
         private Boolean isConnect = true;
+        public Thread runningThread = null;
         public ClientHandler(Socket socket){
             this.clientSocket = socket;
         }
@@ -75,7 +77,19 @@ public class AppServer {
                     throw new RuntimeException(e);
                 }
                 do {
+                    if(clientSocket.isClosed()){
+                        break;
+                    }
+                    if(inputStream == null){
+                        break;
+                    }
+
                     JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
+
+                    if(dataHeader == null){
+                        continue;
+                    }
+
                     String dataStrType = CommonUtil.getValueFromJson(
                             ZUPKeys.STRUCT_TYPE.getKey(),
                             dataHeader,
@@ -154,7 +168,7 @@ public class AppServer {
                 e.printStackTrace();
             }
             finally {
-                disconnect(this);
+                disconnect(this, false);
             }
         }
     }
@@ -167,9 +181,15 @@ public class AppServer {
             throw new RuntimeException(e);
         }
     }
-    public static void disconnect(ClientHandler client){
+    public static void disconnect(ClientHandler client, Boolean propagate){
+        if(client.clientSocket.isClosed()){
+            return;
+        }
         try {
-            ZUPManager.sendData(client.clientSocket, new ZUPCommand(new ZUCDisconnection()));
+            if(propagate) {
+                System.out.println("Send msg of deco");
+                ZUPManager.sendData(client.clientSocket, new ZUPCommand(new ZUCDisconnection()));
+            }
             client.clientSocket.close();
             clients.remove(client);
             System.out.println("Client: " + client.clientSocket.getInetAddress() + " has been disconnected.");
@@ -177,6 +197,7 @@ public class AppServer {
         } catch (Exception e){
             e.printStackTrace();
         }
+        client.runningThread.stop();
     }
 
     private void executeClientCmd(ClientHandler client, ZUPCommand zupCommand){
