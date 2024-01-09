@@ -9,7 +9,6 @@ import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessage;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
@@ -19,10 +18,8 @@ import com.zephyrupdater.server.serverCmd.CmdManager;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,9 +46,7 @@ public class AppServer {
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 clients.add(clientHandler);
 
-                clientHandler.runningThread = new Thread(clientHandler);
-                clientHandler.runningThread.start();
-
+                new Thread(clientHandler).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +58,6 @@ public class AppServer {
     public class ClientHandler implements Runnable{
         public Socket clientSocket;
         private Boolean isConnect = true;
-        public Thread runningThread = null;
         public ClientHandler(Socket socket){
             this.clientSocket = socket;
         }
@@ -76,8 +70,7 @@ public class AppServer {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                do {
-
+                while(isConnect) {
                     JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
 
                     if(dataHeader == null){
@@ -155,7 +148,7 @@ public class AppServer {
                         default:
                             throw new IllegalArgumentException();
                     }
-                }while(isConnect);
+                }
 
             }catch (Exception e)
             {
@@ -167,17 +160,9 @@ public class AppServer {
         }
     }
 
-    public static void sendMessage(Socket clientSocket, String message)  {
-        try {
-            OutputStream outputStream = clientSocket.getOutputStream();
-            outputStream.write(new ZUCMessage(message).getJson().getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     public static void disconnect(ClientHandler client, Boolean propagate){
-        System.out.println("Call disconnect " + propagate);
-        if(client.clientSocket.isClosed()){
+        if(client.clientSocket.isClosed() | !client.isConnect){
             return;
         }
         try {
@@ -227,13 +212,5 @@ public class AppServer {
         return true;
     }
 
-    public static void sendCmdToAllClients(String cmd) {
-        for (AppServer.ClientHandler client: AppServer.clients) {
-            try{
-                sendMessage(client.clientSocket, cmd);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
+
 }
