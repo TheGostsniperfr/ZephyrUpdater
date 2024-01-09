@@ -13,7 +13,6 @@ import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
 public class ZUPManager {
     private static final int BUFFER_SIZE = 1024;
 
-
     /**
      * Send data to a specific socket with type header
      *
@@ -26,7 +25,7 @@ public class ZUPManager {
             OutputStream outputStream = socket.getOutputStream();
             //get data header
             String dataToSend = data.getJson();
-            System.out.println("Data to send: " + dataToSend);
+            //System.out.println("Data to send: " + dataToSend);
 
             outputStream.write(dataToSend.getBytes(StandardCharsets.UTF_8));
 
@@ -84,7 +83,8 @@ public class ZUPManager {
         if(bytesRead == -1 || bytesRead == 0){
             return null;
         }
-        System.out.println("Byte read: " + bytesRead);
+        //System.out.println("Byte read: " + bytesRead);
+        //System.out.println(byteArrayOutputStream.toString(StandardCharsets.UTF_8));
         return JsonParser.parseString(byteArrayOutputStream.toString(StandardCharsets.UTF_8)).getAsJsonObject();
     }
 }

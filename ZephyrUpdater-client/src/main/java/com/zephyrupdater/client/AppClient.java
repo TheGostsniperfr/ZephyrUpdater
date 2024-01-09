@@ -49,7 +49,7 @@ public class AppClient {
                     disconnectFromServer(false);
                     break;
                 }
-                System.out.println("dataHeader: " + dataHeader.toString());
+                //System.out.println("dataHeader: " + dataHeader.toString());
                 String dataStrType = CommonUtil.getValueFromJson(
                         ZUPKeys.STRUCT_TYPE.getKey(),
                         dataHeader,

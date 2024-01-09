@@ -3,8 +3,10 @@ package com.zephyrupdater.common;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.net.Socket;
+
 public class CommonUtil {
-    public static final String SHARE_MSG = "Hello from util";
     public static final String HOST = "localhost";
     public static final int SERVER_PORT  = 2048;
 
@@ -14,7 +16,6 @@ public class CommonUtil {
     public static String getFormatCmd(String str){
         return "@!@__" + str + "__@!@";
     }
-
     public static <T> T getValueFromJson(String key, JsonObject jsonElement, Class<T> valueType) {
         JsonElement valueElement = jsonElement.getAsJsonObject().get(key);
 

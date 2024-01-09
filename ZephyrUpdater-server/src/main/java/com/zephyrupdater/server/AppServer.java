@@ -77,17 +77,11 @@ public class AppServer {
                     throw new RuntimeException(e);
                 }
                 do {
-                    if(clientSocket.isClosed()){
-                        break;
-                    }
-                    if(inputStream == null){
-                        break;
-                    }
 
                     JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
 
                     if(dataHeader == null){
-                        continue;
+                        return;
                     }
 
                     String dataStrType = CommonUtil.getValueFromJson(
@@ -182,12 +176,13 @@ public class AppServer {
         }
     }
     public static void disconnect(ClientHandler client, Boolean propagate){
+        System.out.println("Call disconnect " + propagate);
         if(client.clientSocket.isClosed()){
             return;
         }
         try {
+            client.isConnect = false;
             if(propagate) {
-                System.out.println("Send msg of deco");
                 ZUPManager.sendData(client.clientSocket, new ZUPCommand(new ZUCDisconnection()));
             }
             client.clientSocket.close();
@@ -197,11 +192,9 @@ public class AppServer {
         } catch (Exception e){
             e.printStackTrace();
         }
-        client.runningThread.stop();
     }
 
     private void executeClientCmd(ClientHandler client, ZUPCommand zupCommand){
-        System.out.println(zupCommand.content);
         ZUCTypes zucTypes = zupCommand.cmdStructType;
         JsonObject data = JsonParser.parseString(zupCommand.content).getAsJsonObject();
 
