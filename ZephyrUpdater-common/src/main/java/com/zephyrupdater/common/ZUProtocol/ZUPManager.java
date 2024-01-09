@@ -87,4 +87,14 @@ public class ZUPManager {
         //System.out.println(byteArrayOutputStream.toString(StandardCharsets.UTF_8));
         return JsonParser.parseString(byteArrayOutputStream.toString(StandardCharsets.UTF_8)).getAsJsonObject();
     }
+
+    public static ZUPTypes findZUPTypesByName(String name){
+        for (ZUPTypes cType : ZUPTypes.values()) {
+            if (cType.toString().equals(name)) {
+                return cType;
+            }
+        }
+        System.err.println("Unknown ZUPStruct type: " + name);
+        return null;
+    }
 }

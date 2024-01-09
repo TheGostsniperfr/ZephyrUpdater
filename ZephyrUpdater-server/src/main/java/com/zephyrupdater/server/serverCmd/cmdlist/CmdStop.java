@@ -3,6 +3,7 @@ package com.zephyrupdater.server.serverCmd.cmdlist;
 import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
+import com.zephyrupdater.server.client.ClientHandler;
 import com.zephyrupdater.server.serverCmd.ServerCmd;
 import com.zephyrupdater.server.AppServer;
 
@@ -25,10 +26,10 @@ public class CmdStop implements ServerCmd {
     }
 
     public static void informClientsAboutShutdown() {
-        List<AppServer.ClientHandler> clientsCopy = new ArrayList<>(AppServer.clients);
-        for (AppServer.ClientHandler client : clientsCopy) {
+        List<ClientHandler> clientsCopy = new ArrayList<>(AppServer.clients);
+        for (ClientHandler client : clientsCopy) {
             try {
-                AppServer.disconnect(client, true);
+                client.disconnect(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -123,7 +123,6 @@ public class AppClient {
         }
     }
     private static void executeServerCmd(ZUPCommand zupCommand){
-        System.out.println(zupCommand.content);
         ZUCTypes zucTypes = zupCommand.cmdStructType;
         JsonObject data = JsonParser.parseString(zupCommand.content).getAsJsonObject();
 
@@ -277,9 +276,7 @@ public class AppClient {
     }
 
     private static void disconnectFromServer(Boolean propagate){
-
         if(!isConnect){
-            System.out.println("You are already disconnected.");
             return;
         }
 
