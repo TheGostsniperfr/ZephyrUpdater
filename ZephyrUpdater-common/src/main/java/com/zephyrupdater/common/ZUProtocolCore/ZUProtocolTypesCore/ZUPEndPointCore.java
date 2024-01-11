@@ -1,10 +1,10 @@
-package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
+package com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPStructCore;
-import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPStructCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
 
 public class ZUPEndPointCore implements ZUPStructCore {
     //End point is to mark the end of a multi chunks data (ex: file)

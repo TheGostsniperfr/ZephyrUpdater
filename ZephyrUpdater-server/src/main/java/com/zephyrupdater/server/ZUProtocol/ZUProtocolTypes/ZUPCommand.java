@@ -2,10 +2,14 @@ package com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLoginCore;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessageCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommandCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCLoginCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
+import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCDisconnection;
+import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCLogin;
+import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCMessage;
+import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.server.client.Auth.ClientAuth;
 import com.zephyrupdater.server.client.ClientHandler;
@@ -22,30 +26,21 @@ public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
     public void execute(ClientHandler client) {
         ZUCTypes zucTypes = this.cmdStructType;
         JsonObject data = JsonParser.parseString(this.content).getAsJsonObject();
-
+        ZUCStruct zucStruct = null;
         switch (zucTypes){
             case LOGIN:
-                if(!ClientAuth.isValidAccount(new ZUCLoginCore(data))){
-                    client.setIsConnect(false);
-                }
+                zucStruct = new ZUCLogin(data);
                 break;
             case MESSAGE:
-                ZUCMessageCore zucMessage = new ZUCMessageCore(data);
-
-                Date currentDate = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
-
-                System.out.println(dateFormat.format(currentDate)
-                        + " from "
-                        + client.getHost()
-                        + " -> " + zucMessage.content);
-
+                zucStruct = new ZUCMessage(data);
                 break;
             case DISCONNECTION:
-                client.setIsConnect(false);
+                zucStruct = new ZUCDisconnection();
                 break;
             default:
-                throw new IllegalArgumentException();
+                System.err.println("Invalid Argument: " + zucTypes);
         }
+
+        if(zucStruct != null) zucStruct.execute(client);
     }
 }

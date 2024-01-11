@@ -3,15 +3,15 @@ package com.zephyrupdater.client;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCList.*;
-import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommandCore;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPointCore;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.*;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -255,7 +255,7 @@ public class AppClient {
 
                     //Send to server (deco)
                     continue;
-                case QUIT:
+                case STOP:
                     if(isConnect){
                         disconnectFromServer(true);
                     }

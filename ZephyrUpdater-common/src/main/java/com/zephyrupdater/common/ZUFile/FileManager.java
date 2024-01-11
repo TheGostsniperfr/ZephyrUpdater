@@ -1,8 +1,8 @@
 package com.zephyrupdater.common.ZUFile;
 
-import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPointCore;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 
 import java.io.*;
 import java.net.Socket;

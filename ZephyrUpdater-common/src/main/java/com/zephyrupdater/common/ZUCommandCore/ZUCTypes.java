@@ -1,13 +1,11 @@
-package com.zephyrupdater.common.ZUCommand;
-
-import com.zephyrupdater.common.ZUCommand.ZUCList.*;
+package com.zephyrupdater.common.ZUCommandCore;
 
 public enum ZUCTypes {
     LOGIN("login"),
     DISCONNECTION("exit"),
     MESSAGE("msg"),
     CONNECT("connect"),
-    QUIT("quit"),
+    STOP("stop"),
     HELP("help");
     private final String cmdName;
 

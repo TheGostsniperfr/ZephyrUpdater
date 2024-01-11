@@ -1,24 +1,27 @@
-package com.zephyrupdater.common.ZUCommand.ZUCList;
+package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCKeys;
-import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
+import com.zephyrupdater.common.ZUCommandCore.ZUCKeys;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
-public class ZUCLoginCore extends ZUCStructCore {
+public class ZUCLoginCore implements ZUCStructCore {
     public String id;
     public String password;
     public ZUCLoginCore(String id, String password){
-        this.structType = ZUCTypes.LOGIN;
         this.id = id;
         this.password = password;
     }
 
     public ZUCLoginCore(JsonObject data){
-        this.structType = ZUCTypes.LOGIN;
         this.id = CommonUtil.getValueFromJson(ZUCKeys.ID.getKey(), data, String.class);
         this.password = CommonUtil.getValueFromJson(ZUCKeys.PASSWORD.getKey(), data, String.class);
+    }
+
+    @Override
+    public ZUCTypes getStructType() {
+        return ZUCTypes.LOGIN;
     }
 
     public static String getCmdName() {

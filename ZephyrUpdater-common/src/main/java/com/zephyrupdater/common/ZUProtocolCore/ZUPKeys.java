@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.ZUProtocol;
+package com.zephyrupdater.common.ZUProtocolCore;
 
 public enum ZUPKeys {
     STRUCT_TYPE("structType"),

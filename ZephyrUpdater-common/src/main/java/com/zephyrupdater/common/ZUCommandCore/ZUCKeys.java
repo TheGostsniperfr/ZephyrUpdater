@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.ZUCommand;
+package com.zephyrupdater.common.ZUCommandCore;
 
 public enum ZUCKeys {
     ID("id"),

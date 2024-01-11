@@ -1,12 +1,18 @@
-package com.zephyrupdater.common.ZUCommand.ZUCList;
+package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
-import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
-public class ZUCConnectCore extends ZUCStructCore {
+public class ZUCConnectCore implements ZUCStructCore {
 
     public String host;
     public int serverPort;
+
+    @Override
+    public ZUCTypes getStructType() {
+        return ZUCTypes.CONNECT;
+    }
+
     public static String getCmdName(){
         return "connect";
     }
@@ -17,7 +23,6 @@ public class ZUCConnectCore extends ZUCStructCore {
     }
 
     public ZUCConnectCore(String host, int port){
-        this.structType = ZUCTypes.CONNECT;
         this.host = host;
         this.serverPort = port;
     }

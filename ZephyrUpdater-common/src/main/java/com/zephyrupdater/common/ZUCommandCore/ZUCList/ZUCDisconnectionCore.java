@@ -1,13 +1,18 @@
-package com.zephyrupdater.common.ZUCommand.ZUCList;
+package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCKeys;
-import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
+import com.zephyrupdater.common.ZUCommandCore.ZUCKeys;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
-public class ZUCDisconnectionCore extends ZUCStructCore {
+public class ZUCDisconnectionCore implements ZUCStructCore {
     public String content;
+
+    @Override
+    public ZUCTypes getStructType() {
+        return ZUCTypes.DISCONNECTION;
+    }
 
     public static String getCmdName(){
         return "exit";
@@ -22,7 +27,6 @@ public class ZUCDisconnectionCore extends ZUCStructCore {
     }
 
     public ZUCDisconnectionCore(){
-        this.structType = ZUCTypes.DISCONNECTION;
         this.content = CommonUtil.getFormatCmd("Exit");
     }
     public static void printHelp(){

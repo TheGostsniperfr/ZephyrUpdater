@@ -2,7 +2,7 @@ package com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUFile.FileManager;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.server.client.ClientHandler;
 

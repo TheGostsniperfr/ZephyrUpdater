@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.ZUProtocol;
+package com.zephyrupdater.common.ZUProtocolCore;
 
 import java.io.*;
 import java.net.Socket;
@@ -7,8 +7,8 @@ import java.nio.charset.StandardCharsets;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPointCore;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 
 public class ZUPManager {
     private static final int BUFFER_SIZE = 1024;

@@ -2,11 +2,11 @@ package com.zephyrupdater.server.client;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnectionCore;
-import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommandCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
 import com.zephyrupdater.server.AppServer;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes.ZUPCommand;

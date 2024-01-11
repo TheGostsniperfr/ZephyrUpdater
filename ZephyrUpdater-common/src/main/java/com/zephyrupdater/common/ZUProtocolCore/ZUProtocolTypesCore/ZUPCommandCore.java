@@ -1,18 +1,17 @@
-package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
+package com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPStructCore;
-import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPStructCore;
+import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
 
 import java.nio.charset.StandardCharsets;
 public class ZUPCommandCore implements ZUPStructCore {
     public ZUCTypes cmdStructType;
     public String content;
-
     private final long dataSize;
 
 
@@ -45,7 +44,7 @@ public class ZUPCommandCore implements ZUPStructCore {
         }
     }
     public ZUPCommandCore(ZUCStructCore cmd){
-        this.cmdStructType = cmd.structType;
+        this.cmdStructType = cmd.getStructType();
         this.content = cmd.getJson();
         this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
     }
