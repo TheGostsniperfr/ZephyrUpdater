@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
 import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
 
