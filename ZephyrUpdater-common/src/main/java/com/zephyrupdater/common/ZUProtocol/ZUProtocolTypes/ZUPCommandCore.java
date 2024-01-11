@@ -2,18 +2,21 @@ package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCStruct;
+import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.common.ZUProtocol.ZUPStructCore;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 
 import java.nio.charset.StandardCharsets;
-public class ZUPCommand extends ZUPStruct {
+public class ZUPCommandCore implements ZUPStructCore {
     public ZUCTypes cmdStructType;
     public String content;
-    public ZUPCommand(JsonObject dataHeader){
-        this.structType = ZUPTypes.COMMAND;
+
+    private final long dataSize;
+
+
+    public ZUPCommandCore(JsonObject dataHeader){
         this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
         this.content =  CommonUtil.getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
 
@@ -41,11 +44,25 @@ public class ZUPCommand extends ZUPStruct {
             );
         }
     }
-    public ZUPCommand(ZUCStruct cmd){
-        this.structType = ZUPTypes.COMMAND;
+    public ZUPCommandCore(ZUCStructCore cmd){
         this.cmdStructType = cmd.structType;
         this.content = cmd.getJson();
         this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
+    }
+
+    @Override
+    public ZUPTypes getStructType() {
+        return ZUPTypes.COMMAND;
+    }
+
+    @Override
+    public long getDataSize() {
+        return this.dataSize;
+    }
+
+    @Override
+    public Boolean getIsMultiChunks() {
+        return false;
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.zephyrupdater.common.ZUCommand.ZUCList;
 
-import com.zephyrupdater.common.ZUCommand.ZUCStruct;
+import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 
-public class ZUCHelp extends ZUCStruct {
-    public ZUCHelp(){
+public class ZUCHelpCore extends ZUCStructCore {
+    public ZUCHelpCore(){
         this.structType = ZUCTypes.HELP;
     }
     public static void printHelp(){

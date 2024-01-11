@@ -3,26 +3,34 @@ package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.common.ZUProtocol.ZUPStructCore;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 
-import java.nio.charset.StandardCharsets;
-
-public class ZUPFile extends ZUPStruct {
+public class ZUPFileCore implements ZUPStructCore {
     public String fileName;
-
-    public ZUPFile(JsonObject dataHeader){
-        this.structType = ZUPTypes.FILE;
+    private final long dataSize;
+    public ZUPFileCore(JsonObject dataHeader){
         this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
-        this.isMultiChunks = true;
     }
 
-    public ZUPFile(String filename, long size){
-        this.structType = ZUPTypes.FILE;
+    public ZUPFileCore(String filename, long size){
         this.fileName = filename;
         this.dataSize = size;
-        this.isMultiChunks = true;
+    }
+
+    @Override
+    public ZUPTypes getStructType() {
+        return ZUPTypes.FILE;
+    }
+
+    @Override
+    public long getDataSize() {
+        return this.dataSize;
+    }
+
+    @Override
+    public Boolean getIsMultiChunks() {
+        return true;
     }
 
     @Override

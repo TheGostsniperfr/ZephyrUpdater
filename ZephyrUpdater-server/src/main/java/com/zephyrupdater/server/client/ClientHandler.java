@@ -1,25 +1,19 @@
 package com.zephyrupdater.server.client;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLogin;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCMessage;
-import com.zephyrupdater.common.ZUCommand.ZUCTypes;
-import com.zephyrupdater.common.ZUFile.FileManager;
+import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommandCore;
 import com.zephyrupdater.server.AppServer;
-import com.zephyrupdater.server.client.Auth.ClientAuth;
+import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes.ZUPCommand;
+import com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes.ZUPFile;
 
 import java.io.InputStream;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ClientHandler implements Runnable {
     private static final int BUFFER_SIZE = 1024;
@@ -34,12 +28,12 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            InputStream inputStream = clientSocket.getInputStream();
+            InputStream inputStream = this.clientSocket.getInputStream();
 
             while (isConnect) {
                 JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
                 if (dataHeader == null) return; // -> deco client
-                ClientProcess.clientDataHeaderProcess(this, dataHeader);
+                clientDataHeaderProcess(dataHeader);
             }
 
         } catch (Exception e) {
@@ -56,7 +50,7 @@ public class ClientHandler implements Runnable {
         try {
             this.isConnect = false;
             if(propagate) {
-                ZUPManager.sendData(this.clientSocket, new ZUPCommand(new ZUCDisconnection()));
+                ZUPManager.sendData(this.clientSocket, new ZUPCommandCore(new ZUCDisconnectionCore()));
             }
             this.clientSocket.close();
             AppServer.clients.remove(this);
@@ -65,6 +59,32 @@ public class ClientHandler implements Runnable {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void clientDataHeaderProcess(JsonObject dataHeader){
+        String zupName = CommonUtil.getValueFromJson(
+                ZUPKeys.STRUCT_TYPE.getKey(),
+                dataHeader,
+                String.class
+        );
+
+        ZUPTypes dataType = ZUPManager.findZUPTypesByName(zupName);
+        if(dataType == null) return;
+        ZUPStruct zupStruct;
+
+        switch (dataType) {
+            case COMMAND:
+                zupStruct = new ZUPCommand(dataHeader);
+                break;
+            case FILE:
+                zupStruct = new ZUPFile(dataHeader);
+                break;
+            default:
+                System.err.println("Invalid arg read: " + dataType);
+                return;
+        }
+
+        zupStruct.execute(this);
     }
 
     public void setIsConnect(Boolean state){

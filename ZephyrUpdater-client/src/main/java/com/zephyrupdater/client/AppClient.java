@@ -4,14 +4,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUCommand.ZUCList.*;
-import com.zephyrupdater.common.ZUCommand.ZUCStruct;
+import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommandCore;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPointCore;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -72,11 +72,11 @@ public class AppClient {
 
                 switch (dataType) {
                     case COMMAND:
-                        executeServerCmd(new ZUPCommand(dataHeader));
+                        executeServerCmd(new ZUPCommandCore(dataHeader));
                         break;
 
                     case FILE:
-                        ZUPFile zupFile = new ZUPFile(dataHeader);
+                        ZUPFileCore zupFile = new ZUPFileCore(dataHeader);
                         long totalBytes = 0;
 
                         //get multi chunks data
@@ -88,7 +88,7 @@ public class AppClient {
 
                             while ((bytesRead = inputStream.read(buffer)) != -1) {
                                 String serverResp = new String(buffer, 0, bytesRead);
-                                if (serverResp.trim().equals(ZUPEndPoint.endPointFlag)) {
+                                if (serverResp.trim().equals(ZUPEndPointCore.endPointFlag)) {
                                     break;
                                 }
 
@@ -101,14 +101,14 @@ public class AppClient {
                             e.printStackTrace();
                         }
 
-                        if (totalBytes != zupFile.dataSize) {
+                        if (totalBytes != zupFile.getDataSize()) {
                                 /*
                                     TODO
 
                                     Delete the file or create a tmp folder (if the data is corrupted)
                                 */
 
-                            System.err.println("Error: Data corrupted: " + (zupFile.dataSize - totalBytes) + " bytes missing");
+                            System.err.println("Error: Data corrupted: " + (zupFile.getDataSize() - totalBytes) + " bytes missing");
                         }
 
                         break;
@@ -122,13 +122,13 @@ public class AppClient {
             e.printStackTrace();
         }
     }
-    private static void executeServerCmd(ZUPCommand zupCommand){
-        ZUCTypes zucTypes = zupCommand.cmdStructType;
-        JsonObject data = JsonParser.parseString(zupCommand.content).getAsJsonObject();
+    private static void executeServerCmd(ZUPCommandCore zupCommandCore){
+        ZUCTypes zucTypes = zupCommandCore.cmdStructType;
+        JsonObject data = JsonParser.parseString(zupCommandCore.content).getAsJsonObject();
 
         switch (zucTypes){
             case MESSAGE:
-                ZUCMessage zucMessage = new ZUCMessage(data);
+                ZUCMessageCore zucMessage = new ZUCMessageCore(data);
 
                 Date currentDate = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
@@ -176,20 +176,20 @@ public class AppClient {
                 continue;
             }
 
-            ZUCStruct zucStruct = null;
+            ZUCStructCore zucStructCore = null;
 
             switch (cmdType) {
                 case LOGIN:
                     if (argv.size() < 3) {
-                        ZUCLogin.printHelp();
+                        ZUCLoginCore.printHelp();
                         continue;
                     }
 
-                    zucStruct = new ZUCLogin(argv.get(1), argv.get(2));
+                    zucStructCore = new ZUCLoginCore(argv.get(1), argv.get(2));
                     break;
                 case MESSAGE:
                     if (argv.size() < 2) {
-                        ZUCMessage.printHelp();
+                        ZUCMessageCore.printHelp();
                         continue;
                     }
 
@@ -199,14 +199,14 @@ public class AppClient {
                         stringBuilder.append(" ").append(argv.get(2));
                     }
 
-                    zucStruct = new ZUCMessage(stringBuilder.toString());
+                    zucStructCore = new ZUCMessageCore(stringBuilder.toString());
                     break;
                 case HELP:
-                    ZUCHelp.printHelp();
+                    ZUCHelpCore.printHelp();
                     continue;
                 case CONNECT:
                     if(argv.size() <= 2){
-                        ZUCConnect.printHelp();
+                        ZUCConnectCore.printHelp();
                         continue;
                     }
 
@@ -223,7 +223,7 @@ public class AppClient {
                         continue;
                     }
 
-                    ZUCConnect zucConnect = new ZUCConnect(argv.get(1), serverPort);
+                    ZUCConnectCore zucConnect = new ZUCConnectCore(argv.get(1), serverPort);
 
                     for(int nbTry = 0; nbTry < CommonUtil.nbTry; nbTry++) {
                         try {
@@ -271,7 +271,7 @@ public class AppClient {
                 continue;
             }
 
-            ZUPManager.sendData(serverSocket, new ZUPCommand(zucStruct));
+            ZUPManager.sendData(serverSocket, new ZUPCommandCore(zucStructCore));
         }
     }
 
@@ -287,7 +287,7 @@ public class AppClient {
                 listenToServerThread.interrupt();
             }
             if (propagate) {
-                ZUPManager.sendData(serverSocket, new ZUPCommand(new ZUCDisconnection()));
+                ZUPManager.sendData(serverSocket, new ZUPCommandCore(new ZUCDisconnectionCore()));
             }
             isConnect = false;
         } catch (Exception e){

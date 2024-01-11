@@ -1,9 +1,9 @@
 package com.zephyrupdater.common.ZUCommand.ZUCList;
 
-import com.zephyrupdater.common.ZUCommand.ZUCStruct;
+import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 
-public class ZUCQuit extends ZUCStruct {
+public class ZUCQuitCore extends ZUCStructCore {
 
     public static String getCmdName(){
         return "quit";
@@ -14,7 +14,7 @@ public class ZUCQuit extends ZUCStruct {
         return "ZUCQuit is a local cmd";
     }
 
-    public ZUCQuit(){
+    public ZUCQuitCore(){
         this.structType = ZUCTypes.QUIT;
     }
     public static void printHelp(){

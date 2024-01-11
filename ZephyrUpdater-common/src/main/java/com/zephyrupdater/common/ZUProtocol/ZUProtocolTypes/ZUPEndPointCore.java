@@ -3,19 +3,30 @@ package com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUProtocol.ZUPKeys;
-import com.zephyrupdater.common.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.common.ZUProtocol.ZUPStructCore;
 import com.zephyrupdater.common.ZUProtocol.ZUPTypes;
 
-import java.nio.charset.StandardCharsets;
-
-public class ZUPEndPoint extends ZUPStruct {
+public class ZUPEndPointCore implements ZUPStructCore {
     //End point is to mark the end of a multi chunks data (ex: file)
-
+    private final long dataSize;
     public static final String endPointFlag = CommonUtil.getFormatCmd("END_POINT");
     public static final byte[] endPointFlagByte = endPointFlag.getBytes();
-    public ZUPEndPoint(){
-        this.structType = ZUPTypes.END_POINT;
+    public ZUPEndPointCore(){
         this.dataSize = -1;
+    }
+    @Override
+    public ZUPTypes getStructType() {
+        return ZUPTypes.END_POINT;
+    }
+
+    @Override
+    public long getDataSize() {
+        return this.dataSize;
+    }
+
+    @Override
+    public Boolean getIsMultiChunks() {
+        return false;
     }
 
     @Override

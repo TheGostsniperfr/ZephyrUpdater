@@ -1,10 +1,8 @@
 package com.zephyrupdater.common.ZUFile;
 
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
 import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPoint;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFile;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPEndPointCore;
+import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPFileCore;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,7 +25,7 @@ public class FileManager {
      *
      * @return -1 on error, else 0
      */
-    public static int createFileFromStream(Socket socket, ZUPFile zupFile) {
+    public static int createFileFromStream(Socket socket, ZUPFileCore zupFile) {
         String tmpFilename = zupFile.fileName + TMP_EXT;
         Path filePath = Paths.get(zupFile.fileName);
         Path tmpFilePath = Paths.get(tmpFilename);
@@ -44,8 +42,8 @@ public class FileManager {
                          new BufferedOutputStream(new FileOutputStream(tmpFilename));
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
-                if (Arrays.equals(buffer, ZUPEndPoint.endPointFlagByte) |
-                        totalBytes > zupFile.dataSize) {
+                if (Arrays.equals(buffer, ZUPEndPointCore.endPointFlagByte) |
+                        totalBytes > zupFile.getDataSize()) {
                     break;
                 }
 
@@ -54,9 +52,9 @@ public class FileManager {
             }
 
 
-            if (totalBytes != zupFile.dataSize) {
+            if (totalBytes != zupFile.getDataSize()) {
                 Files.deleteIfExists(tmpFilePath);
-                System.err.println("Error: Data corrupted: " + (zupFile.dataSize - totalBytes) + " bytes missing");
+                System.err.println("Error: Data corrupted: " + (zupFile.getDataSize() - totalBytes) + " bytes missing");
                 return -1;
             }
 
@@ -78,7 +76,7 @@ public class FileManager {
         }
 
         long size = 0;
-        ZUPManager.sendData(socket, new ZUPFile(file.getAbsolutePath(), file.length()));
+        ZUPManager.sendData(socket, new ZUPFileCore(file.getAbsolutePath(), file.length()));
 
         try {
             OutputStream outputStream = socket.getOutputStream();
@@ -91,7 +89,7 @@ public class FileManager {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            outputStream.write(ZUPEndPoint.endPointFlagByte, 0, ZUPEndPoint.endPointFlagByte.length);
+            outputStream.write(ZUPEndPointCore.endPointFlagByte, 0, ZUPEndPointCore.endPointFlagByte.length);
         } catch (Exception e){
             e.printStackTrace();
         }

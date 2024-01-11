@@ -1,13 +1,12 @@
 package com.zephyrupdater.common.ZUCommand.ZUCList;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUCommand.ZUCKeys;
-import com.zephyrupdater.common.ZUCommand.ZUCStruct;
+import com.zephyrupdater.common.ZUCommand.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommand.ZUCTypes;
 
-public class ZUCDisconnection extends ZUCStruct {
+public class ZUCDisconnectionCore extends ZUCStructCore {
     public String content;
 
     public static String getCmdName(){
@@ -22,7 +21,7 @@ public class ZUCDisconnection extends ZUCStruct {
         return jsonObject.toString();
     }
 
-    public ZUCDisconnection(){
+    public ZUCDisconnectionCore(){
         this.structType = ZUCTypes.DISCONNECTION;
         this.content = CommonUtil.getFormatCmd("Exit");
     }

@@ -1,7 +1,6 @@
 package com.zephyrupdater.server;
 
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCLogin;
 import com.zephyrupdater.server.client.ClientHandler;
 import com.zephyrupdater.server.serverCmd.CmdManager;
 

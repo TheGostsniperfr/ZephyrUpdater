@@ -1,8 +1,5 @@
 package com.zephyrupdater.server.serverCmd.cmdlist;
 
-import com.zephyrupdater.common.ZUCommand.ZUCList.ZUCDisconnection;
-import com.zephyrupdater.common.ZUProtocol.ZUPManager;
-import com.zephyrupdater.common.ZUProtocol.ZUProtocolTypes.ZUPCommand;
 import com.zephyrupdater.server.client.ClientHandler;
 import com.zephyrupdater.server.serverCmd.ServerCmd;
 import com.zephyrupdater.server.AppServer;
