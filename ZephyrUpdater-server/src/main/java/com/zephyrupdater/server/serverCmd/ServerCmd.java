@@ -1,7 +1,9 @@
 package com.zephyrupdater.server.serverCmd;
 
-public interface ServerCmd {
-    String getCmdName();
+import java.util.List;
 
-    void execute();
+public interface ServerCmd {
+     String getCmdName();
+
+    void execute(List<String> argv);
 }

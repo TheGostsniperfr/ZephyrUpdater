@@ -26,20 +26,20 @@ public class FileManager {
      * @return -1 on error, else 0
      */
     public static int createFileFromStream(Socket socket, ZUPFileCore zupFile) {
-        String tmpFilename = zupFile.fileName + TMP_EXT;
         Path filePath = Paths.get(zupFile.fileName);
-        Path tmpFilePath = Paths.get(tmpFilename);
         long totalBytes = 0;
 
         try {
-            Files.createDirectories(tmpFilePath.getParent());
+            if(!Files.exists(filePath.getParent())) {
+                Files.createDirectories(filePath.getParent());
+            }
             InputStream inputStream = socket.getInputStream();
 
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead;
 
             BufferedOutputStream bufferedOutputStream =
-                         new BufferedOutputStream(new FileOutputStream(tmpFilename));
+                         new BufferedOutputStream(new FileOutputStream(zupFile.fileName));
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 if (Arrays.equals(buffer, ZUPEndPointCore.endPointFlagByte) |
@@ -53,13 +53,10 @@ public class FileManager {
 
 
             if (totalBytes != zupFile.getDataSize()) {
-                Files.deleteIfExists(tmpFilePath);
+                Files.deleteIfExists(filePath);
                 System.err.println("Error: Data corrupted: " + (zupFile.getDataSize() - totalBytes) + " bytes missing");
                 return -1;
             }
-
-            Files.move(tmpFilePath, filePath, StandardCopyOption.REPLACE_EXISTING);
-            Files.deleteIfExists(tmpFilePath);
 
             return 0;
         } catch (IOException e) {

@@ -16,7 +16,14 @@ public class ZUCLogin extends ZUCLoginCore implements ZUCStruct {
     @Override
     public void execute(ClientHandler client) {
         if(!ClientAuth.isValidAccount(this)){
-            client.setIsConnect(false);
+            client.sendMsgToClient("Wrong id or password.");
+            System.out.println(client.getHost() + " Failed to login: wrong id or password.");
+            return;
         }
+
+        client.setIsAuth(true);
+        client.setClientId(this.id);
+        client.sendMsgToClient("Success to login.\nHi " + this.id + " !");
+        System.out.println(client.getHost() + " Success to login.");
     }
 }

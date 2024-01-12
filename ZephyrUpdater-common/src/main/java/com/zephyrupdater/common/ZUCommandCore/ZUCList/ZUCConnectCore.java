@@ -7,7 +7,6 @@ public class ZUCConnectCore implements ZUCStructCore {
 
     public String host;
     public int serverPort;
-
     @Override
     public ZUCTypes getStructType() {
         return ZUCTypes.CONNECT;

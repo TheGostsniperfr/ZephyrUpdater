@@ -16,15 +16,26 @@ public class CmdManager {
         while(true){
             String cmd = scanner.nextLine();
 
-            Class<? extends ServerCmd> clazz = findCmdByName(cmd);
+            cmd = cmd.replace("  ", " ");
+            List<String> argv = List.of(cmd.split(" "));
 
-            if(clazz == null){
+            if (argv.isEmpty()) {
+                continue;
+            }
+
+            Class<? extends ServerCmd> clazz = findCmdByName(argv.get(0));
+
+            if(clazz == null) {
                 System.out.println("Unknown command.");
                 continue;
             }
 
             try {
-                clazz.getDeclaredConstructor().newInstance().execute();
+                List<String> subArgv = new ArrayList<>();
+                if(argv.size() > 1){
+                    subArgv = argv.subList(1, argv.size());
+                }
+                clazz.getDeclaredConstructor().newInstance().execute(subArgv);
             } catch (Exception e){
                 e.printStackTrace();
             }

@@ -15,7 +15,7 @@ public class CmdStop implements ServerCmd {
     }
 
     @Override
-    public void execute() {
+    public void execute(List<String> argv) {
         System.out.println("Closing server...");
         informClientsAboutShutdown();
         System.out.println("Server closed, see you.");

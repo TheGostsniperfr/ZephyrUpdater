@@ -196,7 +196,7 @@ public class AppClient {
                     StringBuilder stringBuilder = new StringBuilder(argv.get(1));
 
                     for (int i = 2; i < argv.size(); i++) {
-                        stringBuilder.append(" ").append(argv.get(2));
+                        stringBuilder.append(" ").append(argv.get(i));
                     }
 
                     zucStructCore = new ZUCMessageCore(stringBuilder.toString());

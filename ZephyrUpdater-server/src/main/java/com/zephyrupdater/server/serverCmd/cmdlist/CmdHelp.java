@@ -13,7 +13,7 @@ public class CmdHelp implements ServerCmd {
     }
 
     @Override
-    public void execute() {
+    public void execute(List<String> argv) {
         System.out.println("Help menu: \n");
 
         List<Class<? extends ServerCmd>> allClasses = CmdManager.getAllServerCmdClasses();

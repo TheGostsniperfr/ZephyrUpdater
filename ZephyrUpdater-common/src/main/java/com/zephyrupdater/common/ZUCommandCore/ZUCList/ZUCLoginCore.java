@@ -6,19 +6,27 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCKeys;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
+import java.util.List;
+
 public class ZUCLoginCore implements ZUCStructCore {
     public String id;
     public String password;
+
+    public final int MIN_ARG = 3;
+
     public ZUCLoginCore(String id, String password){
         this.id = id;
         this.password = password;
+    }
+
+    public ZUCLoginCore(List<String> argv){
+
     }
 
     public ZUCLoginCore(JsonObject data){
         this.id = CommonUtil.getValueFromJson(ZUCKeys.ID.getKey(), data, String.class);
         this.password = CommonUtil.getValueFromJson(ZUCKeys.PASSWORD.getKey(), data, String.class);
     }
-
     @Override
     public ZUCTypes getStructType() {
         return ZUCTypes.LOGIN;

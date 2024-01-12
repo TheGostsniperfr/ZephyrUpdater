@@ -3,6 +3,7 @@ package com.zephyrupdater.server.client;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
@@ -19,6 +20,9 @@ public class ClientHandler implements Runnable {
     private static final int BUFFER_SIZE = 1024;
     public final Socket clientSocket;
     private Boolean isConnect = true;
+    private String clientId = "NOT_LOGGED";
+    private Boolean isAuth = false;
+    public static final String MSG_PLS_LOGIN = "Please login before.";
 
     public ClientHandler(Socket socket) {
         AppServer.clients.add(this);
@@ -84,14 +88,36 @@ public class ClientHandler implements Runnable {
                 return;
         }
 
+        if(!this.isAuth && dataType != ZUPTypes.COMMAND){
+            sendMsgToClient(ClientHandler.MSG_PLS_LOGIN);
+            return;
+        }
         zupStruct.execute(this);
     }
 
     public void setIsConnect(Boolean state){
         this.isConnect = state;
     }
-
     public String getHost(){
         return this.clientSocket.getInetAddress().getHostAddress();
+    }
+    public Boolean getIsAuth() { return this.isAuth; }
+    public void setIsAuth(Boolean state) { this.isAuth = state; }
+    public void setClientId(String clientId) { this.clientId = clientId; }
+    public String getClientId() { return clientId; }
+    public void sendMsgToClient(String msg){
+        if(this.isConnect) {
+            ZUPManager.sendData(this.clientSocket, new ZUPCommandCore(new ZUCMessageCore(msg)));
+        }
+    }
+
+    public static ClientHandler getClientById(String clientId){
+        for(ClientHandler client : AppServer.clients){
+            if(client.getIsAuth() && client.getClientId().equals(clientId)){
+                return client;
+            }
+        }
+
+        return null;
     }
 }
