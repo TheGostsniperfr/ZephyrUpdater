@@ -2,6 +2,8 @@ package com.zephyrupdater.server;
 
 import com.zephyrupdater.common.CommonUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,21 +12,25 @@ import java.nio.file.Paths;
 
 public class MainServer {
     public static void main(String[] args) {
-        /*
-        String decodedPath = MainServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        try {
-            decodedPath = URLDecoder.decode(decodedPath, StandardCharsets.UTF_8);
-            Path publicDir = Paths.get(decodedPath);
 
-            if(!Files.exists(publicDir)){
-                Files.createDirectories(publicDir.getParent());
+        String path = MainServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        File serverFile = new File(path);
+        Path serverDir = Paths.get(serverFile.getParentFile().getAbsolutePath()).resolve("public");
+
+        if(!Files.exists(serverDir)){
+
+            try {
+                Files.createDirectories(serverDir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+        }
 
-            System.out.println("PublicDirPath: " + publicDir);
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
+
+        System.out.println(serverDir);
+
+
 
         new AppServer().launchServer();
     }

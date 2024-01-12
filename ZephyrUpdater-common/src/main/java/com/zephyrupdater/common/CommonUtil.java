@@ -16,8 +16,8 @@ public class CommonUtil {
     public static String getFormatCmd(String str){
         return "@!@__" + str + "__@!@";
     }
-    public static <T> T getValueFromJson(String key, JsonObject jsonElement, Class<T> valueType) {
-        JsonElement valueElement = jsonElement.getAsJsonObject().get(key);
+    public static <T> T getValueFromJson(String key, JsonObject jsonObject, Class<T> valueType) {
+        JsonElement valueElement = jsonObject.getAsJsonObject().get(key);
 
         if (valueElement != null && !valueElement.isJsonNull()) {
             try {
