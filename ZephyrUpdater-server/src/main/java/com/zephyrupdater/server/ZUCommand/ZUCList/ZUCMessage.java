@@ -18,9 +18,14 @@ public class ZUCMessage extends ZUCMessageCore implements ZUCStruct {
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
 
+        String clientId = "";
+        if(client.getIsAuth()) {
+            clientId = " Id: " +client.getClientId() ;
+        }
         System.out.println(dateFormat.format(currentDate)
                 + " from "
                 + client.getHost()
+                + clientId
                 + " -> " + this.content);
     }
 }
