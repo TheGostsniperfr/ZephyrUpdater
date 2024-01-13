@@ -1,5 +1,7 @@
 package com.zephyrupdater.server;
 
+import com.zephyrupdater.server.updater.CheckingFiles;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainServer {
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         String path = MainServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         File serverFile = new File(path);
@@ -25,6 +27,7 @@ public class MainServer {
 
 
         System.out.println(serverDir);
+        System.out.println(CheckingFiles.getFilesJson(serverDir));
 
 
 
