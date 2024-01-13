@@ -1,13 +1,14 @@
 package com.zephyrupdater.server.updater;
 
-import java.io.*;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 
@@ -16,22 +17,25 @@ public class CheckingFiles {
         JsonObject jsonObject = new JsonObject();
         JsonObject jsonVal = new JsonObject();
 
-        File directory = new File("ZephyrUpdater-server/build/classes/java/public");
+        File directory = new File(filesParentPath.toString());
         File[] list = directory.listFiles();
 
-
-
-        if (list != null) {
+        if (list.length != 0) {
             System.out.println("files list :");
 
 
             for (File file : list) {
+                System.out.println("############");
+                if(file.isDirectory()){
+                    System.out.println("Directory: " + file.getName());
+                    continue;
+                }
+
+                System.out.println("File: " + file.getName());
+
+
                 byte[] fileContentBytes = Files.readAllBytes(Paths.get(file.getPath()));
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] hash = digest.digest(fileContentBytes);
-
-
-
+                byte[] hash = MessageDigest.getInstance("SHA-256").digest(fileContentBytes);
 
                 String path = file.getPath();
                 String name = file.getName();
