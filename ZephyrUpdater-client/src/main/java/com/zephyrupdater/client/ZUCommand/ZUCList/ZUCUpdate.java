@@ -43,9 +43,14 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
             return;
         }
 
+        String folderPath = argv.get(1);
+        if(folderPath.equals("*")){
+            folderPath = "";
+        }
+
         ZUPManager.sendData(
                 AppClient.getServerSocket(),
-                new ZUPCommandCore(new ZUCUpdate(argv.get(1), new JsonObject())));
+                new ZUPCommandCore(new ZUCUpdate(folderPath, new JsonObject())));
     }
 
     public static void printHelp(){
