@@ -4,9 +4,10 @@ public enum ZUPKeys {
     STRUCT_TYPE("structType"),
     DATA_SIZE("dataSize"),
     CONTENT("content"),
-
     FILE_NAME("filename"),
-    COMMAND("cmd");
+    COMMAND("cmd"),
+    FOLDER_PATH("folderPath"),
+    FILES_JSON("filesJson");
 
     private final String key;
 

@@ -1,7 +1,5 @@
 package com.zephyrupdater.server;
 
-import com.zephyrupdater.server.updater.CheckingFiles;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,28 +7,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainServer {
+
+    public static Path publicFilesPath;
     public static void main(String[] args){
+        getPublicFilesPath();
+        System.out.println(publicFilesPath);
+        //System.out.println(CheckingFiles.getFilesJson(publicFilesPath));
 
+        new AppServer().launchServer();
+    }
+
+    private static void getPublicFilesPath(){
         String path = MainServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        File serverFile = new File(path);
-        Path serverDir = Paths.get(serverFile.getParentFile().getAbsolutePath()).resolve("public");
+        File publicFiles = new File(path);
+        publicFilesPath = Paths.get(publicFiles.getParentFile().getAbsolutePath()).resolve("public");
 
-        if(!Files.exists(serverDir)){
+        if(!Files.exists(publicFilesPath)){
 
             try {
-                Files.createDirectories(serverDir);
+                Files.createDirectories(publicFilesPath);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
-
-
-        System.out.println(serverDir);
-        System.out.println(CheckingFiles.getFilesJson(serverDir));
-
-
-
-        new AppServer().launchServer();
     }
 }

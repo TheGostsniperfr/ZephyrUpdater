@@ -10,11 +10,13 @@ import java.security.MessageDigest;
 
 
 public class CheckingFiles {
-    public static String getFilesJson(Path filesParentPath){
+    public static JsonObject getFilesJson(Path filesParentPath){
+        System.out.println("Listing files to update at: " + filesParentPath.toString());
+
         JsonObject jsonObject = new JsonObject();
         getJsonObjFromDir(jsonObject, filesParentPath);
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     private static void getJsonObjFromDir(JsonObject mainJson, Path currentDirPath){
@@ -37,17 +39,7 @@ public class CheckingFiles {
                 mainJson.add(file.getName(), currentObject);
             } catch (Exception e){
                 e.printStackTrace();
-                continue;
             }
-
-
-
-
-
-
-
         }
     }
-
-
 }

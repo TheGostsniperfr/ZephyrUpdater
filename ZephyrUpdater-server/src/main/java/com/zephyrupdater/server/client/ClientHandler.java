@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
@@ -105,10 +106,13 @@ public class ClientHandler implements Runnable {
     public void setIsAuth(Boolean state) { this.isAuth = state; }
     public void setClientId(String clientId) { this.clientId = clientId; }
     public String getClientId() { return clientId; }
-    public void sendMsgToClient(String msg){
+    public void sendCmdToClient(ZUCStructCore zucStruct){
         if(this.isConnect) {
-            ZUPManager.sendData(this.clientSocket, new ZUPCommandCore(new ZUCMessageCore(msg)));
+            ZUPManager.sendData(this.clientSocket, new ZUPCommandCore(zucStruct));
         }
+    }
+    public void sendMsgToClient(String msg){
+        sendCmdToClient(new ZUCMessageCore(msg));
     }
 
     public static ClientHandler getClientById(String clientId){

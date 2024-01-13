@@ -7,6 +7,7 @@ import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCor
 import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCDisconnection;
 import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCLogin;
 import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCMessage;
+import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCUpdate;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.server.client.ClientHandler;
@@ -30,6 +31,9 @@ public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
                 break;
             case DISCONNECTION:
                 zucStruct = new ZUCDisconnection();
+                break;
+            case UPDATE:
+                zucStruct = new ZUCUpdate(data);
                 break;
             default:
                 System.err.println("Invalid Argument: " + zucTypes);

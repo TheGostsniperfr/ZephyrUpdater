@@ -12,9 +12,8 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.List;
 import java.util.Scanner;
+
 public class AppClient {
-
-
     private static Socket serverSocket = null;
     private static Thread listenToServerThread = null;
     private static Boolean isConnect = false;

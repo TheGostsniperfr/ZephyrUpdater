@@ -41,8 +41,11 @@ public interface ZUCStruct extends ZUCStructCore {
             case STOP:
                 ZUCStop.executeClientCmd(argv);
                 break;
+            case UPDATE:
+                ZUCUpdate.executeClientCmd(argv);
+                break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(cmdType.toString());
         }
     }
 
