@@ -3,59 +3,51 @@ package com.zephyrupdater.server.updater;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 
 public class CheckingFiles {
-    public static String getFilesJson(Path filesParentPath) throws IOException, NoSuchAlgorithmException {
+    public static String getFilesJson(Path filesParentPath){
         JsonObject jsonObject = new JsonObject();
-        JsonObject jsonVal = new JsonObject();
+        getJsonObjFromDir(jsonObject, filesParentPath);
 
-        File directory = new File(filesParentPath.toString());
-        File[] list = directory.listFiles();
+        return jsonObject.toString();
+    }
 
-        if (list.length != 0) {
-            System.out.println("files list :");
+    private static void getJsonObjFromDir(JsonObject mainJson, Path currentDirPath){
+        File directory = new File(currentDirPath.toString());
+        File[] files = directory.listFiles();
 
+        for(File file : files){
+            if(file.isDirectory()){
+                getJsonObjFromDir(mainJson, Paths.get(file.getPath().toString()));
+                continue;
+            }
 
-            for (File file : list) {
-                System.out.println("############");
-                if(file.isDirectory()){
-                    System.out.println("Directory: " + file.getName());
-                    continue;
-                }
-
-                System.out.println("File: " + file.getName());
-
-
+            JsonObject currentObject = new JsonObject();
+            try{
                 byte[] fileContentBytes = Files.readAllBytes(Paths.get(file.getPath()));
                 byte[] hash = MessageDigest.getInstance("SHA-256").digest(fileContentBytes);
+                currentObject.addProperty("path", file.getPath());
+                currentObject.addProperty("hash", hash.toString());
 
-                String path = file.getPath();
-                String name = file.getName();
-
-                if (file.isFile()) {
-                    System.out.println("name : " + name);
-                    System.out.println("path : " + path);
-                    System.out.println("hash : " + Arrays.toString(hash));
-
-                    jsonVal.addProperty(path, Arrays.toString(hash));
-                    jsonObject.add(name, jsonVal);
-
-                }
+                mainJson.add(file.getName(), currentObject);
+            } catch (Exception e){
+                e.printStackTrace();
+                continue;
             }
-            System.out.println("------------------------------------");
-            return jsonObject.toString();
+
+
+
+
+
+
+
         }
-        else{
-            System.out.println("No such file or directory...");
-        }
-        return null;
     }
+
+
 }
