@@ -25,7 +25,5 @@ public class ZUCConnectCore implements ZUCStructCore {
         this.host = host;
         this.serverPort = port;
     }
-    public static void printHelp(){
-        System.out.println("connect [host] [port]");
-    }
+
 }

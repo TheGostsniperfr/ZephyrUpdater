@@ -45,7 +45,4 @@ public class ZUCLoginCore implements ZUCStructCore {
         return jsonObject.toString();
     }
 
-    public static void printHelp(){
-        System.out.println("login [id] [password]");
-    }
 }

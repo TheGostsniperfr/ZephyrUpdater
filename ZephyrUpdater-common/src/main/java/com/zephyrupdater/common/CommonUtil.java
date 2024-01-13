@@ -3,9 +3,6 @@ package com.zephyrupdater.common;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
-import java.net.Socket;
-
 public class CommonUtil {
     public static final String HOST = "localhost";
     public static final int SERVER_PORT  = 2048;

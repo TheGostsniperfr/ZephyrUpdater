@@ -33,7 +33,5 @@ public class ZUCMessageCore implements ZUCStructCore {
         return jsonObject.toString();
     }
 
-    public static void printHelp(){
-        System.out.println("msg [message]");
-    }
+
 }
