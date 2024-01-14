@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("org.reflections:reflections:0.9.12")
+    implementation("org.apache.commons:commons-compress:1.21")
 
 }
 
