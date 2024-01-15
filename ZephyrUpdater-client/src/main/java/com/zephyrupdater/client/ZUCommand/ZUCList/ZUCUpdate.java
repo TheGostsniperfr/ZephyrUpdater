@@ -32,6 +32,7 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
         String clientMainPath = String.valueOf(MainClient.clientFilePath);
 
         for (String key : this.filesJson.keySet()) {
+            System.out.println("####################");
             JsonElement jsonElement = this.filesJson.get(key);
 
             if (!filesJson.isJsonObject()) {
@@ -44,38 +45,43 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
             Path path = Paths.get(CommonUtil.getValueFromJson("path", midJson, String.class));
             String hash = CommonUtil.getValueFromJson("hash", midJson, String.class);
 
-            System.out.println("Server path is : " + path);
-            System.out.println("File hash is :" + hash);
+            System.out.println("-Server path is : " + path);
 
-            Path localPath = Paths.get(MainClient.clientFilePath.toString() + path);
-            if(Files.exists(localPath) && Files.isDirectory(localPath)){
-                System.out.println(key + "is downloaded");
+            Path localPath = Paths.get(MainClient.clientFilePath.toString() + "\\" + path);
+            System.out.println("-local path : " + localPath);
+            if(Files.exists(localPath)){
+
+                System.out.println("//  Path OK");
                 System.out.println("hash verification :");
-                try {
-                    byte[] fileContentBytes = Files.readAllBytes(path);
-                    byte[] clienthash = MessageDigest.getInstance("SHA-256").digest(fileContentBytes);
 
-                    if(!Objects.equals(clienthash, hash)){
-                        System.out.println("not same hash, delete it");
+                try {
+                    byte[] fileContentBytes = Files.readAllBytes(Paths.get("C:\\Users\\mathys\\AppData\\Roaming\\.Arffornia.V.5\\mods\\angelblockrenewed-forge-1.3-1.20.jar"));
+                    byte[] clienthash = MessageDigest.getInstance("SHA-256").digest(fileContentBytes);
+                    System.out.println("-server : " + hash);
+                    System.out.println("-client :" + clienthash);
+
+                    if(!clienthash.equals(hash)){
+                        System.out.println("//  not same hash, delete it");
                         /* TODO
                         delete file and doawnload a new one
                          */
                     }
+
+                    else{
+                        System.out.println("//  Hash OK");
+                    }
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
+
             else{
-                System.out.println("No such file or directory");
+                System.out.println("//  No such file or directory");
                 /* TODO
                 doawnload it
                  */
             }
-
-
-
-
-
         }
     }
     /**
