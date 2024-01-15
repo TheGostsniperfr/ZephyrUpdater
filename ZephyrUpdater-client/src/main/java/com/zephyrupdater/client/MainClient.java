@@ -14,7 +14,7 @@ public class MainClient {
     public static void main(String[] args) {
         checkGameFolder();
         UpdaterManager.update();
-        //AppClient.launchClient();
+        AppClient.launchClient();
     }
 
     private static void checkGameFolder(){

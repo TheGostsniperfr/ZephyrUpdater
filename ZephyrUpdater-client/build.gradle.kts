@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":ZephyrUpdater-common"))
     implementation("org.reflections:reflections:0.9.12")
     implementation("com.google.code.gson:gson:2.8.9")
+    implementation("commons-io:commons-io:2.11.0")
 
 }
 

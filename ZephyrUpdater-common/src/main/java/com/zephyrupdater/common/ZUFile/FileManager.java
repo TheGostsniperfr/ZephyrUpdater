@@ -90,4 +90,17 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
+    public static File findFolderStartingByWith(Path pathToSearch, String startName){
+        File dir = new File(pathToSearch.toUri());
+        if(dir.exists() && dir.isDirectory()) {
+            for (File currentFile : dir.listFiles()) {
+                if (currentFile.isDirectory() && currentFile.getName().startsWith(startName)){
+                    return currentFile;
+                }
+            }
+        }
+
+        return null;
+    }
 }

@@ -3,7 +3,10 @@ package com.zephyrupdater.client.Updater.JavaUpdater;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.common.OSType;
 import com.zephyrupdater.common.ZUFile.ArchiveExtractor;
+import com.zephyrupdater.common.ZUFile.FileManager;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -11,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 
 public class JavaUpdater {
     private static final Path JAVA_DIR = MainClient.clientFilePath.resolve("java");
@@ -24,31 +28,26 @@ public class JavaUpdater {
             }
         }
 
-        System.out.println("test");
-        if(!JavaUpdater.isJavaInstalled()){
-            System.out.println("test2");
+        if(!JavaUpdater.isJavaInstalled()) {
             JavaUpdater.downloadJava();
-            System.out.println("test3");
-            if(!JavaUpdater.isJavaInstalled()){
+            if (!JavaUpdater.isJavaInstalled()) {
                 throw new RuntimeException("Failed to install java.");
             }
-        }else{
-            JavaUpdater.setCurrentJava();
         }
-
     }
     private static void downloadJava() {
         try {
             URL javaUrl = new URL(getJavaUrlByOS());
-            System.out.println("URL:" + javaUrl);
-            System.out.println("Java dir: " + JAVA_DIR);
             InputStream inputStream = javaUrl.openStream();
             Path destinationFile = JAVA_DIR.resolve(Paths.get(javaUrl.getPath()).getFileName().toString());
-            System.out.println("dest File: " + destinationFile);
+
+            //TODO Remove if
             if(!Files.exists(destinationFile)) {
+                System.out.println("Downloading java archive.");
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
 
+            System.out.println("Extraction of java archive");
 
             if (MainClient.CLIENT_OS == OSType.WINDOWS) {
                 ArchiveExtractor.extractZipArchive(destinationFile, JAVA_DIR);
@@ -56,12 +55,20 @@ public class JavaUpdater {
                 ArchiveExtractor.extractTarGzArchive(destinationFile, JAVA_DIR);
             }
 
-            //Files.deleteIfExists(destinationFile);
+            File extractedJavaFolder = FileManager.findFolderStartingByWith(JAVA_DIR, "jdk");
+            System.out.println("Sub folder: " + extractedJavaFolder.toString());
+            if(extractedJavaFolder == null){
+                System.err.println("Error to find sub folder starting with `jdk`");
+                return;
+            }
+
+            FileUtils.copyDirectory(extractedJavaFolder, new File(JAVA_DIR.toUri()));
+            FileUtils.deleteDirectory(extractedJavaFolder);
+
+            //Files.deleteIfExists(destinationFile); //TODO REMOVE COMMENT
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        setCurrentJava();
     }
 
     private static String getJavaUrlByOS(){
@@ -77,12 +84,8 @@ public class JavaUpdater {
         }
     }
 
-    private static void setCurrentJava() {
-        System.setProperty("java.home", JAVA_DIR.resolve("bin").toString());
-    }
-
     private static Boolean isJavaInstalled(){
-        Path javaBinDir = JAVA_DIR.resolve("jdk-17.0.9").resolve("bin");
+        Path javaBinDir = JAVA_DIR.resolve("bin");
         if(!Files.exists(javaBinDir)){
             return false;
         }
