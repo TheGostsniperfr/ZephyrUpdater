@@ -1,5 +1,7 @@
 package com.zephyrupdater.server;
 
+import com.zephyrupdater.common.FileUtils.CurseForgeUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,12 +11,16 @@ import java.nio.file.Paths;
 public class MainServer {
 
     public static Path publicFilesPath;
+
     public static void main(String[] args){
         getPublicFilesPath();
         System.out.println(publicFilesPath);
-        //System.out.println(CheckingFiles.getFilesJson(publicFilesPath));
 
-        new AppServer().launchServer();
+        Path modsDir = publicFilesPath.resolve("mods");
+        //CurseForgeUtils.createBlankJsonModList(10, publicFilesPath.resolve("mods"), "modList.json");
+        CurseForgeUtils.downloadModList(modsDir.resolve("modList.json"), modsDir);
+
+        //new AppServer().launchServer();
     }
 
     private static void getPublicFilesPath(){

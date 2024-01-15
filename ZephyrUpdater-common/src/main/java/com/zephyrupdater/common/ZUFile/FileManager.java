@@ -1,5 +1,7 @@
 package com.zephyrupdater.common.ZUFile;
 
+import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
@@ -102,5 +104,27 @@ public class FileManager {
         }
 
         return null;
+    }
+
+    public static void saveJsonAt(JsonObject jsonObject, Path filepath, String filename){
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try (FileWriter fileWriter = new FileWriter(filepath.resolve(filename).toFile())) {
+            JsonWriter jsonWriter = new JsonWriter(fileWriter);
+            jsonWriter.setIndent("\t");
+            gson.toJson(jsonObject, jsonWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static JsonObject createJsonObjectFromFile(Path filePath){
+        try (FileReader fileReader = new FileReader(filePath.toFile())) {
+            JsonParser jsonParser = new JsonParser();
+            return jsonParser.parse(fileReader).getAsJsonObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
