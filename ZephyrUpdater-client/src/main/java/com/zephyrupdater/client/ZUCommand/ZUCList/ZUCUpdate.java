@@ -2,9 +2,9 @@ package com.zephyrupdater.client.ZUCommand.ZUCList;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.zephyrupdater.client.AppClient;
 import com.zephyrupdater.client.MainClient;
+import com.zephyrupdater.client.Updater.UpdaterManager;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
@@ -16,19 +16,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.List;
-import java.util.Objects;
 
 public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
     public ZUCUpdate(JsonObject data) {
         super(data);
     }
 
-    public ZUCUpdate(String folderPath, JsonObject filesJson) {
-        super(folderPath, filesJson);
+    public ZUCUpdate(String folderPath, JsonObject filesJson, JsonObject curseModJson) {
+        super(folderPath, filesJson, curseModJson);
     }
 
     @Override
     public void executeServerCmd() {
+        UpdaterManager.update(this.filesJson, this.curseModJson);
+
         String clientMainPath = String.valueOf(MainClient.clientFilePath);
 
         for (String key : this.filesJson.keySet()) {
@@ -104,7 +105,7 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
 
         ZUPManager.sendData(
                 AppClient.getServerSocket(),
-                new ZUPCommandCore(new ZUCUpdate(folderPath, new JsonObject())));
+                new ZUPCommandCore(new ZUCUpdate(folderPath, new JsonObject(), new JsonObject())));
     }
 
     public static void printHelp(){
