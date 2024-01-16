@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.FileUtils;
+package com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 
 public enum CURSE_KEY {
     FILE_ID("fileId"),

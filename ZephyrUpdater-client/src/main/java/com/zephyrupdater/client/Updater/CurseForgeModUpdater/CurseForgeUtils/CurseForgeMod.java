@@ -3,7 +3,6 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.CURSE_KEY;
 import com.zephyrupdater.common.FileUtils.HashUtils.HASH_ALGO_TYPE;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 

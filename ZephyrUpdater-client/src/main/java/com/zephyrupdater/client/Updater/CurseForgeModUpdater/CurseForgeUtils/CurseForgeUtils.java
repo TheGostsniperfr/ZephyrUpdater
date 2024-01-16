@@ -3,8 +3,6 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.CURSE_KEY;
 import com.zephyrupdater.common.ZUFile.FileManager;
 
 import java.io.BufferedReader;
@@ -19,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurseForgeUtils {
-    private static final String CURSE_FORGE_URL = "https://api.curse.tools";
-    private static final String GET_MOD_FILE_URL = "/v1/cf/mods/{modId}/files/{fileId}";
+    private static final String CF_BASE_URL = "https://api.curse.tools";
+
 
     public static List<CurseForgeMod> getModFileList(JsonObject jsonModList, Path modsDirPath){
         List<CurseForgeMod> curseForgeMods = new ArrayList<>();
@@ -33,21 +31,9 @@ public class CurseForgeUtils {
                 continue;
             }
 
-            JsonObject modJson = jsonElement.getAsJsonObject();
-            String fileId = CommonUtil.getValueFromJson(CURSE_KEY.FILE_ID.getKey(), modJson, String.class);
-            String projectId = CommonUtil.getValueFromJson(CURSE_KEY.PROJECT_ID.getKey(), modJson, String.class);
-
-            String formattedUrl = CURSE_FORGE_URL + GET_MOD_FILE_URL
-                            .replace("{modId}", projectId)
-                            .replace("{fileId}", fileId);
-
-            try {
-                JsonObject response = getResponseFromRequest(new URL(formattedUrl));
-                curseForgeMods.add(new CurseForgeMod(response, modsDirPath));
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            CurseForgeFile modFile = new CurseForgeFile(jsonElement.getAsJsonObject());
+            JsonObject response = getResponseFromRequest(modFile.getDownloadUrl(CF_BASE_URL));
+            curseForgeMods.add(new CurseForgeMod(response, modsDirPath));
         }
 
         return curseForgeMods;
