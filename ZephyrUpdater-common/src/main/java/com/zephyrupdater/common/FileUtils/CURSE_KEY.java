@@ -7,7 +7,7 @@ public enum CURSE_KEY {
     FILE_NAME("fileName"),
     HASH("hashes"),
     VALUE("value"),
-    SIZE("fileSizeOnDisk"),
+    SIZE("fileLength"),
     URL("downloadUrl");
 
     private final String key;

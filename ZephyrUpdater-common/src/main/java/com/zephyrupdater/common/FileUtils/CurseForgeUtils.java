@@ -18,29 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurseForgeUtils {
-        private static final String CURSE_FORGE_URL = "https://api.curseforge.com";
-        private static final String GET_MOD_FILE_URL = "/v1/mods/{modId}/files/{fileId}";
-
-    public static void createBlankJsonModList(int nbMods, Path filePath, String fileName){
-        if(Files.exists(filePath.resolve(fileName))){
-            System.out.println("A file with the same name already exist.");
-            return;
-        }
-        JsonObject mainJson = new JsonObject();
-        for(int i = 0; i < nbMods; i++){
-            JsonObject modJson = new JsonObject();
-            modJson.addProperty(CURSE_KEY.FILE_ID.name(),"");
-            modJson.addProperty(CURSE_KEY.PROJECT_ID.name(),"");
-            mainJson.add(new StringBuilder("CurseForgeUrl").append(i).toString(), modJson);
-        }
-
-        FileManager.saveJsonAt(mainJson, filePath, fileName);
-    }
-
+    private static final String CURSE_FORGE_URL = "https://api.curse.tools";
+    private static final String GET_MOD_FILE_URL = "/v1/cf/mods/{modId}/files/{fileId}";
 
     public static List<CurseForgeMod> getModList(Path modListPath, Path modsDir){
         List<CurseForgeMod> curseForgeMods = new ArrayList<>();
         JsonObject jsonModList = FileManager.createJsonObjectFromFile(modListPath);
+
         for(String modName : jsonModList.keySet()){
             System.out.println("mod key: " + modName);
             JsonElement jsonElement = jsonModList.get(modName);
@@ -74,12 +58,12 @@ public class CurseForgeUtils {
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
+            conn.setInstanceFollowRedirects(true);
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Accept", "application/json");
             int responseCode = conn.getResponseCode();
 
-            if(responseCode != 200){
-                System.err.println("Error when attempt to connect to Curse Forge API");
-                return null;
-            }
+
 
             try (Reader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 return new CurseForgeMod(JsonParser.parseReader(reader).getAsJsonObject());
@@ -88,5 +72,21 @@ public class CurseForgeUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void createBlankJsonModList(int nbMods, Path filePath, String fileName){
+        if(Files.exists(filePath.resolve(fileName))){
+            System.out.println("A file with the same name already exist.");
+            return;
+        }
+        JsonObject mainJson = new JsonObject();
+        for(int i = 0; i < nbMods; i++){
+            JsonObject modJson = new JsonObject();
+            modJson.addProperty(CURSE_KEY.FILE_ID.getKey(),"");
+            modJson.addProperty(CURSE_KEY.PROJECT_ID.getKey(),"");
+            mainJson.add(new StringBuilder("CurseForgeUrl").append(i).toString(), modJson);
+        }
+
+        FileManager.saveJsonAt(mainJson, filePath, fileName);
     }
 }
