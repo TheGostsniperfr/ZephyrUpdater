@@ -1,24 +1,21 @@
 package com.zephyrupdater.client.Updater;
 
+import com.google.gson.JsonObject;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
-import com.zephyrupdater.common.FileUtils.CurseForgeMod;
-import com.zephyrupdater.common.FileUtils.CurseForgeUtils;
+import com.zephyrupdater.client.Updater.ModUpdater.ModUpdater;
 
 import java.nio.file.Path;
-import java.util.List;
 
 public class UpdaterManager {
+    private static final Path modDirPath = MainClient.clientFilePath.resolve("mods");
 
-    public static void update(){
+    public static void update(JsonObject extUpdateFilesJson, JsonObject curseModJson){
+        // Update Java
         JavaUpdater.javaUpdate();
 
-        Path modPath = MainClient.clientFilePath.resolve("mods");
-        //CurseForgeUtils.createBlankJsonModList(3, MainClient.clientFilePath, "modList.json");
-        List<CurseForgeMod> modList = CurseForgeUtils.getModList(MainClient.clientFilePath.resolve("modList.json"), MainClient.clientFilePath);
-        for(CurseForgeMod curseForgeMod : modList){
-            System.out.println("Downloading: " + curseForgeMod.getFileName());
-            curseForgeMod.downloadMod(modPath);
-        }
+        // Update mods
+        ModUpdater modUpdater = new ModUpdater(modDirPath, curseModJson, extUpdateFilesJson);
+        modUpdater.update();
     }
 }

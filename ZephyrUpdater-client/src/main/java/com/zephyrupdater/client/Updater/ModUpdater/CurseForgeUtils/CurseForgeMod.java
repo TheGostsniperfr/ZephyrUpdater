@@ -1,8 +1,11 @@
-package com.zephyrupdater.common.FileUtils;
+package com.zephyrupdater.client.Updater.ModUpdater.CurseForgeUtils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.FileUtils.CURSE_KEY;
+import com.zephyrupdater.common.FileUtils.HashUtils.HASH_ALGO_TYPE;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,9 +19,10 @@ public class CurseForgeMod {
     private final String hash;
     private final long size;
     private final URL url;
+    private final Path modsDirPath;
+    private final Path modFilePath;
 
-
-    public CurseForgeMod(JsonObject jsonObject) {
+    public CurseForgeMod(JsonObject jsonObject, Path modDirPath) {
         try {
             JsonObject dataObj = jsonObject.get(CURSE_KEY.DATA.getKey()).getAsJsonObject();
             this.fileName = CommonUtil.getValueFromJson(CURSE_KEY.FILE_NAME.getKey(), dataObj, String.class);
@@ -28,29 +32,45 @@ public class CurseForgeMod {
             JsonArray hashesArray = dataObj.getAsJsonArray(CURSE_KEY.HASH.getKey());
             JsonObject firstHashObj = hashesArray.get(0).getAsJsonObject();
             this.hash = CommonUtil.getValueFromJson(CURSE_KEY.VALUE.getKey(), firstHashObj, String.class);
+
+            this.modsDirPath = modDirPath;
+            this.modFilePath = this.modsDirPath.resolve(this.fileName);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
     }
 
-    public void downloadMod(Path pathToDownload){
+    private void downloadMod(){
         InputStream inputStream;
         try {
-            if(!Files.exists(pathToDownload)){
-                Files.createDirectories(pathToDownload);
+            if(!Files.exists(this.modsDirPath)){
+                Files.createDirectories(modsDirPath);
             }
 
             inputStream = this.url.openStream();
-            Path destinationFile = pathToDownload.resolve(this.fileName);
-            if (!Files.exists(destinationFile)) {
-                Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+            if (!Files.exists(this.modFilePath)) {
+                Files.copy(inputStream, this.modFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private Boolean needToBeUpdate(){
+        if(!Files.exists(this.modFilePath)){
+            return true;
+        }
+
+        return !HashAlgo.getHashFromFilePath(this.modFilePath, HASH_ALGO_TYPE.SHA256).equals(this.hash);
+    }
+
+    public void checkUpdate(){
+        if(needToBeUpdate()){
+            System.out.println("Downloading mod: " + this.fileName);
+            downloadMod();
+        }
+    }
 
     public URL getUrl() {
         return url;
@@ -66,5 +86,13 @@ public class CurseForgeMod {
 
     public String getHash() {
         return hash;
+    }
+
+    public Path getModFilePath() {
+        return modFilePath;
+    }
+
+    public Path getModsDirPath() {
+        return modsDirPath;
     }
 }

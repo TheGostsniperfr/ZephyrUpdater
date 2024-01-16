@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.ZUFile;
+package com.zephyrupdater.common.FileUtils;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;

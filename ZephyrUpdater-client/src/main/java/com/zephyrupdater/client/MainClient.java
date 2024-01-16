@@ -1,6 +1,5 @@
 package com.zephyrupdater.client;
 
-import com.zephyrupdater.client.Updater.UpdaterManager;
 import com.zephyrupdater.common.OSType;
 
 import java.nio.file.Files;
@@ -13,8 +12,7 @@ public class MainClient {
     public static OSType CLIENT_OS;
     public static void main(String[] args) {
         checkGameFolder();
-        UpdaterManager.update();
-        //AppClient.launchClient();
+        AppClient.launchClient();
     }
 
     private static void checkGameFolder(){

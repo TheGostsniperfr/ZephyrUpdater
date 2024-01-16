@@ -2,7 +2,7 @@ package com.zephyrupdater.client.Updater.JavaUpdater;
 
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.common.OSType;
-import com.zephyrupdater.common.ZUFile.ArchiveExtractor;
+import com.zephyrupdater.common.FileUtils.ArchiveExtractor;
 import com.zephyrupdater.common.ZUFile.FileManager;
 import org.apache.commons.io.FileUtils;
 

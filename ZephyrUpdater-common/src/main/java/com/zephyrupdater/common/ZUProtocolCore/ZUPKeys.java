@@ -7,7 +7,8 @@ public enum ZUPKeys {
     FILE_NAME("filename"),
     COMMAND("cmd"),
     FOLDER_PATH("folderPath"),
-    FILES_JSON("filesJson");
+    FILES_JSON("filesJson"),
+    CURSE_MOD_JSON("curseModJson");
 
     private final String key;
 

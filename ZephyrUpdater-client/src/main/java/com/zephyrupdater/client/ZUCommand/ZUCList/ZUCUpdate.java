@@ -2,6 +2,7 @@ package com.zephyrupdater.client.ZUCommand.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.AppClient;
+import com.zephyrupdater.client.Updater.UpdaterManager;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
@@ -14,8 +15,8 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
         super(data);
     }
 
-    public ZUCUpdate(String folderPath, JsonObject filesJson) {
-        super(folderPath, filesJson);
+    public ZUCUpdate(String folderPath, JsonObject filesJson, JsonObject curseModJson) {
+        super(folderPath, filesJson, curseModJson);
     }
 
     @Override
@@ -28,6 +29,8 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
 
         System.out.println("Update file at: " + this.folderPath);
         System.out.println(this.filesJson.toString());
+
+        UpdaterManager.update(this.filesJson, this.curseModJson);
     }
 
     /**
@@ -50,7 +53,7 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
 
         ZUPManager.sendData(
                 AppClient.getServerSocket(),
-                new ZUPCommandCore(new ZUCUpdate(folderPath, new JsonObject())));
+                new ZUPCommandCore(new ZUCUpdate(folderPath, new JsonObject(), new JsonObject())));
     }
 
     public static void printHelp(){

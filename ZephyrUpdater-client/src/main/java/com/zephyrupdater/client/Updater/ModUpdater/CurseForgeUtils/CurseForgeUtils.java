@@ -1,9 +1,10 @@
-package com.zephyrupdater.common.FileUtils;
+package com.zephyrupdater.client.Updater.ModUpdater.CurseForgeUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.FileUtils.CURSE_KEY;
 import com.zephyrupdater.common.ZUFile.FileManager;
 
 import java.io.BufferedReader;
@@ -21,16 +22,14 @@ public class CurseForgeUtils {
     private static final String CURSE_FORGE_URL = "https://api.curse.tools";
     private static final String GET_MOD_FILE_URL = "/v1/cf/mods/{modId}/files/{fileId}";
 
-    public static List<CurseForgeMod> getModList(Path modListPath, Path modsDir){
+    public static List<CurseForgeMod> getModFileList(JsonObject jsonModList, Path modsDirPath){
         List<CurseForgeMod> curseForgeMods = new ArrayList<>();
-        JsonObject jsonModList = FileManager.createJsonObjectFromFile(modListPath);
 
         for(String modName : jsonModList.keySet()){
-            System.out.println("mod key: " + modName);
             JsonElement jsonElement = jsonModList.get(modName);
 
             if(!jsonElement.isJsonObject()){
-                System.out.println(jsonModList + " is not a JsonObject");
+                System.out.println(jsonElement + " is not a JsonObject");
                 continue;
             }
 
@@ -43,8 +42,8 @@ public class CurseForgeUtils {
                             .replace("{fileId}", fileId);
 
             try {
-                URL url = new URL(formattedUrl);
-                curseForgeMods.add(getResponseFromRequest(url));
+                JsonObject response = getResponseFromRequest(new URL(formattedUrl));
+                curseForgeMods.add(new CurseForgeMod(response, modsDirPath));
 
             } catch (Exception e){
                 e.printStackTrace();
@@ -54,7 +53,7 @@ public class CurseForgeUtils {
         return curseForgeMods;
     }
 
-    private static CurseForgeMod getResponseFromRequest(URL url){
+    private static JsonObject getResponseFromRequest(URL url){
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -63,10 +62,10 @@ public class CurseForgeUtils {
             conn.setRequestProperty("Accept", "application/json");
             int responseCode = conn.getResponseCode();
 
-
+            // TODO
 
             try (Reader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-                return new CurseForgeMod(JsonParser.parseReader(reader).getAsJsonObject());
+                return JsonParser.parseReader(reader).getAsJsonObject();
             }
 
         } catch (IOException e) {
@@ -88,5 +87,9 @@ public class CurseForgeUtils {
         }
 
         FileManager.saveJsonAt(mainJson, filePath, fileName);
+    }
+
+    public static void checkUpdateModList(List<CurseForgeMod> modList){
+        modList.forEach(CurseForgeMod::checkUpdate);
     }
 }
