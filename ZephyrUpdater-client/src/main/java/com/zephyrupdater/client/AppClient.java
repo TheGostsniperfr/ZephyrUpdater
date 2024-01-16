@@ -107,6 +107,7 @@ public class AppClient {
         AppClient.isConnect = isConnect;
     }
 
+
     public static Thread getListenToServerThread() {
         return listenToServerThread;
     }

@@ -1,6 +1,7 @@
 package com.zephyrupdater.server.updater;
 
 import com.google.gson.JsonObject;
+import com.zephyrupdater.server.MainServer;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -25,15 +26,20 @@ public class CheckingFiles {
 
         for(File file : files){
             if(file.isDirectory()){
-                getJsonObjFromDir(mainJson, Paths.get(file.getPath().toString()));
+                getJsonObjFromDir(mainJson, Paths.get(file.getPath()));
                 continue;
             }
 
             JsonObject currentObject = new JsonObject();
             try{
-                byte[] fileContentBytes = Files.readAllBytes(Paths.get(file.getPath()));
+
+                Path filePath = Paths.get(file.getPath());
+                Path relative = MainServer.publicFilesPath.relativize(filePath);
+                System.out.println("relative path :" + relative);
+
+                byte[] fileContentBytes = Files.readAllBytes(filePath);
                 byte[] hash = MessageDigest.getInstance("SHA-256").digest(fileContentBytes);
-                currentObject.addProperty("path", file.getPath());
+                currentObject.addProperty("path", relative.toString());
                 currentObject.addProperty("hash", hash.toString());
 
                 mainJson.add(file.getName(), currentObject);
