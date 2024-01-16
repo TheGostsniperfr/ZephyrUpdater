@@ -30,8 +30,6 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
     public void executeServerCmd() {
         UpdaterManager.update(this.filesJson, this.curseModJson);
 
-        String clientMainPath = String.valueOf(MainClient.clientFilePath);
-
         for (String key : this.filesJson.keySet()) {
             System.out.println("####################");
             JsonElement jsonElement = this.filesJson.get(key);

@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.Updater.ModUpdater.CurseForgeUtils;
+package com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
