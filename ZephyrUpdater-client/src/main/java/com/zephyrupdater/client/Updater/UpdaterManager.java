@@ -2,7 +2,7 @@ package com.zephyrupdater.client.Updater;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.MainClient;
-import com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeModUpdater;
+import com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
 
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ public class UpdaterManager {
         JavaUpdater.javaUpdate();
 
         // Update curse forge mods
-        CurseForgeModUpdater.updateCurseForgeMod(curseModJson, modDirPath);
+        CurseForgeUtils.updateCurseForgeMod(curseModJson, modDirPath);
 
         // Update external files
         // TODO

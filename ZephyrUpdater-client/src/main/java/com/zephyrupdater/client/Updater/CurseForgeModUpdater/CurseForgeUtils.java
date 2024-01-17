@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
+package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,6 +18,11 @@ import java.util.List;
 
 public class CurseForgeUtils {
     private static final String CF_BASE_URL = "https://api.curse.tools";
+
+    public static void updateCurseForgeMod(JsonObject curseModJson, Path modDirPath){
+        List<CurseForgeMod> modList = CurseForgeUtils.getModFileList(curseModJson, modDirPath);
+        CurseForgeUtils.checkUpdateModList(modList);
+    }
 
 
     public static List<CurseForgeMod> getModFileList(JsonObject jsonModList, Path modsDirPath){
