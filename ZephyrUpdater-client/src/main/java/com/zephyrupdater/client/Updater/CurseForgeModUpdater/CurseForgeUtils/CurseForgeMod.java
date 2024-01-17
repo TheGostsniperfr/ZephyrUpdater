@@ -61,7 +61,7 @@ public class CurseForgeMod {
             return true;
         }
 
-        return !HashAlgo.getHashFromFilePath(this.modFilePath, HASH_ALGO_TYPE.SHA256).equals(this.hash);
+        return !HashAlgo.getHashFromFilePath(this.modFilePath, HASH_ALGO_TYPE.SHA1).equals(this.hash);
     }
 
     public void checkUpdate(){

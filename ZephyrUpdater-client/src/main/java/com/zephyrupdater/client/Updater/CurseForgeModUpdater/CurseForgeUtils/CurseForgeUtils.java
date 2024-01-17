@@ -48,7 +48,9 @@ public class CurseForgeUtils {
             conn.setRequestProperty("Accept", "application/json");
             int responseCode = conn.getResponseCode();
 
-            // TODO
+            if(responseCode != 200){
+                throw new RuntimeException("Bad server response code: " + responseCode);
+            }
 
             try (Reader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 return JsonParser.parseReader(reader).getAsJsonObject();
