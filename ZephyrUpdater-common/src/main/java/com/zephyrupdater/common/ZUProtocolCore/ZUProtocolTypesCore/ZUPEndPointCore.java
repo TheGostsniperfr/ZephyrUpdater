@@ -25,11 +25,6 @@ public class ZUPEndPointCore implements ZUPStructCore {
     }
 
     @Override
-    public Boolean getIsMultiChunks() {
-        return false;
-    }
-
-    @Override
     public String getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.END_POINT.toString());

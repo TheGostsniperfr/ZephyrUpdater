@@ -16,4 +16,14 @@ public class HashAlgo {
             throw new RuntimeException(e);
         }
     }
+
+    public static HASH_ALGO_TYPE getAlgoTypeByName(String algoName){
+        for(HASH_ALGO_TYPE algoType : HASH_ALGO_TYPE.values()){
+            if(algoType.getKey().equals(algoName)){
+                return algoType;
+            }
+        }
+
+        throw new IllegalArgumentException(algoName);
+    }
 }

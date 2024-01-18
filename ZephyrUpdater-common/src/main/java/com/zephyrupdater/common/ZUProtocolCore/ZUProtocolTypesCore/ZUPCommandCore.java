@@ -60,11 +60,6 @@ public class ZUPCommandCore implements ZUPStructCore {
     }
 
     @Override
-    public Boolean getIsMultiChunks() {
-        return false;
-    }
-
-    @Override
     public String getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.COMMAND.getKey(), this.cmdStructType.toString());

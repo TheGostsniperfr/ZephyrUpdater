@@ -1,8 +1,9 @@
-package com.zephyrupdater.common.FileUtils.ExternalFilesUtils;
+package com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUtils;
 
 public enum EXTERNAL_FILE_KEY {
     FILE_NAME("filename"),
-    HASH("hash");
+    HASH("hash"),
+    HASH_ALGO("hashAlgo");
 
     private final String key;
 

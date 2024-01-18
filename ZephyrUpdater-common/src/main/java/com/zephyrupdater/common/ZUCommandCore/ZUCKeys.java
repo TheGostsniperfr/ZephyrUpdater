@@ -3,8 +3,9 @@ package com.zephyrupdater.common.ZUCommandCore;
 public enum ZUCKeys {
     ID("id"),
     PASSWORD("password"),
-    CONTENT("content");
-
+    CONTENT("content"),
+    FILE_NANE("fileName"),
+    RELATIVE_FILE_PATH("relativeFilePath");
 
     private final String key;
 

@@ -12,8 +12,6 @@ public class ZUCLoginCore implements ZUCStructCore {
     public String id;
     public String password;
 
-    public final int MIN_ARG = 3;
-
     public ZUCLoginCore(String id, String password){
         this.id = id;
         this.password = password;

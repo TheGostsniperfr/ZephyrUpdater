@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.client.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
 
@@ -114,5 +115,8 @@ public class AppClient {
 
     public static void setListenToServerThread(Thread listenToServerThread) {
         AppClient.listenToServerThread = listenToServerThread;
+    }
+    public static void sendCmdToServer(ZUCStructCore cmd){
+        ZUPManager.sendData(getServerSocket(), new ZUPCommandCore(cmd));
     }
 }

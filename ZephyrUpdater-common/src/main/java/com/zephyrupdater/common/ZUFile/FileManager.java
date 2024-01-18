@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCGetFileCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
-import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 
 import java.io.*;
@@ -14,23 +14,20 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class FileManager {
 
-    private static final String TMP_EXT = ".TMP";
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 8192;
 
     /**
      * Read stream and create the associate file.
-     *
-     * @param socket
-     * @param zupFile
-     *
      * @return -1 on error, else 0
      */
-    public static int createFileFromStream(Socket socket, ZUPFileCore zupFile) {
-        Path filePath = Paths.get(zupFile.fileName);
+    public static int createFileFromStream(Socket socket, ZUPFileCore zupFile, Path downloadDirPath) {
+        System.out.println("rela path: " + zupFile.filePath);
+        System.out.println("path to download: " + downloadDirPath);
+        System.out.println("data size: " + zupFile.getDataSize());
+        Path filePath = downloadDirPath.resolve(Paths.get(zupFile.filePath.toUri()));
         long totalBytes = 0;
 
         try {
@@ -43,11 +40,10 @@ public class FileManager {
             int bytesRead;
 
             BufferedOutputStream bufferedOutputStream =
-                         new BufferedOutputStream(new FileOutputStream(zupFile.fileName));
+                         new BufferedOutputStream(new FileOutputStream(filePath.toString()));
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
-                if (Arrays.equals(buffer, ZUPEndPointCore.endPointFlagByte) |
-                        totalBytes > zupFile.getDataSize()) {
+                if (totalBytes == zupFile.getDataSize()) {
                     break;
                 }
 
@@ -55,12 +51,7 @@ public class FileManager {
                 bufferedOutputStream.write(buffer, 0, bytesRead);
             }
 
-
-            if (totalBytes != zupFile.getDataSize()) {
-                Files.deleteIfExists(filePath);
-                System.err.println("Error: Data corrupted: " + (zupFile.getDataSize() - totalBytes) + " bytes missing");
-                return -1;
-            }
+            bufferedOutputStream.close();
 
             return 0;
         } catch (IOException e) {
@@ -70,18 +61,21 @@ public class FileManager {
         return -1;
     }
 
-    public static void sendFileFromStream(Socket socket, File file){
-        if(!file.exists()){
+    public static void sendFileFromStream(Socket socket, ZUCGetFileCore fileCmd){
+
+        File fileToSend = new File(fileCmd.absFilePath.toUri());
+        if(!fileToSend.exists()){
             System.err.println("File does not exist.");
             return;
         }
 
         long size = 0;
-        ZUPManager.sendData(socket, new ZUPFileCore(file.getAbsolutePath(), file.length()));
+        ZUPManager.sendData(socket, new ZUPFileCore(fileCmd.relativeFilePath.toString(), fileToSend.length()));
+        System.out.println("file size: " + fileToSend.length());
 
         try {
             OutputStream outputStream = socket.getOutputStream();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(fileToSend));
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead;
 
@@ -90,7 +84,6 @@ public class FileManager {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            outputStream.write(ZUPEndPointCore.endPointFlagByte, 0, ZUPEndPointCore.endPointFlagByte.length);
         } catch (Exception e){
             e.printStackTrace();
         }

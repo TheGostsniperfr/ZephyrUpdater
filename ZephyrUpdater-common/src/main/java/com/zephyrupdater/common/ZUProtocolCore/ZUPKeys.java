@@ -4,9 +4,9 @@ public enum ZUPKeys {
     STRUCT_TYPE("structType"),
     DATA_SIZE("dataSize"),
     CONTENT("content"),
-    FILE_NAME("filename"),
     COMMAND("cmd"),
     FOLDER_PATH("folderPath"),
+    FILE_PATH("filePath"),
     FILES_JSON("filesJson"),
     CURSE_MOD_JSON("curseModJson");
 

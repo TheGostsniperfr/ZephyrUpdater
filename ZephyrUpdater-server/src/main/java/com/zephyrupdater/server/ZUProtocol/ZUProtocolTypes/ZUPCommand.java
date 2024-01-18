@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
-import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCDisconnection;
-import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCLogin;
-import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCMessage;
-import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCUpdate;
+import com.zephyrupdater.server.ZUCommand.ZUCList.*;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.server.client.ClientHandler;
@@ -34,6 +31,9 @@ public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
                 break;
             case UPDATE:
                 zucStruct = new ZUCUpdate(data);
+                break;
+            case GET_FILE:
+                zucStruct = new ZUCGetFile(data);
                 break;
             default:
                 System.err.println("Invalid Argument: " + zucTypes);

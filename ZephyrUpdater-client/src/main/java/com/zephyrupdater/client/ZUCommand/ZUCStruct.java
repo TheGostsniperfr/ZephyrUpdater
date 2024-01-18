@@ -44,6 +44,9 @@ public interface ZUCStruct extends ZUCStructCore {
             case UPDATE:
                 ZUCUpdate.executeClientCmd(argv);
                 break;
+            case GET_FILE:
+                ZUCGetFile.executeClientCmd(argv);
+                break;
             default:
                 throw new IllegalArgumentException(cmdType.toString());
         }

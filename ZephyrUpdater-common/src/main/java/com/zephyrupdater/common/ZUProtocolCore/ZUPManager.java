@@ -1,14 +1,14 @@
 package com.zephyrupdater.common.ZUProtocolCore;
 
-import java.io.*;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPEndPointCore;
-import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 
 public class ZUPManager {
     private static final int BUFFER_SIZE = 1024;
@@ -28,30 +28,6 @@ public class ZUPManager {
             //System.out.println("Data to send: " + dataToSend);
 
             outputStream.write(dataToSend.getBytes(StandardCharsets.UTF_8));
-
-            if(data.getIsMultiChunks()){
-                if(data.getClass() == ZUPFileCore.class){
-                    String filename = ((ZUPFileCore) data).fileName;
-                    try {
-                        FileInputStream fileInputStream = new FileInputStream(filename);
-                        byte[] buffer = new byte[BUFFER_SIZE];
-                        int bytesRead;
-
-                        while((bytesRead = fileInputStream.read(buffer)) != -1){
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-
-                    } catch (FileNotFoundException e){
-                        System.err.println("File: " + filename + "not found.");
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-
-                //send end multi chunks point
-                outputStream.write(new ZUPEndPointCore().getJson().getBytes(StandardCharsets.UTF_8));
-            }
-
         } catch (Exception e){
             e.printStackTrace();
         }

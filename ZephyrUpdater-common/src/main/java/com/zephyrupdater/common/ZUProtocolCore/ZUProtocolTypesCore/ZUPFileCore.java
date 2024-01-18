@@ -6,15 +6,19 @@ import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPStructCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class ZUPFileCore implements ZUPStructCore {
-    public String fileName;
+    public Path filePath;
     private final long dataSize;
     public ZUPFileCore(JsonObject dataHeader){
         this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
+        this.filePath = Paths.get(CommonUtil.getValueFromJson(ZUPKeys.FILE_PATH.getKey(), dataHeader, String.class));
     }
 
-    public ZUPFileCore(String filename, long size){
-        this.fileName = filename;
+    public ZUPFileCore(String filePath, long size){
+        this.filePath = Paths.get(filePath);
         this.dataSize = size;
     }
 
@@ -29,16 +33,11 @@ public class ZUPFileCore implements ZUPStructCore {
     }
 
     @Override
-    public Boolean getIsMultiChunks() {
-        return true;
-    }
-
-    @Override
     public String getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.FILE.toString());
-        jsonObject.addProperty(ZUPKeys.FILE_NAME.getKey(), this.fileName);
-        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), -1); // TODO
+        jsonObject.addProperty(ZUPKeys.FILE_PATH.getKey(), this.filePath.toString());
+        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), this.dataSize);
 
         return jsonObject.toString();
     }

@@ -66,7 +66,7 @@ public class CurseForgeMod {
 
     public void checkUpdate(){
         if(needToBeUpdate()){
-            System.out.println("Downloading mod: " + this.fileName);
+            System.out.println("Downloading: " + this.fileName);
             downloadMod();
         }
     }
