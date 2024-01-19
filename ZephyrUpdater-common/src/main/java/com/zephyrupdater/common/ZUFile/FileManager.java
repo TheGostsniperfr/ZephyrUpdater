@@ -13,7 +13,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FileManager {
 
@@ -27,7 +26,8 @@ public class FileManager {
         System.out.println("rela path: " + zupFile.filePath);
         System.out.println("path to download: " + downloadDirPath);
         System.out.println("data size: " + zupFile.getDataSize());
-        Path filePath = downloadDirPath.resolve(Paths.get(zupFile.filePath.toUri()));
+        Path filePath = downloadDirPath.resolve(zupFile.filePath);
+        System.out.println("final file path: " + filePath);
         long totalBytes = 0;
 
         try {
@@ -42,11 +42,7 @@ public class FileManager {
             BufferedOutputStream bufferedOutputStream =
                          new BufferedOutputStream(new FileOutputStream(filePath.toString()));
 
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                if (totalBytes == zupFile.getDataSize()) {
-                    break;
-                }
-
+            while (totalBytes < zupFile.getDataSize() && (bytesRead = inputStream.read(buffer)) != -1) {
                 totalBytes += bytesRead;
                 bufferedOutputStream.write(buffer, 0, bytesRead);
             }
@@ -69,7 +65,6 @@ public class FileManager {
             return;
         }
 
-        long size = 0;
         ZUPManager.sendData(socket, new ZUPFileCore(fileCmd.relativeFilePath.toString(), fileToSend.length()));
         System.out.println("file size: " + fileToSend.length());
 
@@ -80,7 +75,6 @@ public class FileManager {
             int bytesRead;
 
             while ((bytesRead = bufferedInputStream.read(buffer)) != -1){
-                size += bytesRead;
                 outputStream.write(buffer, 0, bytesRead);
             }
 
