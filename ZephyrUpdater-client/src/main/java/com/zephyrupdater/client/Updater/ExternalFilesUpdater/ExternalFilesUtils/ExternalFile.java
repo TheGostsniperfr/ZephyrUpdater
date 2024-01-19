@@ -40,7 +40,6 @@ public class ExternalFile {
 
     public void checkUpdate(){
         if(needToBeUpdate()){
-            System.out.println("Downloading: " + this.fileName);
             downloadFile();
         }
     }

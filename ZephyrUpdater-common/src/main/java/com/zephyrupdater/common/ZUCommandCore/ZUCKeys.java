@@ -5,7 +5,8 @@ public enum ZUCKeys {
     PASSWORD("password"),
     CONTENT("content"),
     FILE_NANE("fileName"),
-    RELATIVE_FILE_PATH("relativeFilePath");
+    RELATIVE_FILE_PATH("relativeFilePath"),
+    REQUEST("request");
 
     private final String key;
 

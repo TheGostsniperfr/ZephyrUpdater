@@ -8,7 +8,8 @@ public enum ZUCTypes {
     STOP("stop"),
     HELP("help"),
     UPDATE("update"),
-    GET_FILE("getFile");
+    GET_FILE("getFile"),
+    GET_FILES("getFiles");
     private final String cmdName;
 
     ZUCTypes(String cmdName) {

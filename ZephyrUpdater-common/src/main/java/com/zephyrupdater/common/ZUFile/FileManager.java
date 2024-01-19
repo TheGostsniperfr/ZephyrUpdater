@@ -18,16 +18,10 @@ public class FileManager {
 
     private static final int BUFFER_SIZE = 8192;
 
-    /**
-     * Read stream and create the associate file.
-     * @return -1 on error, else 0
-     */
-    public static int createFileFromStream(Socket socket, ZUPFileCore zupFile, Path downloadDirPath) {
-        System.out.println("rela path: " + zupFile.filePath);
-        System.out.println("path to download: " + downloadDirPath);
-        System.out.println("data size: " + zupFile.getDataSize());
+    public static void createFileFromStream(Socket socket, ZUPFileCore zupFile, Path downloadDirPath) {
         Path filePath = downloadDirPath.resolve(zupFile.filePath);
-        System.out.println("final file path: " + filePath);
+        File file = new File(filePath.toUri());
+        System.out.println("Downloading: " + file.getName() + " at: " + filePath);
         long totalBytes = 0;
 
         try {
@@ -49,12 +43,11 @@ public class FileManager {
 
             bufferedOutputStream.close();
 
-            return 0;
+            System.out.println("Success to download: " + file.getName());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return -1;
     }
 
     public static void sendFileFromStream(Socket socket, ZUCGetFileCore fileCmd){
@@ -66,7 +59,6 @@ public class FileManager {
         }
 
         ZUPManager.sendData(socket, new ZUPFileCore(fileCmd.relativeFilePath.toString(), fileToSend.length()));
-        System.out.println("file size: " + fileToSend.length());
 
         try {
             OutputStream outputStream = socket.getOutputStream();
