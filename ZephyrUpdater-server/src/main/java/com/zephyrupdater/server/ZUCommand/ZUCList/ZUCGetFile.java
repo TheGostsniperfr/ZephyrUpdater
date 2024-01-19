@@ -2,7 +2,7 @@ package com.zephyrupdater.server.ZUCommand.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCGetFileCore;
-import com.zephyrupdater.common.ZUFile.FileManager;
+import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.client.ClientHandler;
@@ -18,7 +18,7 @@ public class ZUCGetFile extends ZUCGetFileCore implements ZUCStruct {
     public void execute(ClientHandler client) {
 
         // check if the file exist on server
-        this.absFilePath = MainServer.publicFilesPath.resolve(this.relativeFilePath);
+        this.absFilePath = MainServer.publicDirPath.resolve(this.relativeFilePath);
         File serverFile = new File(this.absFilePath.toUri());
         if(!serverFile.exists() || serverFile.isDirectory()){
             // Invalid file
@@ -26,10 +26,7 @@ public class ZUCGetFile extends ZUCGetFileCore implements ZUCStruct {
             return;
         }
 
-        System.out.println("abs Path to file: " + this.absFilePath);
-        System.out.println("rela Path to file: " + this.relativeFilePath);
-
         // Send file to client
-        FileManager.sendFileFromStream(client.clientSocket, this);
+        ZUFileManager.sendFileFromStream(client.clientSocket, this);
     }
 }

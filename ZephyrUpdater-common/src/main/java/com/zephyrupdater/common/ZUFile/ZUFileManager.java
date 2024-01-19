@@ -14,7 +14,7 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileManager {
+public class ZUFileManager {
 
     private static final int BUFFER_SIZE = 8192;
 

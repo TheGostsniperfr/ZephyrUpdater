@@ -34,7 +34,7 @@ public class CheckingFiles {
             try{
 
                 Path filePath = Paths.get(file.getPath());
-                Path relative = MainServer.publicFilesPath.relativize(filePath);
+                Path relative = MainServer.publicDirPath.relativize(filePath);
                 System.out.println("relative path :" + relative);
 
                 byte[] fileContentBytes = Files.readAllBytes(filePath);

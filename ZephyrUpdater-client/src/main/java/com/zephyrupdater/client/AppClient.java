@@ -3,6 +3,7 @@ package com.zephyrupdater.client;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.client.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.common.FileUtils.FileUtils;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
@@ -34,7 +35,7 @@ public class AppClient {
                 throw new RuntimeException(e);
             }
             while(isConnect) {
-                JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
+                JsonObject dataHeader = FileUtils.loadJsonFromStream(inputStream);
                 if(dataHeader == null){
                     disconnectFromServer(false);
                     break;

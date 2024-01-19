@@ -1,7 +1,7 @@
 package com.zephyrupdater.server.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.ZUFile.FileManager;
+import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
@@ -13,6 +13,6 @@ public class ZUPFile extends ZUPFileCore implements ZUPStruct{
     }
     @Override
     public void execute(ClientHandler client) {
-        FileManager.createFileFromStream(client.clientSocket, this, MainServer.publicFilesPath);
+        ZUFileManager.createFileFromStream(client.clientSocket, this, MainServer.publicDirPath);
     }
 }

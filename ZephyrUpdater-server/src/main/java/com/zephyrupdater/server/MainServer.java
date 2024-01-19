@@ -1,36 +1,32 @@
 package com.zephyrupdater.server;
 
+import com.zephyrupdater.common.FileUtils.FileUtils;
+
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainServer {
 
-    public static Path publicFilesPath = getPublicFilesPath();
-    public static final Path curseModJsonPath = publicFilesPath.resolve("curseModList.json");
+    public static Path publicDirPath;
+    public static Path cacheDirPath;
+    public static final Path curseModJsonPath = publicDirPath.resolve("curseModList.json");
 
     public static void main(String[] args){
-        System.out.println(publicFilesPath);
+        setRuntimeDirPath();
+        System.out.println(publicDirPath);
 
         new AppServer().launchServer();
     }
 
-    private static Path getPublicFilesPath(){
+    private static void setRuntimeDirPath(){
         String path = MainServer.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        File publicFiles = new File(path);
-        Path publicFilesPath = Paths.get(publicFiles.getParentFile().getAbsolutePath()).resolve("public");
+        File serverClassFile = new File(path);
+        MainServer.publicDirPath = Paths.get(serverClassFile.getParentFile().getAbsolutePath()).resolve("public");
+        MainServer.cacheDirPath = Paths.get(serverClassFile.getParentFile().getAbsolutePath()).resolve("cache");
 
-        if(!Files.exists(publicFilesPath)){
-
-            try {
-                Files.createDirectories(publicFilesPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return publicFilesPath;
+        FileUtils.createDirIfNotExist(MainServer.publicDirPath);
+        FileUtils.createDirIfNotExist(MainServer.cacheDirPath);
     }
+
 }

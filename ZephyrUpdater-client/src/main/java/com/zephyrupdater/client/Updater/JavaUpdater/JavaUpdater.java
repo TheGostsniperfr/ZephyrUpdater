@@ -3,7 +3,7 @@ package com.zephyrupdater.client.Updater.JavaUpdater;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.common.OSType;
 import com.zephyrupdater.common.FileUtils.ArchiveExtractor;
-import com.zephyrupdater.common.ZUFile.FileManager;
+import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class JavaUpdater {
                 ArchiveExtractor.extractTarGzArchive(destinationFile, JAVA_DIR);
             }
 
-            File extractedJavaFolder = FileManager.findFolderStartingByWith(JAVA_DIR, "jdk");
+            File extractedJavaFolder = ZUFileManager.findFolderStartingByWith(JAVA_DIR, "jdk");
             System.out.println("Sub folder: " + extractedJavaFolder.toString());
             if(extractedJavaFolder == null){
                 System.err.println("Error to find sub folder starting with `jdk`");

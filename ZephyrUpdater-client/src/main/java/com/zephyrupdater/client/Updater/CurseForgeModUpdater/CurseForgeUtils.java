@@ -3,7 +3,7 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUFile.FileManager;
+import com.zephyrupdater.common.ZUFile.ZUFileManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,7 +79,7 @@ public class CurseForgeUtils {
             mainJson.add(new StringBuilder("CurseForgeUrl").append(i).toString(), modJson);
         }
 
-        FileManager.saveJsonAt(mainJson, filePath, fileName);
+        ZUFileManager.saveJsonAt(mainJson, filePath, fileName);
     }
 
     public static void checkUpdateModList(List<CurseForgeMod> modList){

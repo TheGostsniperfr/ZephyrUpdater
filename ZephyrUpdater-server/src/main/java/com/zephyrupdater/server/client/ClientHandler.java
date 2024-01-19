@@ -2,6 +2,7 @@ package com.zephyrupdater.server.client;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.FileUtils.FileUtils;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
@@ -36,7 +37,7 @@ public class ClientHandler implements Runnable {
             InputStream inputStream = this.clientSocket.getInputStream();
 
             while (isConnect) {
-                JsonObject dataHeader = ZUPManager.readJsonFromStream(inputStream);
+                JsonObject dataHeader = FileUtils.loadJsonFromStream(inputStream);
                 if (dataHeader == null) return; // -> deco client
                 clientDataHeaderProcess(dataHeader);
             }
