@@ -1,6 +1,7 @@
 package com.zephyrupdater.server;
 
 import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.server.updater.CurseForgeUpdater;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -10,11 +11,14 @@ public class MainServer {
 
     public static Path publicDirPath;
     public static Path cacheDirPath;
-    public static final Path curseModJsonPath = publicDirPath.resolve("curseModList.json");
+
+    public CurseForgeUpdater curseForgeUpdater;
+
 
     public static void main(String[] args){
         setRuntimeDirPath();
         System.out.println(publicDirPath);
+
 
         new AppServer().launchServer();
     }
@@ -28,5 +32,4 @@ public class MainServer {
         FileUtils.createDirIfNotExist(MainServer.publicDirPath);
         FileUtils.createDirIfNotExist(MainServer.cacheDirPath);
     }
-
 }

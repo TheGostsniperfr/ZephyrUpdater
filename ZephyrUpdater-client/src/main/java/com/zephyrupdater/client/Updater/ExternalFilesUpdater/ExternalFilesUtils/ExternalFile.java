@@ -3,56 +3,34 @@ package com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUtils
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.AppClient;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCGetFile;
-import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.HashUtils.HASH_ALGO_TYPE;
+import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-public class ExternalFile {
-    private final String hash;
-    private final HASH_ALGO_TYPE hashAlgoType;
-    private final Path relativeFilePath;
-    private final String fileName;
+public class ExternalFile extends ExternalFileCore {
 
-    public ExternalFile(JsonObject extJsonFile){
-        this.relativeFilePath =
-                Paths.get(CommonUtil.getValueFromJson(EXTERNAL_FILE_KEY.FILE_NAME.getKey(), extJsonFile, String.class));
-        this.hash = CommonUtil.getValueFromJson(EXTERNAL_FILE_KEY.HASH.getKey(), extJsonFile, String.class);
-        this.hashAlgoType =
-                HashAlgo.getAlgoTypeByName(CommonUtil.getValueFromJson(EXTERNAL_FILE_KEY.HASH_ALGO.getKey(), extJsonFile, String.class));
-        this.fileName = this.relativeFilePath.getFileName().toString();
+
+    public ExternalFile(JsonObject extJsonFile) {
+        super(extJsonFile);
     }
 
     private void downloadFile(){
-        AppClient.sendCmdToServer(new ZUCGetFile(this.fileName, this.relativeFilePath));
+        AppClient.sendCmdToServer(new ZUCGetFile(this.getFileName(), this.getRelativeFilePath()));
     }
 
     private Boolean needToBeUpdate(){
-        if(!Files.exists(this.relativeFilePath)){
+        if(!Files.exists(this.getRelativeFilePath())){
             return true;
         }
 
-        return !HashAlgo.getHashFromFilePath(this.relativeFilePath, HASH_ALGO_TYPE.SHA1).equals(this.hash);
+        return !HashAlgo.getHashFromFilePath(this.getRelativeFilePath(), HashAlgoType.SHA1).equals(this.getHash());
     }
 
     public void checkUpdate(){
         if(needToBeUpdate()){
             downloadFile();
         }
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
-    public Path getRelativeFilePath() {
-        return relativeFilePath;
-    }
-
-    public HASH_ALGO_TYPE getHashAlgoType() {
-        return hashAlgoType;
     }
 }

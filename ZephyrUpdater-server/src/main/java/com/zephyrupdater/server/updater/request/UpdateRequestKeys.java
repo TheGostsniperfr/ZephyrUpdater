@@ -1,10 +1,9 @@
 package com.zephyrupdater.server.updater.request;
 
 public enum UpdateRequestKeys {
-    REQUEST_NAME("name"),
-    TARGET_RELATIVE_PATH("targetPath"),
-    HASH("hash"),
-    HASH_ALGO("hashAlgo");
+    REQUEST_alias("alias"),
+    FILES("files"),
+    DB_NAME("request");
     private final String key;
 
     UpdateRequestKeys(String key) {

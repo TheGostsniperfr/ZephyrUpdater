@@ -3,7 +3,8 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.HashUtils.HASH_ALGO_TYPE;
+import com.zephyrupdater.common.FileUtils.CURSE_KEY;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class CurseForgeMod {
             return true;
         }
 
-        return !HashAlgo.getHashFromFilePath(this.modFilePath, HASH_ALGO_TYPE.SHA1).equals(this.hash);
+        return !HashAlgo.getHashFromFilePath(this.modFilePath, HashAlgoType.SHA1).equals(this.hash);
     }
 
     public void checkUpdate(){

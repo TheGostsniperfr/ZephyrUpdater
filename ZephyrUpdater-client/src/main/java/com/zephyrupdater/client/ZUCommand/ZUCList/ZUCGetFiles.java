@@ -37,7 +37,7 @@ public class ZUCGetFiles extends ZUCGetFilesCore implements ZUCStruct {
     }
 
     public static void printHelp(){
-        System.out.println("getFiles [relative path to the target directory for files to download]");
+        System.out.println("getFiles [request alias name]");
         //ex: getFiles Arffornia_v.5/mc_files
     }
 }

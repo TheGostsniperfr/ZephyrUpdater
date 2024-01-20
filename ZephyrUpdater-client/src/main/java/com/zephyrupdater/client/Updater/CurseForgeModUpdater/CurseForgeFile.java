@@ -2,6 +2,7 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.FileUtils.CURSE_KEY;
 
 import java.net.MalformedURLException;
 import java.net.URL;

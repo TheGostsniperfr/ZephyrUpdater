@@ -1,63 +1,54 @@
 package com.zephyrupdater.server.updater.request;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.FileUtils.HashUtils.HASH_ALGO_TYPE;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.MainServer;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
+import java.util.List;
 
 public class UpdateRequest {
-    private final String requestName;
-    private final Path requestRelativePath;
-    private String hash;
-    private HASH_ALGO_TYPE hashAlgoType;
-    private Path requestAbsPath;
+    private final String requestAlias;
+    private List<ExternalFileCore> externalFileCores;
 
+    public UpdateRequest(JsonObject data){
+        this.requestAlias = CommonUtil.getValueFromJson(UpdateRequestKeys.REQUEST_alias.getKey(), data, String.class);
+        JsonArray files = data.get(UpdateRequestKeys.FILES.getKey()).getAsJsonArray();
 
-    public UpdateRequest(String requestName, Path requestRelativePath){
-        this.requestName = requestName;
-        this.requestRelativePath = requestRelativePath;
-        this.requestAbsPath = MainServer.publicDirPath.resolve(this.requestRelativePath);
-        
-        if(!Files.exists(this.requestAbsPath)){
-            throw new IllegalArgumentException(this.requestAbsPath.toString() + "does not exist.");
+        if(files == null) { throw new RuntimeException("Error: Invalid jsonObject: no fields 'files'"); }
+
+        for(JsonElement jsonElement : files){
+            if(!jsonElement.isJsonObject()){
+                throw new RuntimeException("Error: Invalid jsonElement: " + jsonElement);
+            }
+
+            externalFileCores.add(new ExternalFileCore(jsonElement.getAsJsonObject()));
         }
-        
-        this.hash = HashAlgo.getHashFromFilePath(this.requestAbsPath, HASH_ALGO_TYPE.SHA1);
-        this.hashAlgoType =  HASH_ALGO_TYPE.SHA1;
     }
 
-
+    public UpdateRequest(String requestAlias, List<File> targetFiles){
+        this.requestAlias = requestAlias;
+        for(File targetFile : targetFiles){
+            externalFileCores.add(new ExternalFileCore(
+                    targetFile.toPath().toAbsolutePath(),
+                    MainServer.publicDirPath,
+                    HashAlgoType.SHA1));
+        }
+    }
     
     public JsonObject getJson(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(UpdateRequestKeys.REQUEST_NAME.getKey(), this.requestName);
-        jsonObject.addProperty(UpdateRequestKeys.TARGET_RELATIVE_PATH.getKey(), this.requestRelativePath.toString());
-        jsonObject.addProperty(UpdateRequestKeys.HASH.getKey(), this.hash);
-        jsonObject.addProperty(UpdateRequestKeys.HASH_ALGO.getKey(), this.hashAlgoType.getKey());
+        jsonObject.addProperty(UpdateRequestKeys.REQUEST_alias.getKey(), this.requestAlias);
+
+        JsonArray jsonArray = new JsonArray();
+        for (ExternalFileCore externalFileCore : externalFileCores) {
+            jsonArray.add(externalFileCore.getJson());
+        }
 
         return jsonObject;
-    }
-
-    public Path getRequestRelativePath() {
-        return requestRelativePath;
-    }
-
-    public String getRequestName() {
-        return requestName;
-    }
-
-    public HASH_ALGO_TYPE getHashAlgoType() {
-        return hashAlgoType;
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
-    public Path getRequestAbsPath() {
-        return requestAbsPath;
     }
 }

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 
 public class HashAlgo {
-    public static String getHashFromFilePath(Path filePath, HASH_ALGO_TYPE algoType){
+    public static String getHashFromFilePath(Path filePath, HashAlgoType algoType){
         try {
             byte[] data = Files.readAllBytes(filePath);
             byte[] hash = MessageDigest.getInstance(algoType.getKey()).digest(data);
@@ -17,8 +17,8 @@ public class HashAlgo {
         }
     }
 
-    public static HASH_ALGO_TYPE getAlgoTypeByName(String algoName){
-        for(HASH_ALGO_TYPE algoType : HASH_ALGO_TYPE.values()){
+    public static HashAlgoType getAlgoTypeByName(String algoName){
+        for(HashAlgoType algoType : HashAlgoType.values()){
             if(algoType.getKey().equals(algoName)){
                 return algoType;
             }

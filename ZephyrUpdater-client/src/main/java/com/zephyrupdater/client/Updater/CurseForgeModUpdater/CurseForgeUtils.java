@@ -3,7 +3,6 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.zephyrupdater.common.ZUFile.ZUFileManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,22 +62,6 @@ public class CurseForgeUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void createBlankJsonModList(int nbMods, Path filePath, String fileName){
-        if(Files.exists(filePath.resolve(fileName))){
-            System.out.println("A file with the same name already exist.");
-            return;
-        }
-        JsonObject mainJson = new JsonObject();
-        for(int i = 0; i < nbMods; i++){
-            JsonObject modJson = new JsonObject();
-            modJson.addProperty(CURSE_KEY.FILE_ID.getKey(),"");
-            modJson.addProperty(CURSE_KEY.PROJECT_ID.getKey(),"");
-            mainJson.add(new StringBuilder("CurseForgeUrl").append(i).toString(), modJson);
-        }
-
-        ZUFileManager.saveJsonAt(mainJson, filePath, fileName);
     }
 
     public static void checkUpdateModList(List<CurseForgeMod> modList){

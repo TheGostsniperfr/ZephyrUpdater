@@ -1,13 +1,13 @@
 package com.zephyrupdater.common.FileUtils.HashUtils;
 
-public enum HASH_ALGO_TYPE {
+public enum HashAlgoType {
     SHA256("SHA-256"),
     MD5("MD5"),
     SHA1("SHA-1");
 
     private final String key;
 
-    HASH_ALGO_TYPE(String key) {
+    HashAlgoType(String key) {
         this.key = key;
     }
 
