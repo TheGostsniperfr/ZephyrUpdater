@@ -7,7 +7,7 @@ import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCor
 import com.zephyrupdater.server.ZUCommand.ZUCList.*;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
 public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
     public ZUPCommand(JsonObject dataHeader) {

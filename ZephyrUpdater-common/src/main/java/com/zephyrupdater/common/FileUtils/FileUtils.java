@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 
 import java.io.*;
 import java.net.SocketException;
@@ -96,5 +98,21 @@ public class FileUtils {
 
     public static Path getRelativePathFromAbs(Path absPath, Path basePath){
         return basePath.relativize(absPath);
+    }
+
+    /**
+     * Check if a file is still the same by checking his hash
+     *
+     * @param absFilePath absolute path to the file
+     * @param hash current file hash
+     * @param hashAlgoType current file algo type
+     * @return true is the file is the same, else false
+     */
+    public static Boolean isSameFile(Path absFilePath, String hash, HashAlgoType hashAlgoType){
+        if(!Files.exists(absFilePath) | Files.isDirectory(absFilePath)){
+            return false;
+        }
+
+        return HashAlgo.getHashFromFilePath(absFilePath, hashAlgoType).equals(hash);
     }
 }

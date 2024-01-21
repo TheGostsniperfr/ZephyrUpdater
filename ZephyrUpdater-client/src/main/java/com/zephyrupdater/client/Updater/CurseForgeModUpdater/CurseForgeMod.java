@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.FileUtils.CURSE_KEY;
+import com.zephyrupdater.common.FileUtils.FileUtils;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,11 +58,7 @@ public class CurseForgeMod {
     }
 
     private Boolean needToBeUpdate(){
-        if(!Files.exists(this.modFilePath)){
-            return true;
-        }
-
-        return !HashAlgo.getHashFromFilePath(this.modFilePath, HashAlgoType.SHA1).equals(this.hash);
+        return !FileUtils.isSameFile(this.modFilePath, this.hash, HashAlgoType.SHA1);
     }
 
     public void checkUpdate(){

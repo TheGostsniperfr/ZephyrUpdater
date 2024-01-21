@@ -2,12 +2,10 @@ package com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUtils
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.AppClient;
+import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCGetFile;
 import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
-
-import java.nio.file.Files;
+import com.zephyrupdater.common.FileUtils.FileUtils;
 
 public class ExternalFile extends ExternalFileCore {
 
@@ -21,11 +19,7 @@ public class ExternalFile extends ExternalFileCore {
     }
 
     private Boolean needToBeUpdate(){
-        if(!Files.exists(this.getRelativeFilePath())){
-            return true;
-        }
-
-        return !HashAlgo.getHashFromFilePath(this.getRelativeFilePath(), HashAlgoType.SHA1).equals(this.getHash());
+        return !FileUtils.isSameFile(this.getAbsFilePath(MainClient.clientFilePath), this.getHash(), this.getHashAlgoType());
     }
 
     public void checkUpdate(){

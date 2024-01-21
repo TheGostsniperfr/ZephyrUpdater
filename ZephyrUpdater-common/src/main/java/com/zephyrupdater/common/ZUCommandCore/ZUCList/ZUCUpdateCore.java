@@ -9,25 +9,29 @@ import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 
 public class ZUCUpdateCore implements ZUCStructCore {
 
-    public String folderPath;
-    public JsonObject filesJson;
+    public String request;
+    public JsonObject extFilesJson;
     public JsonObject curseModJson;
 
     public ZUCUpdateCore(JsonObject data){
-        this.folderPath = CommonUtil.getValueFromJson(ZUPKeys.FOLDER_PATH.getKey(), data, String.class);
-        this.filesJson = JsonParser.parseString(
-                CommonUtil.getValueFromJson(ZUPKeys.FILES_JSON.getKey(), data, String.class))
+        this.request = CommonUtil.getValueFromJson(ZUPKeys.REQUEST.getKey(), data, String.class);
+        this.extFilesJson = JsonParser.parseString(
+                CommonUtil.getValueFromJson(ZUPKeys.EXT_FILES_JSON.getKey(), data, String.class))
                 .getAsJsonObject();
         this.curseModJson = JsonParser.parseString(
                 CommonUtil.getValueFromJson(ZUPKeys.CURSE_MOD_JSON.getKey(), data, String.class))
                 .getAsJsonObject();
     }
 
-    public ZUCUpdateCore(String folderPath, JsonObject filesJson, JsonObject curseModJson){
-        this.folderPath = folderPath;
-        this.filesJson = filesJson;
+    public ZUCUpdateCore(JsonObject extFilesJson, JsonObject curseModJson){
+        this.extFilesJson = extFilesJson;
         this.curseModJson = curseModJson;
     }
+
+    public ZUCUpdateCore(String request){
+        this.request = request;
+    }
+
     @Override
     public ZUCTypes getStructType() {
         return ZUCTypes.UPDATE;
@@ -36,8 +40,8 @@ public class ZUCUpdateCore implements ZUCStructCore {
     @Override
     public String getJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(ZUPKeys.FOLDER_PATH.getKey(), folderPath);
-        jsonObject.addProperty(ZUPKeys.FILES_JSON.getKey(), filesJson.toString());
+        jsonObject.addProperty(ZUPKeys.REQUEST.getKey(), request);
+        jsonObject.addProperty(ZUPKeys.EXT_FILES_JSON.getKey(), extFilesJson.toString());
         jsonObject.addProperty(ZUPKeys.CURSE_MOD_JSON.getKey(), curseModJson.toString());
 
         return jsonObject.toString();

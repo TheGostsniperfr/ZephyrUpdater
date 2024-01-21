@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.serverCmd.cmdlist;
+package com.zephyrupdater.server.serverCmd.cmdlist.serverManagement;
 
 import com.zephyrupdater.server.serverCmd.CmdManager;
 import com.zephyrupdater.server.serverCmd.ServerCmd;

@@ -3,8 +3,8 @@ package com.zephyrupdater.server.ZUCommand.ZUCList;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCLoginCore;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
-import com.zephyrupdater.server.client.Auth.ClientAuth;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.Auth.ClientAuth;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
 public class ZUCLogin extends ZUCLoginCore implements ZUCStruct {
 

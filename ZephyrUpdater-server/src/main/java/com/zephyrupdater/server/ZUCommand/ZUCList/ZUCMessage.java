@@ -3,7 +3,7 @@ package com.zephyrupdater.server.ZUCommand.ZUCList;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

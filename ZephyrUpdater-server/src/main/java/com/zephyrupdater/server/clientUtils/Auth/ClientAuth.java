@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.client.Auth;
+package com.zephyrupdater.server.clientUtils.Auth;
 
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCLoginCore;
 

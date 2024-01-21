@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.client;
+package com.zephyrupdater.server.clientUtils;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;

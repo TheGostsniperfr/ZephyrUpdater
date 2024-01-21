@@ -5,7 +5,7 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCGetFileCore;
 import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
 import java.io.File;
 

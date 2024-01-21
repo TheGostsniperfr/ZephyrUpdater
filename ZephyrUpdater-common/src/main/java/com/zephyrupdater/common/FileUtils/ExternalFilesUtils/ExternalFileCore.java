@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ExternalFileCore {
-    private final String hash;
+    private String hash;
     private final HashAlgoType hashAlgoType;
     private final Path relativeFilePath;
 
@@ -34,6 +34,9 @@ public class ExternalFileCore {
 
     public String getHash() {
         return hash;
+    }
+    public void setHash(String hash){
+        this.hash = hash;
     }
     public String getFileName() { return this.relativeFilePath.getFileName().toString(); }
     public Path getRelativeFilePath() {

@@ -35,6 +35,15 @@ public class CurseForgeUpdater {
         this.saveModList();
     }
 
+    public void addMod(String modName, String fileId, String projectId){
+        JsonObject newModObj = new JsonObject();
+        newModObj.addProperty(CURSE_KEY.FILE_ID.getKey(), fileId);
+        newModObj.addProperty(CURSE_KEY.PROJECT_ID.getKey(), projectId);
+
+        this.modList.add(modName, newModObj);
+        this.saveModList();
+    }
+
     public void saveModList(){
         FileUtils.saveJsonAt(this.modList, this.curseModJsonPath);
     }

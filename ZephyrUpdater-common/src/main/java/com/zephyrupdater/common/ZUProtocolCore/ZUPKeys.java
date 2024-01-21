@@ -5,9 +5,9 @@ public enum ZUPKeys {
     DATA_SIZE("dataSize"),
     CONTENT("content"),
     COMMAND("cmd"),
-    FOLDER_PATH("folderPath"),
+    REQUEST("request"),
     FILE_PATH("filePath"),
-    FILES_JSON("filesJson"),
+    EXT_FILES_JSON("extFilesJson"),
     CURSE_MOD_JSON("curseModJson");
 
     private final String key;

@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.updater.request;
+package com.zephyrupdater.server.updater.ExtFilesUpdate;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,13 +11,13 @@ import com.zephyrupdater.server.MainServer;
 import java.io.File;
 import java.util.List;
 
-public class UpdateRequest {
+public class ExtFilesRequest {
     private final String requestAlias;
-    private List<ExternalFileCore> externalFileCores;
+    private List<ExtFile> extFiles;
 
-    public UpdateRequest(JsonObject data){
-        this.requestAlias = CommonUtil.getValueFromJson(UpdateRequestKeys.REQUEST_alias.getKey(), data, String.class);
-        JsonArray files = data.get(UpdateRequestKeys.FILES.getKey()).getAsJsonArray();
+    public ExtFilesRequest(JsonObject data){
+        this.requestAlias = CommonUtil.getValueFromJson(ExtFilesRequestKeys.REQUEST_alias.getKey(), data, String.class);
+        JsonArray files = data.get(ExtFilesRequestKeys.FILES.getKey()).getAsJsonArray();
 
         if(files == null) { throw new RuntimeException("Error: Invalid jsonObject: no fields 'files'"); }
 
@@ -26,14 +26,16 @@ public class UpdateRequest {
                 throw new RuntimeException("Error: Invalid jsonElement: " + jsonElement);
             }
 
-            externalFileCores.add(new ExternalFileCore(jsonElement.getAsJsonObject()));
+            extFiles.add(new ExtFile(jsonElement.getAsJsonObject()));
         }
     }
 
-    public UpdateRequest(String requestAlias, List<File> targetFiles){
+    public ExtFilesRequest(String requestAlias, List<File> targetFiles){
         this.requestAlias = requestAlias;
         for(File targetFile : targetFiles){
-            externalFileCores.add(new ExternalFileCore(
+            System.out.println("Adding: " + targetFile.getName() + " metadata to cache.");
+
+            extFiles.add(new ExtFile(
                     targetFile.toPath().toAbsolutePath(),
                     MainServer.publicDirPath,
                     HashAlgoType.SHA1));
@@ -42,13 +44,17 @@ public class UpdateRequest {
     
     public JsonObject getJson(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(UpdateRequestKeys.REQUEST_alias.getKey(), this.requestAlias);
+        jsonObject.addProperty(ExtFilesRequestKeys.REQUEST_alias.getKey(), this.requestAlias);
 
         JsonArray jsonArray = new JsonArray();
-        for (ExternalFileCore externalFileCore : externalFileCores) {
+        for (ExternalFileCore externalFileCore : extFiles) {
             jsonArray.add(externalFileCore.getJson());
         }
 
         return jsonObject;
+    }
+
+    public void checkRequest(){
+        this.extFiles.removeIf(extFile -> !extFile.isValidFile());
     }
 }

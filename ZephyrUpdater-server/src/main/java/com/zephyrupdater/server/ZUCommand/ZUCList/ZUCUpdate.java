@@ -5,36 +5,31 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 import com.zephyrupdater.server.AppServer;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
-import com.zephyrupdater.server.client.ClientHandler;
-import com.zephyrupdater.server.updater.CheckingFiles;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
 public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
+    public Path absTargetDirPath;
     public ZUCUpdate(JsonObject data) {
         super(data);
     }
 
-    public ZUCUpdate(String folderPath, JsonObject filesJson, JsonObject curseModJson) {
-        super(folderPath, filesJson, curseModJson);
+    public ZUCUpdate(JsonObject extFilesJson, JsonObject curseModJson) {
+        super(extFilesJson, curseModJson);
     }
 
     @Override
     public void execute(ClientHandler client) {
-        try {
-            Path pathToGetJson = MainServer.publicDirPath.resolve(this.folderPath);
+        this.absTargetDirPath = MainServer.publicDirPath.resolve(absTargetDirPath);
+        JsonObject extFilesJson = AppServer.getUpdateRequestManager().getResponse(this);
 
-            if(!Files.exists(pathToGetJson)){
-                throw new InvalidPathException("", "Path does not exist.");
-            }
-
-            this.filesJson = CheckingFiles.getFilesJson(pathToGetJson);
-            this.curseModJson = AppServer.getCurseForgeUpdater().getModList();
-            client.sendCmdToClient(this);
-        } catch (InvalidPathException e){
-            client.sendMsgToClient("Invalid path to check!");
+        if(extFilesJson == null){
+            client.sendMsgToClient("Request doest not exist on server.");
+            return;
         }
+
+        this.curseModJson = AppServer.getCurseForgeUpdater().getModList();
+        client.sendCmdToClient(new ZUCUpdate(extFilesJson, this.curseModJson));
     }
 }

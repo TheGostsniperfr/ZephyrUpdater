@@ -5,7 +5,7 @@ import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPFileCore;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUProtocol.ZUPStruct;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 
 public class ZUPFile extends ZUPFileCore implements ZUPStruct{
     public ZUPFile(JsonObject dataHeader) {

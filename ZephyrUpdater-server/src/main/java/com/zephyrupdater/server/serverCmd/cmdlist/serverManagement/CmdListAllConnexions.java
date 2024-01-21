@@ -1,7 +1,7 @@
-package com.zephyrupdater.server.serverCmd.cmdlist;
+package com.zephyrupdater.server.serverCmd.cmdlist.serverManagement;
 
 import com.zephyrupdater.server.AppServer;
-import com.zephyrupdater.server.client.ClientHandler;
+import com.zephyrupdater.server.clientUtils.ClientHandler;
 import com.zephyrupdater.server.serverCmd.ServerCmd;
 
 import java.util.List;
