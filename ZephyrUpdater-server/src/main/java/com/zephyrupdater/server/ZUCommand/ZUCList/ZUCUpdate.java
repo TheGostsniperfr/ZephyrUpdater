@@ -1,5 +1,6 @@
 package com.zephyrupdater.server.ZUCommand.ZUCList;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 import com.zephyrupdater.server.AppServer;
@@ -15,14 +16,14 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
         super(data);
     }
 
-    public ZUCUpdate(JsonObject extFilesJson, JsonObject curseModJson) {
+    public ZUCUpdate(JsonArray extFilesJson, JsonObject curseModJson) {
         super(extFilesJson, curseModJson);
     }
 
     @Override
     public void execute(ClientHandler client) {
         this.absTargetDirPath = MainServer.publicDirPath.resolve(absTargetDirPath);
-        JsonObject extFilesJson = AppServer.getUpdateRequestManager().getResponse(this);
+        JsonArray extFilesJson = AppServer.getUpdateRequestManager().getResponse(this);
 
         if(extFilesJson == null){
             client.sendMsgToClient("Request doest not exist on server.");

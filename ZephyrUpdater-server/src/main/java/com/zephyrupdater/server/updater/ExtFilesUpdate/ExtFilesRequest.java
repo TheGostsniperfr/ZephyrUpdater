@@ -4,11 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.MainServer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExtFilesRequest {
@@ -16,10 +16,12 @@ public class ExtFilesRequest {
     private List<ExtFile> extFiles;
 
     public ExtFilesRequest(JsonObject data){
-        this.requestAlias = CommonUtil.getValueFromJson(ExtFilesRequestKeys.REQUEST_alias.getKey(), data, String.class);
+        this.requestAlias = CommonUtil.getValueFromJson(ExtFilesRequestKeys.REQUEST_ALIAS.getKey(), data, String.class);
         JsonArray files = data.get(ExtFilesRequestKeys.FILES.getKey()).getAsJsonArray();
 
         if(files == null) { throw new RuntimeException("Error: Invalid jsonObject: no fields 'files'"); }
+
+        this.extFiles = new ArrayList<>();
 
         for(JsonElement jsonElement : files){
             if(!jsonElement.isJsonObject()){
@@ -32,26 +34,30 @@ public class ExtFilesRequest {
 
     public ExtFilesRequest(String requestAlias, List<File> targetFiles){
         this.requestAlias = requestAlias;
+        this.extFiles = new ArrayList<>();
         for(File targetFile : targetFiles){
             System.out.println("Adding: " + targetFile.getName() + " metadata to cache.");
 
-            extFiles.add(new ExtFile(
+            System.out.println("abs path: " + targetFile.toPath().toAbsolutePath());
+            ExtFile extFile = new ExtFile(
                     targetFile.toPath().toAbsolutePath(),
                     MainServer.publicDirPath,
-                    HashAlgoType.SHA1));
+                    HashAlgoType.SHA1);
+
+            System.out.println("valid file: " + extFile.isValidFile());
+
+            extFiles.add(extFile);
         }
     }
-    
-    public JsonObject getJson(){
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(ExtFilesRequestKeys.REQUEST_alias.getKey(), this.requestAlias);
 
+    public JsonArray getExtFilesAsJsonArray(){
         JsonArray jsonArray = new JsonArray();
-        for (ExternalFileCore externalFileCore : extFiles) {
-            jsonArray.add(externalFileCore.getJson());
+
+        for(ExtFile extFile : this.extFiles){
+            jsonArray.add(extFile.getJson());
         }
 
-        return jsonObject;
+        return jsonArray;
     }
 
     public void checkRequest(){

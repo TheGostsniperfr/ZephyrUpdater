@@ -89,6 +89,7 @@ public class FileUtils {
         for(File file : targetDir.listFiles()){
             if(file.isFile()){
                 listedFile.add(file);
+                continue;
             }
             listedFile.addAll(getRecursiveFilesFromDirPath(file.toPath().toAbsolutePath()));
         }

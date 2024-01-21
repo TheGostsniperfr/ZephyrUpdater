@@ -1,9 +1,8 @@
 package com.zephyrupdater.server.updater.ExtFilesUpdate;
 
 public enum ExtFilesRequestKeys {
-    REQUEST_alias("alias"),
-    FILES("files"),
-    DB_NAME("request");
+    REQUEST_ALIAS("alias"),
+    FILES("files");
     private final String key;
 
     ExtFilesRequestKeys(String key) {

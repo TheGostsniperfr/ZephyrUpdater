@@ -1,5 +1,6 @@
 package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zephyrupdater.common.CommonUtil;
@@ -10,20 +11,20 @@ import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 public class ZUCUpdateCore implements ZUCStructCore {
 
     public String request;
-    public JsonObject extFilesJson;
+    public JsonArray extFilesJson;
     public JsonObject curseModJson;
 
     public ZUCUpdateCore(JsonObject data){
         this.request = CommonUtil.getValueFromJson(ZUPKeys.REQUEST.getKey(), data, String.class);
         this.extFilesJson = JsonParser.parseString(
                 CommonUtil.getValueFromJson(ZUPKeys.EXT_FILES_JSON.getKey(), data, String.class))
-                .getAsJsonObject();
+                .getAsJsonArray();
         this.curseModJson = JsonParser.parseString(
                 CommonUtil.getValueFromJson(ZUPKeys.CURSE_MOD_JSON.getKey(), data, String.class))
                 .getAsJsonObject();
     }
 
-    public ZUCUpdateCore(JsonObject extFilesJson, JsonObject curseModJson){
+    public ZUCUpdateCore(JsonArray extFilesJson, JsonObject curseModJson){
         this.extFilesJson = extFilesJson;
         this.curseModJson = curseModJson;
     }
