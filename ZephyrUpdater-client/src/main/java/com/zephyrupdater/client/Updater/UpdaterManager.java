@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
+import com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUpdater;
 import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
 
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ public class UpdaterManager {
         CurseForgeUtils.updateCurseForgeMod(curseModJson, modDirPath);
 
         // Update external files
-        // TODO
+        ExternalFilesUpdater.checkUpdateExtFiles(extUpdateFilesJson);
 
         System.out.println("Successful to update game files");
     }
