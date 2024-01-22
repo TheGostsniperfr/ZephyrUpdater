@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 import com.zephyrupdater.server.AppServer;
-import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.clientUtils.ClientHandler;
 
@@ -22,7 +21,6 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
 
     @Override
     public void execute(ClientHandler client) {
-        this.absTargetDirPath = MainServer.publicDirPath.resolve(absTargetDirPath);
         JsonArray extFilesJson = AppServer.getUpdateRequestManager().getResponse(this);
 
         if(extFilesJson == null){

@@ -27,6 +27,7 @@ public class CurseForgeUtils {
         List<CurseForgeMod> curseForgeMods = new ArrayList<>();
 
         for(String modName : jsonModList.keySet()){
+            System.out.println("Requesting curse forge api forge: " + modName);
             JsonElement jsonElement = jsonModList.get(modName);
 
             if(!jsonElement.isJsonObject()){
@@ -36,12 +37,22 @@ public class CurseForgeUtils {
 
             CurseForgeFile modFile = new CurseForgeFile(jsonElement.getAsJsonObject());
             JsonObject response = getResponseFromRequest(modFile.getDownloadUrl(CF_BASE_URL));
+            if(response == null){
+                //on request error
+                continue;
+            }
             curseForgeMods.add(new CurseForgeMod(response, modsDirPath));
         }
 
         return curseForgeMods;
     }
 
+    /**
+     * Get mod info on via curse forge api
+     *
+     * @param url api request
+     * @return null on error, else mod's json
+     */
     private static JsonObject getResponseFromRequest(URL url){
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -51,8 +62,21 @@ public class CurseForgeUtils {
             conn.setRequestProperty("Accept", "application/json");
             int responseCode = conn.getResponseCode();
 
-            if(responseCode != 200){
-                throw new RuntimeException("Bad server response code: " + responseCode);
+            switch (responseCode){
+                case 200:
+                    //OK
+                    break;
+                case 404:
+                    //Not found
+                    System.err.println("File not found on curse forge: " + url);
+                    return null;
+                case 500:
+                    //Curse forge API internal error
+                    System.err.println("Curse forge API internal error.");
+                    return null;
+                default:
+                    System.err.println("Unsupported error code: " + responseCode) ;
+                    return null;
             }
 
             try (Reader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
@@ -67,4 +91,6 @@ public class CurseForgeUtils {
     public static void checkUpdateModList(List<CurseForgeMod> modList){
         modList.forEach(CurseForgeMod::checkUpdate);
     }
+
+
 }

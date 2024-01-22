@@ -12,6 +12,8 @@ public class UpdaterManager {
     private static final Path modDirPath = MainClient.clientFilePath.resolve("mods");
 
     public static void update(JsonArray extUpdateFilesJson, JsonObject curseModJson){
+        System.out.println("Starting to update game files:");
+
         // Update Java
         JavaUpdater.javaUpdate();
 
@@ -20,6 +22,8 @@ public class UpdaterManager {
 
         // Update external files
         // TODO
+
+        System.out.println("Successful to update game files");
     }
 
 

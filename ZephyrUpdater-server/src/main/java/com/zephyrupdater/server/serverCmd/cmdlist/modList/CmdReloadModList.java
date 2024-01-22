@@ -14,5 +14,6 @@ public class CmdReloadModList implements ServerCmd {
     @Override
     public void execute(List<String> argv) {
         AppServer.getCurseForgeUpdater().loadModList();
+        System.out.println("Successful mod list reload");
     }
 }

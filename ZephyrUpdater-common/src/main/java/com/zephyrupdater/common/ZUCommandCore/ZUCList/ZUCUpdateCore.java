@@ -25,12 +25,15 @@ public class ZUCUpdateCore implements ZUCStructCore {
     }
 
     public ZUCUpdateCore(JsonArray extFilesJson, JsonObject curseModJson){
+        this.request = "";
         this.extFilesJson = extFilesJson;
         this.curseModJson = curseModJson;
     }
 
     public ZUCUpdateCore(String request){
         this.request = request;
+        this.curseModJson = new JsonObject();
+        this.extFilesJson = new JsonArray();
     }
 
     @Override

@@ -36,6 +36,7 @@ public class AppClient {
             }
             while(isConnect) {
                 JsonObject dataHeader = FileUtils.loadJsonFromStream(inputStream);
+                System.out.println("data: " + dataHeader);
                 if(dataHeader == null){
                     disconnectFromServer(false);
                     break;

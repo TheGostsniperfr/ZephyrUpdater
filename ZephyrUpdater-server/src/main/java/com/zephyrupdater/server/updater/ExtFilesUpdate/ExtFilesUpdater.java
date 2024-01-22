@@ -58,7 +58,10 @@ public class ExtFilesUpdater {
 
         System.out.println("Adding new request, target directory: "  + absTargetDirPath);
         ExtFilesRequest extFilesRequest = new ExtFilesRequest(requestAlias, FileUtils.getRecursiveFilesFromDirPath(absTargetDirPath));
-        this.db.add(requestAlias, extFilesRequest.getExtFilesAsJsonArray());
+        JsonObject filesObj = new JsonObject();
+        filesObj.add(ExtFilesRequestKeys.FILES.getKey(), extFilesRequest.getExtFilesAsJsonArray());
+
+        this.db.add(requestAlias, filesObj);
         saveDB();
     }
 

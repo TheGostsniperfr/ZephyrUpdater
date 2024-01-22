@@ -21,6 +21,8 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
 
     @Override
     public void executeServerCmd() {
+        System.out.println("extFilesjson: " + extFilesJson);
+        System.out.println("curseMods: " + curseModJson);
         UpdaterManager.update(this.extFilesJson, this.curseModJson);
         }
 

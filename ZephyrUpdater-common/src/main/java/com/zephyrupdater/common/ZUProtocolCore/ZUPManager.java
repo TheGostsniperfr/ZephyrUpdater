@@ -14,7 +14,7 @@ public class ZUPManager {
      */
     public static void sendData(Socket socket, ZUPStructCore data){
         try {
-
+            System.out.println("send data: " + data.getJson());
             OutputStream outputStream = socket.getOutputStream();
             //get data header
             String dataToSend = data.getJson();

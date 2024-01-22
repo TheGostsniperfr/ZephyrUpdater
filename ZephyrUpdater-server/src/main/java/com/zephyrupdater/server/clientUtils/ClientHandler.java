@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable {
     public final Socket clientSocket;
     private Boolean isConnect = true;
     private String clientId = "NOT_LOGGED";
-    private Boolean isAuth = false;
+    private Boolean isAuth = true; //TODO
     public static final String MSG_PLS_LOGIN = "Please login before.";
 
     public ClientHandler(Socket socket) {

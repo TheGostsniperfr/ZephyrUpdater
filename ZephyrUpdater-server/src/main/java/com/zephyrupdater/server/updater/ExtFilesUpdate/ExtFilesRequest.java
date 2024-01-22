@@ -3,7 +3,6 @@ package com.zephyrupdater.server.updater.ExtFilesUpdate;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.MainServer;
 
@@ -12,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtFilesRequest {
-    private final String requestAlias;
     private List<ExtFile> extFiles;
 
     public ExtFilesRequest(JsonObject data){
-        this.requestAlias = CommonUtil.getValueFromJson(ExtFilesRequestKeys.REQUEST_ALIAS.getKey(), data, String.class);
         JsonArray files = data.get(ExtFilesRequestKeys.FILES.getKey()).getAsJsonArray();
 
         if(files == null) { throw new RuntimeException("Error: Invalid jsonObject: no fields 'files'"); }
@@ -33,7 +30,6 @@ public class ExtFilesRequest {
     }
 
     public ExtFilesRequest(String requestAlias, List<File> targetFiles){
-        this.requestAlias = requestAlias;
         this.extFiles = new ArrayList<>();
         for(File targetFile : targetFiles){
             System.out.println("Adding: " + targetFile.getName() + " metadata to cache.");
