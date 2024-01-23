@@ -1,7 +1,6 @@
 package com.zephyrupdater.client.ZUProtocol.ZUProtocolTypes;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCDisconnection;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCMessage;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCUpdate;
@@ -19,19 +18,18 @@ public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
     @Override
     public void execute() {
         ZUCTypes zucTypes = this.cmdStructType;
-        JsonObject data = JsonParser.parseString(this.content).getAsJsonObject();
 
         ZUCStruct zucStruct;
 
         switch (zucTypes){
             case MESSAGE:
-                zucStruct = new ZUCMessage(data);
+                zucStruct = new ZUCMessage(this.content);
                 break;
             case DISCONNECTION:
                 zucStruct = new ZUCDisconnection();
                 break;
             case UPDATE:
-                zucStruct = new ZUCUpdate(data);
+                zucStruct = new ZUCUpdate(this.content);
                 break;
             default:
                 throw new IllegalArgumentException();

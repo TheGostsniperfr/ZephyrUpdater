@@ -35,12 +35,12 @@ public class ZUCLoginCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUCKeys.ID.getKey(), id);
         jsonObject.addProperty(ZUCKeys.PASSWORD.getKey(), password);
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 
 }

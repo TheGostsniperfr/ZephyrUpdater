@@ -19,11 +19,11 @@ public class ZUCDisconnectionCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUCKeys.CONTENT.getKey(), content);
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     public ZUCDisconnectionCore(){

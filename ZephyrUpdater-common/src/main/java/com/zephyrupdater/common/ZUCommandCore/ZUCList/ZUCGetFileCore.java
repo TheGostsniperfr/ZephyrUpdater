@@ -36,11 +36,11 @@ public class ZUCGetFileCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUCKeys.FILE_NANE.getKey(), this.fileName);
         jsonObject.addProperty(ZUCKeys.RELATIVE_FILE_PATH.getKey(), this.relativeFilePath.toString());
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 }

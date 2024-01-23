@@ -42,12 +42,12 @@ public class ZUCUpdateCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.REQUEST.getKey(), request);
         jsonObject.addProperty(ZUPKeys.EXT_FILES_JSON.getKey(), extFilesJson.toString());
         jsonObject.addProperty(ZUPKeys.CURSE_MOD_JSON.getKey(), curseModJson.toString());
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 }

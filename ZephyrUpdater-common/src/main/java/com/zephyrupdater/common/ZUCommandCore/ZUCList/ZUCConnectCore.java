@@ -1,5 +1,6 @@
 package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
+import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
@@ -17,8 +18,8 @@ public class ZUCConnectCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
-        return "ZUCConnect is a local cmd";
+    public JsonObject getJson() {
+        return new JsonObject();
     }
 
     public ZUCConnectCore(String host, int port){

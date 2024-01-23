@@ -1,5 +1,6 @@
 package com.zephyrupdater.common.ZUCommandCore.ZUCList;
 
+import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
@@ -15,8 +16,8 @@ public class ZUCStopCore implements ZUCStructCore {
     }
 
     @Override
-    public String getJson() {
-        return "ZUCStop is a local cmd";
+    public JsonObject getJson() {
+        return new JsonObject();
     }
 
     public ZUCStopCore() {}

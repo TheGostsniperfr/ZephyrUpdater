@@ -33,12 +33,12 @@ public class ZUPFileCore implements ZUPStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.FILE.toString());
         jsonObject.addProperty(ZUPKeys.FILE_PATH.getKey(), this.filePath.toString());
         jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), this.dataSize);
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 }

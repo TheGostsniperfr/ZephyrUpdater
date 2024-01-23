@@ -7,17 +7,15 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPKeys;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPStructCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPTypes;
-
-import java.nio.charset.StandardCharsets;
 public class ZUPCommandCore implements ZUPStructCore {
     public ZUCTypes cmdStructType;
-    public String content;
+    public JsonObject content;
     private final long dataSize;
 
 
     public ZUPCommandCore(JsonObject dataHeader){
         this.dataSize = CommonUtil.getValueFromJson(ZUPKeys.DATA_SIZE.getKey(), dataHeader, Long.class);
-        this.content =  CommonUtil.getValueFromJson(ZUPKeys.CONTENT.getKey(), dataHeader, String.class);
+        this.content =  dataHeader.get(ZUPKeys.CONTENT.getKey()).getAsJsonObject();
 
         String cmdTypeStr = CommonUtil.getValueFromJson(ZUPKeys.COMMAND.getKey(), dataHeader, String.class);
         for(ZUCTypes cmdType : ZUCTypes.values()){
@@ -33,7 +31,7 @@ public class ZUPCommandCore implements ZUPStructCore {
         }
 
         //check if we lost bytes during data transfer:
-        if(dataSize != -1 && dataSize != content.getBytes(StandardCharsets.UTF_8).length){
+        if(dataSize != -1 && dataSize != content.size()){
             System.err.println(
                     "Error: size not match between: "
                             + ZUPKeys.DATA_SIZE.getKey()
@@ -46,7 +44,7 @@ public class ZUPCommandCore implements ZUPStructCore {
     public ZUPCommandCore(ZUCStructCore cmd){
         this.cmdStructType = cmd.getStructType();
         this.content = cmd.getJson();
-        this.dataSize = content.getBytes(StandardCharsets.UTF_8).length;
+        this.dataSize = content.size();
     }
 
     @Override
@@ -60,13 +58,13 @@ public class ZUPCommandCore implements ZUPStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.COMMAND.getKey(), this.cmdStructType.toString());
         jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.COMMAND.toString());
-        jsonObject.addProperty(ZUPKeys.CONTENT.getKey(), this.content);
-        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), this.content.getBytes(StandardCharsets.UTF_8).length);
+        jsonObject.add(ZUPKeys.CONTENT.getKey(), this.content);
+        jsonObject.addProperty(ZUPKeys.DATA_SIZE.getKey(), this.content.size());
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 }

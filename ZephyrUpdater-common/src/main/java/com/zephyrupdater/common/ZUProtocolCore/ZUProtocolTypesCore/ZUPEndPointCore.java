@@ -25,10 +25,10 @@ public class ZUPEndPointCore implements ZUPStructCore {
     }
 
     @Override
-    public String getJson() {
+    public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(ZUPKeys.STRUCT_TYPE.getKey(), ZUPTypes.END_POINT.toString());
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 }
