@@ -16,5 +16,6 @@ public class ZUPFile extends ZUPFileCore implements ZUPStruct {
     @Override
     public void execute() {
         ZUFileManager.createFileFromStream(AppClient.getServerSocket(), this, MainClient.clientFilePath);
+        AppClient.fileReady = true;
     }
 }

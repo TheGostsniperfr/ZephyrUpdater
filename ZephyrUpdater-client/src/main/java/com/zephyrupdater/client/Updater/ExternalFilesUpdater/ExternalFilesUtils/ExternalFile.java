@@ -24,7 +24,18 @@ public class ExternalFile extends ExternalFileCore {
 
     public void checkUpdate(){
         if(needToBeUpdate()){
+            System.out.println("Starting to download: " + this.getFileName());
             downloadFile();
+
+            while(!AppClient.fileReady){
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            System.out.println("Success to download: " + this.getFileName());
         }
     }
 }

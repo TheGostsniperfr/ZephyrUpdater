@@ -16,9 +16,7 @@ public class ZUPManager {
         try {
             System.out.println("send data: " + data.getJson());
             OutputStream outputStream = socket.getOutputStream();
-            //get data header
             String dataToSend = data.getJson();
-            //System.out.println("Data to send: " + dataToSend);
 
             outputStream.write(dataToSend.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e){

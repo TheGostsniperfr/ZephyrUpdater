@@ -42,6 +42,7 @@ public class FileUtils {
             throw new RuntimeException("Error to read stream ");
         }
 
+        System.out.println("raw data: " + byteArrayOutputStream.toString(StandardCharsets.UTF_8));
         return JsonParser.parseString(byteArrayOutputStream.toString(StandardCharsets.UTF_8)).getAsJsonObject();
     }
 

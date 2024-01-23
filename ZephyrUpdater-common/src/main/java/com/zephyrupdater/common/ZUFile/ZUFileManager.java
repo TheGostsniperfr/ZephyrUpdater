@@ -15,8 +15,6 @@ public class ZUFileManager {
 
     public static void createFileFromStream(Socket socket, ZUPFileCore zupFile, Path downloadDirPath) {
         Path filePath = downloadDirPath.resolve(zupFile.filePath);
-        File file = new File(filePath.toUri());
-        System.out.println("Downloading: " + file.getName() + " at: " + filePath);
         long totalBytes = 0;
 
         try {
@@ -37,9 +35,6 @@ public class ZUFileManager {
             }
 
             bufferedOutputStream.close();
-
-            System.out.println("Success to download: " + file.getName());
-
         } catch (IOException e) {
             e.printStackTrace();
         }

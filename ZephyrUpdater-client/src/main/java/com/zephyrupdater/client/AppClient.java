@@ -6,6 +6,7 @@ import com.zephyrupdater.client.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.FileUtils.FileUtils;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
 
@@ -19,6 +20,8 @@ public class AppClient {
     private static Socket serverSocket = null;
     private static Thread listenToServerThread = null;
     private static Boolean isConnect = false;
+
+    public static Boolean fileReady = false;
 
     public static void launchClient() {
         Thread consoleListenerThread = new Thread(() -> listenToConsole());
@@ -36,7 +39,6 @@ public class AppClient {
             }
             while(isConnect) {
                 JsonObject dataHeader = FileUtils.loadJsonFromStream(inputStream);
-                System.out.println("data: " + dataHeader);
                 if(dataHeader == null){
                     disconnectFromServer(false);
                     break;
@@ -119,6 +121,9 @@ public class AppClient {
         AppClient.listenToServerThread = listenToServerThread;
     }
     public static void sendCmdToServer(ZUCStructCore cmd){
+        if(cmd.getStructType() == ZUCTypes.GET_FILE){
+            fileReady = false;
+        }
         ZUPManager.sendData(getServerSocket(), new ZUPCommandCore(cmd));
     }
 }
