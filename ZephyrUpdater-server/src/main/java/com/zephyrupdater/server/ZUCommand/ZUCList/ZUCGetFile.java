@@ -2,6 +2,7 @@ package com.zephyrupdater.server.ZUCommand.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCGetFileCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
@@ -28,5 +29,9 @@ public class ZUCGetFile extends ZUCGetFileCore implements ZUCStruct {
 
         // Send file to client
         ZUFileManager.sendFileFromStream(client.clientSocket, this);
+    }
+
+    public static ZUCTypes getStructType(){
+        return ZUCTypes.GET_FILE;
     }
 }

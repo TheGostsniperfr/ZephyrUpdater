@@ -2,6 +2,7 @@ package com.zephyrupdater.server.ZUCommand.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
+import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.server.ZUCommand.ZUCStruct;
 import com.zephyrupdater.server.clientUtils.ClientHandler;
 
@@ -27,5 +28,9 @@ public class ZUCMessage extends ZUCMessageCore implements ZUCStruct {
                 + client.getHost()
                 + clientId
                 + " -> " + this.content);
+    }
+
+    public static ZUCTypes getStructType(){
+        return ZUCTypes.MESSAGE;
     }
 }

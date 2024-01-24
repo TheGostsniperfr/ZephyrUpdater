@@ -13,6 +13,8 @@ public class ZUCDisconnectionCore implements ZUCStructCore {
         return ZUCTypes.DISCONNECTION;
     }
 
+    public ZUCDisconnectionCore(JsonObject data){ }
+
     @Override
     public JsonObject getJson() {
         JsonObject jsonObject = new JsonObject();
