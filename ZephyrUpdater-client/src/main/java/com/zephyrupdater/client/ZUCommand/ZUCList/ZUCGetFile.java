@@ -23,7 +23,8 @@ public class ZUCGetFile extends ZUCGetFileCore implements ZUCStruct {
 
     }
 
-    public static void executeClientCmd(List<String> argv){
+
+    public static void executeClientCmd(List<String> argv) {
         if (argv.size() < 2) {
             printHelp();
             return;
@@ -39,7 +40,8 @@ public class ZUCGetFile extends ZUCGetFileCore implements ZUCStruct {
         );
     }
 
+
     public static void printHelp(){
-        System.out.println("getFile [relative path to the file]");
+        System.out.println(getStructType().getCmdAlias() + " [relative path to the file]");
     }
 }

@@ -26,8 +26,8 @@ public class ZUCGetFileCore implements ZUCStructCore {
                 Paths.get(CommonUtil.getValueFromJson(ZUCKeys.RELATIVE_FILE_PATH.getKey(), data, String.class));
     }
 
-    @Override
-    public ZUCTypes getStructType() {
+
+    public static ZUCTypes getStructType() {
         return ZUCTypes.GET_FILE;
     }
 

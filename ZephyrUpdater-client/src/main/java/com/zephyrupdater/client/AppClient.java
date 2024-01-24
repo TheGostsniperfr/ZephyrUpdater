@@ -1,6 +1,7 @@
 package com.zephyrupdater.client;
 
 import com.google.gson.JsonObject;
+import com.zephyrupdater.client.ZUCommand.ZUCManager;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.client.ZUProtocol.ZUPStruct;
 import com.zephyrupdater.common.FileUtils.FileUtils;
@@ -69,9 +70,17 @@ public class AppClient {
                 continue;
             }
 
-            ZUCStruct.executeClientCmd(argv);
+            Class<? extends ZUCStruct> clazz =  ZUCManager.getClassByAlias(argv.get(0));
+            if(clazz == null){
+                System.err.println("Unknown command alias, type help for help.");
+                continue;
+            }
+
+            ZUCManager.executeClientCmd(clazz, argv);
         }
     }
+
+
 
     public static void disconnectFromServer(Boolean propagate){
         if(!isConnect){
@@ -121,7 +130,7 @@ public class AppClient {
         AppClient.listenToServerThread = listenToServerThread;
     }
     public static void sendCmdToServer(ZUCStructCore cmd){
-        if(cmd.getStructType() == ZUCTypes.GET_FILE){
+        if(ZUCTypes.getZUCType(cmd) == ZUCTypes.GET_FILE){
             fileReady = false;
         }
         ZUPManager.sendData(getServerSocket(), new ZUPCommandCore(cmd));

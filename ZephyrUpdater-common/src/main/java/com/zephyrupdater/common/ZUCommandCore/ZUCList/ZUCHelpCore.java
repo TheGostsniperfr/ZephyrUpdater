@@ -6,15 +6,8 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
 public class ZUCHelpCore implements ZUCStructCore {
     public ZUCHelpCore() {}
-    public static void printHelp() {
-        int n = 0;
-        for(ZUCTypes zucTypes : ZUCTypes.values()){
-            System.out.println(n++ + ": " + zucTypes.getCmdName());
-        }
-    }
 
-    @Override
-    public ZUCTypes getStructType() {
+    public static ZUCTypes getStructType() {
         return ZUCTypes.HELP;
     }
 

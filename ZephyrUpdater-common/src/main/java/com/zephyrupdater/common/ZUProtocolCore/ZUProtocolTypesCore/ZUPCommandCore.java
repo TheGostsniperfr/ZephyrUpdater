@@ -42,7 +42,7 @@ public class ZUPCommandCore implements ZUPStructCore {
         }
     }
     public ZUPCommandCore(ZUCStructCore cmd){
-        this.cmdStructType = cmd.getStructType();
+        this.cmdStructType = ZUCTypes.getZUCType(cmd);
         this.content = cmd.getJson();
         this.dataSize = content.size();
     }

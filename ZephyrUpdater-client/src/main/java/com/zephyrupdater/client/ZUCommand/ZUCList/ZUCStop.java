@@ -19,4 +19,9 @@ public class ZUCStop extends ZUCStopCore implements ZUCStruct {
 
         System.exit(0);
     }
+
+    public static void printHelp(){
+        System.out.println(getStructType().getCmdAlias());
+    }
+
 }

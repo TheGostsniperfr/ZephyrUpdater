@@ -6,8 +6,8 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 
 public class ZUCStopCore implements ZUCStructCore {
 
-    @Override
-    public ZUCTypes getStructType() {
+
+    public static ZUCTypes getStructType() {
         return ZUCTypes.STOP;
     }
 
@@ -21,7 +21,4 @@ public class ZUCStopCore implements ZUCStructCore {
     }
 
     public ZUCStopCore() {}
-    public static void printHelp(){
-        System.out.println("stop");
-    }
 }

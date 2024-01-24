@@ -26,7 +26,4 @@ public class UpdaterManager {
 
         System.out.println("Successful to update game files");
     }
-
-
-
 }

@@ -16,8 +16,8 @@ public class ZUCMessageCore implements ZUCStructCore {
         this.content =  CommonUtil.getValueFromJson(ZUCKeys.CONTENT.getKey(), data, String.class);
     }
 
-    @Override
-    public ZUCTypes getStructType() {
+
+    public static ZUCTypes getStructType() {
         return ZUCTypes.MESSAGE;
     }
 

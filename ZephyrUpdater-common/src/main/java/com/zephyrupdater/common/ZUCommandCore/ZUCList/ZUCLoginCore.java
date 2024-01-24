@@ -25,8 +25,8 @@ public class ZUCLoginCore implements ZUCStructCore {
         this.id = CommonUtil.getValueFromJson(ZUCKeys.ID.getKey(), data, String.class);
         this.password = CommonUtil.getValueFromJson(ZUCKeys.PASSWORD.getKey(), data, String.class);
     }
-    @Override
-    public ZUCTypes getStructType() {
+
+    public static ZUCTypes getStructType() {
         return ZUCTypes.LOGIN;
     }
 

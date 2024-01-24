@@ -63,9 +63,10 @@ public class ZUCConnect extends ZUCConnectCore implements ZUCStruct {
                             + zucConnect.serverPort
             );
         }
+
     }
 
     public static void printHelp(){
-        System.out.println("connect [host] [port]");
+        System.out.println(getStructType().getCmdAlias() + " [host] [port]");
     }
 }

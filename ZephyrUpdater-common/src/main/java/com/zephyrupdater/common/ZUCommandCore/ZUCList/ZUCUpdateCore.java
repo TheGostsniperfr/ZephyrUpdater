@@ -36,8 +36,7 @@ public class ZUCUpdateCore implements ZUCStructCore {
         this.extFilesJson = new JsonArray();
     }
 
-    @Override
-    public ZUCTypes getStructType() {
+    public static ZUCTypes getStructType() {
         return ZUCTypes.UPDATE;
     }
 

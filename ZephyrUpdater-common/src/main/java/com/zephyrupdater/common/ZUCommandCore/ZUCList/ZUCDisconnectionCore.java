@@ -9,13 +9,8 @@ import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 public class ZUCDisconnectionCore implements ZUCStructCore {
     public String content;
 
-    @Override
-    public ZUCTypes getStructType() {
+    public static ZUCTypes getStructType() {
         return ZUCTypes.DISCONNECTION;
-    }
-
-    public static String getCmdName(){
-        return "exit";
     }
 
     @Override
@@ -28,8 +23,5 @@ public class ZUCDisconnectionCore implements ZUCStructCore {
 
     public ZUCDisconnectionCore(){
         this.content = CommonUtil.getFormatCmd("Exit");
-    }
-    public static void printHelp(){
-        System.out.println("exit");
     }
 }

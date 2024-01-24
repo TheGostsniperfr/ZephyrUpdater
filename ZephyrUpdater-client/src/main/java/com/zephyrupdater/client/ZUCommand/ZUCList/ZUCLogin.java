@@ -18,7 +18,8 @@ public class ZUCLogin extends ZUCLoginCore implements ZUCStruct {
 
     }
 
-    public static void executeClientCmd(List<String> argv){
+
+    public static void executeClientCmd(List<String> argv) {
         if (argv.size() < 3) {
             printHelp();
             return;
@@ -30,9 +31,8 @@ public class ZUCLogin extends ZUCLoginCore implements ZUCStruct {
     }
 
 
-
     public static void printHelp(){
-        System.out.println("login [id] [password]");
+        System.out.println(getStructType().getCmdAlias() + " [id] [password]");
     }
 
 

@@ -33,7 +33,7 @@ public class ZUCMessage extends ZUCMessageCore implements ZUCStruct {
                 + " -> " + this.content);
     }
 
-    public static void executeClientCmd(List<String> argv){
+    public static void executeClientCmd(List<String> argv) {
         if (argv.size() < 2) {
             printHelp();
             return;
@@ -51,6 +51,6 @@ public class ZUCMessage extends ZUCMessageCore implements ZUCStruct {
     }
 
     public static void printHelp(){
-        System.out.println("msg [message]");
+        System.out.println(getStructType().getCmdAlias() + " [message]");
     }
 }

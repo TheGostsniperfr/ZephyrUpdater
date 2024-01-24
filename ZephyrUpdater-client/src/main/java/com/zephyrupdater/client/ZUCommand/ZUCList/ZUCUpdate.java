@@ -27,7 +27,8 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
         }
 
 
-    public static void executeClientCmd(List<String> argv){
+
+    public static void executeClientCmd(List<String> argv) {
         if(argv.size() < 2){
             printHelp();
             return;
@@ -39,6 +40,6 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
     }
 
     public static void printHelp(){
-        System.out.println("update [request alias]");
+        System.out.println(getStructType().getCmdAlias() + " [request alias]");
     }
 }

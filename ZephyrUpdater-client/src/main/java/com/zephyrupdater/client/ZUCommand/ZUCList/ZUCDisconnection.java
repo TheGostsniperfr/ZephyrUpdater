@@ -14,7 +14,14 @@ public class ZUCDisconnection extends ZUCDisconnectionCore implements ZUCStruct 
         System.out.println("Server close.");
     }
 
+
+
     public static void executeClientCmd(List<String> argv) {
         AppClient.disconnectFromServer(true);
+    }
+
+
+    public static void printHelp(){
+        System.out.println(getStructType().getCmdAlias());
     }
 }
