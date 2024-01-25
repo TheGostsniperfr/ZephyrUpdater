@@ -1,6 +1,7 @@
 package com.zephyrupdater.common.FileUtils.ExternalFilesUtils;
 
 public enum ExtFileKeys {
+    SIZE("size"),
     RELATIVE_FILE_PATH("filename"),
     HASH("hash"),
     HASH_ALGO("hashAlgo");

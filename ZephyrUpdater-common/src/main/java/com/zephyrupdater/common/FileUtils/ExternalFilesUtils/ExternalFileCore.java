@@ -6,16 +6,19 @@ import com.zephyrupdater.common.FileUtils.FileUtils;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ExternalFileCore {
     private String hash;
+    private final long size;
     private final HashAlgoType hashAlgoType;
     private final Path relativeFilePath;
 
     public ExternalFileCore(JsonObject extJsonFile){
+        this.size = CommonUtil.getValueFromJson(ExtFileKeys.SIZE.getKey(), extJsonFile, Long.class);
         this.relativeFilePath =
                 Paths.get(CommonUtil.getValueFromJson(ExtFileKeys.RELATIVE_FILE_PATH.getKey(), extJsonFile, String.class));
         this.hash = CommonUtil.getValueFromJson(ExtFileKeys.HASH.getKey(), extJsonFile, String.class);
@@ -27,9 +30,14 @@ public class ExternalFileCore {
         if(!Files.exists(absPathToFile)){
             throw new IllegalArgumentException("No file at: " + absPathToFile);
         }
-        this.relativeFilePath = FileUtils.getRelativePathFromAbs(absPathToFile, basePath);
-        this.hash = HashAlgo.getHashFromFilePath(absPathToFile, hashAlgo);
-        this.hashAlgoType = hashAlgo;
+        try {
+            this.size = Files.size(absPathToFile);
+            this.relativeFilePath = FileUtils.getRelativePathFromAbs(absPathToFile, basePath);
+            this.hash = HashAlgo.getHashFromFilePath(absPathToFile, hashAlgo);
+            this.hashAlgoType = hashAlgo;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getHash() {
@@ -48,10 +56,15 @@ public class ExternalFileCore {
     }
     public JsonObject getJson(){
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(ExtFileKeys.SIZE.getKey(), this.size);
         jsonObject.addProperty(ExtFileKeys.RELATIVE_FILE_PATH.getKey(), this.relativeFilePath.toString());
         jsonObject.addProperty(ExtFileKeys.HASH.getKey(), this.hash);
         jsonObject.addProperty(ExtFileKeys.HASH_ALGO.getKey(), this.hashAlgoType.getKey());
 
         return jsonObject;
+    }
+
+    public long getSize() {
+        return size;
     }
 }

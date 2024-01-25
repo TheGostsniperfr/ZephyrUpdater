@@ -9,7 +9,10 @@ import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
 import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,6 +53,24 @@ public class FileUtils {
         try {
             return loadJsonFromStream(Files.newInputStream(filePath));
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static JsonObject loadJsonFromUrl(URL url){
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            return loadJsonFromStream(conn.getInputStream());
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static JsonObject loadJsonFromUrl(String url){
+        try{
+            return loadJsonFromUrl(new URL(url));
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
