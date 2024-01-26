@@ -8,16 +8,29 @@ public enum McMKeys {
 
     /*  VERSION MANIFEST  */
 
+    CLIENT("client"),
+    ASSET_INDEX("assetIndex"),
     LIBS("libraries"),
 
-    /*  LIBS OBJ */
-
+    /*  LIBS OBJ  */
     LIB_DOWNLOADS("downloads"),
     LIB_ARTIFACT("artifact"),
     LIB_PATH("path"),
     LIB_URL("url"),
     LIB_HASH("sha1"),
-    LIB_SIZE("size");
+    LIB_SIZE("size"),
+    LIB_CLASSIFIERS("classifiers"),
+
+    /*  ASSET INDEX OBJ  */
+    A_I_URL("url"),
+    A_I_HASH("sha1"),
+    A_I_SIZE("size"),
+
+    /* CLIENT OBJ  */
+
+    CLIENT_URL("url"),
+    CLIENT_HASH("sha1"),
+    CLIENT_SIZE("size");
 
 
 

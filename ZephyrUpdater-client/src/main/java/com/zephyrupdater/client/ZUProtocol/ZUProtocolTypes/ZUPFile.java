@@ -15,7 +15,7 @@ public class ZUPFile extends ZUPFileCore implements ZUPStruct {
 
     @Override
     public void execute() {
-        ZUFileManager.createFileFromStream(AppClient.getServerSocket(), this, MainClient.clientFilePath);
+        ZUFileManager.createFileFromStream(AppClient.getServerSocket(), this, MainClient.gameDirPath);
         AppClient.fileReady = true;
     }
 }

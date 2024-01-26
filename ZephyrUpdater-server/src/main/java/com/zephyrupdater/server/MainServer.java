@@ -1,6 +1,6 @@
 package com.zephyrupdater.server;
 
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.server.updater.CurseForgeUpdater;
 
 import java.io.File;

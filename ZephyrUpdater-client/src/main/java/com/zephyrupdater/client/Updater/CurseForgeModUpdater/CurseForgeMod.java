@@ -3,9 +3,9 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.CURSE_KEY;
-import com.zephyrupdater.common.FileUtils.FileUtils;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
+import com.zephyrupdater.common.utils.FileUtils.CurseKeys;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,14 +24,14 @@ public class CurseForgeMod {
 
     public CurseForgeMod(JsonObject jsonObject, Path modDirPath) {
         try {
-            JsonObject dataObj = jsonObject.get(CURSE_KEY.DATA.getKey()).getAsJsonObject();
-            this.fileName = CommonUtil.getValueFromJson(CURSE_KEY.FILE_NAME.getKey(), dataObj, String.class);
-            this.size = CommonUtil.getValueFromJson(CURSE_KEY.SIZE.getKey(), dataObj, Long.class);
-            this.url = new URL(CommonUtil.getValueFromJson(CURSE_KEY.URL.getKey(), dataObj, String.class));
+            JsonObject dataObj = jsonObject.get(CurseKeys.DATA.getKey()).getAsJsonObject();
+            this.fileName = CommonUtil.getValueFromJson(CurseKeys.FILE_NAME.getKey(), dataObj, String.class);
+            this.size = CommonUtil.getValueFromJson(CurseKeys.SIZE.getKey(), dataObj, Long.class);
+            this.url = new URL(CommonUtil.getValueFromJson(CurseKeys.URL.getKey(), dataObj, String.class));
 
-            JsonArray hashesArray = dataObj.getAsJsonArray(CURSE_KEY.HASH.getKey());
+            JsonArray hashesArray = dataObj.getAsJsonArray(CurseKeys.HASH.getKey());
             JsonObject firstHashObj = hashesArray.get(0).getAsJsonObject();
-            this.hash = CommonUtil.getValueFromJson(CURSE_KEY.VALUE.getKey(), firstHashObj, String.class);
+            this.hash = CommonUtil.getValueFromJson(CurseKeys.VALUE.getKey(), firstHashObj, String.class);
 
             this.modsDirPath = modDirPath;
             this.modFilePath = this.modsDirPath.resolve(this.fileName);

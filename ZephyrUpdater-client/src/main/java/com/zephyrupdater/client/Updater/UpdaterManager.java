@@ -10,7 +10,7 @@ import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
 import java.nio.file.Path;
 
 public class UpdaterManager {
-    private static final Path modDirPath = MainClient.clientFilePath.resolve("mods");
+    private static final Path modDirPath = MainClient.gameDirPath.resolve("mods");
 
     public static void update(JsonArray extUpdateFilesJson, JsonObject curseModJson){
         System.out.println("Starting to update game files:");

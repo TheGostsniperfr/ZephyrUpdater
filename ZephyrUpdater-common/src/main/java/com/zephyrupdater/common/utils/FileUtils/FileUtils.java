@@ -1,12 +1,12 @@
-package com.zephyrupdater.common.FileUtils;
+package com.zephyrupdater.common.utils.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 
 import java.io.*;
 import java.net.HttpURLConnection;

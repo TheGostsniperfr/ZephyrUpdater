@@ -2,7 +2,7 @@ package com.zephyrupdater.client.Updater.JavaUpdater;
 
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.common.OSType;
-import com.zephyrupdater.common.FileUtils.ArchiveExtractor;
+import com.zephyrupdater.common.utils.FileUtils.ArchiveExtractor;
 import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import org.apache.commons.io.FileUtils;
 
@@ -18,7 +18,7 @@ import java.nio.file.StandardCopyOption;
 
 
 public class JavaUpdater {
-    private static final Path JAVA_DIR = MainClient.clientFilePath.resolve("java");
+    private static final Path JAVA_DIR = MainClient.gameDirPath.resolve("java");
 
     private static final String JAVA_BASE_URL = "https://download.oracle.com/java/{gVersion}/archive/jdk-{version}_{osType}";
 

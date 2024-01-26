@@ -1,8 +1,8 @@
 package com.zephyrupdater.server.updater;
 
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.FileUtils.CURSE_KEY;
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.CurseKeys;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.server.MainServer;
 
 import java.nio.file.Files;
@@ -27,8 +27,8 @@ public class CurseForgeUpdater {
         this.modList = new JsonObject();
         for(int i = 0; i < nbMods; i++){
             JsonObject modJson = new JsonObject();
-            modJson.addProperty(CURSE_KEY.FILE_ID.getKey(),"");
-            modJson.addProperty(CURSE_KEY.PROJECT_ID.getKey(),"");
+            modJson.addProperty(CurseKeys.FILE_ID.getKey(),"");
+            modJson.addProperty(CurseKeys.PROJECT_ID.getKey(),"");
             this.modList.add(new StringBuilder("CurseForgeUrl").append(i).toString(), modJson);
         }
 
@@ -37,8 +37,8 @@ public class CurseForgeUpdater {
 
     public void addMod(String modName, String fileId, String projectId){
         JsonObject newModObj = new JsonObject();
-        newModObj.addProperty(CURSE_KEY.FILE_ID.getKey(), fileId);
-        newModObj.addProperty(CURSE_KEY.PROJECT_ID.getKey(), projectId);
+        newModObj.addProperty(CurseKeys.FILE_ID.getKey(), fileId);
+        newModObj.addProperty(CurseKeys.PROJECT_ID.getKey(), projectId);
 
         this.modList.add(modName, newModObj);
         this.saveModList();

@@ -1,10 +1,10 @@
-package com.zephyrupdater.common.FileUtils.ExternalFilesUtils;
+package com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.FileUtils;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgo;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class ExternalFileCore {
     private String hash;
-    private final long size;
+    private final Long size;
     private final HashAlgoType hashAlgoType;
     private final Path relativeFilePath;
 

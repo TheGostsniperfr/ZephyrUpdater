@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.zephyrupdater.client.AppClient;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.ZUCommand.ZUCList.ZUCGetFile;
-import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 
 public class ExternalFile extends ExternalFileCore {
 
@@ -19,7 +19,7 @@ public class ExternalFile extends ExternalFileCore {
     }
 
     private Boolean needToBeUpdate(){
-        return !FileUtils.isSameFile(this.getAbsFilePath(MainClient.clientFilePath), this.getHash(), this.getHashAlgoType());
+        return !FileUtils.isSameFile(this.getAbsFilePath(MainClient.gameDirPath), this.getHash(), this.getHashAlgoType());
     }
 
     public void checkUpdate(){

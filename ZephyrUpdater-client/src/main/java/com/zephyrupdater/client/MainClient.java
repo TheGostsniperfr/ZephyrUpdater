@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 public class MainClient {
     public static final String GAME_DIR_NAME = ".Arffornia.V.5";
-    public static Path clientFilePath = getAppDataRoamingPath().resolve(GAME_DIR_NAME);
+    public static Path gameDirPath = getAppDataRoamingPath().resolve(GAME_DIR_NAME);
     public static OSType CLIENT_OS;
     public static void main(String[] args) {
         checkGameFolder();
@@ -16,10 +16,10 @@ public class MainClient {
     }
 
     private static void checkGameFolder(){
-        System.out.println("Appdata folder:" + clientFilePath);
+        System.out.println("Appdata folder:" + gameDirPath);
         try{
-            if(!Files.exists(clientFilePath)){
-                Files.createDirectories(clientFilePath);
+            if(!Files.exists(gameDirPath)){
+                Files.createDirectories(gameDirPath);
             }
         } catch (Exception e){
             e.printStackTrace();

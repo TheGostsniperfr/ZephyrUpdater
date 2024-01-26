@@ -1,6 +1,6 @@
-package com.zephyrupdater.common.FileUtils;
+package com.zephyrupdater.common.utils.FileUtils;
 
-public enum CURSE_KEY {
+public enum CurseKeys {
     FILE_ID("fileId"),
     PROJECT_ID("projectId"),
     DATA("data"),
@@ -12,7 +12,7 @@ public enum CURSE_KEY {
 
     private final String key;
 
-    CURSE_KEY(String key) {
+    CurseKeys(String key) {
         this.key = key;
     }
 

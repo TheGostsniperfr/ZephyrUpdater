@@ -3,7 +3,7 @@ package com.zephyrupdater.server.updater.ExtFilesUpdate;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.common.PromptUtils;
 import com.zephyrupdater.server.MainServer;
 import com.zephyrupdater.server.ZUCommand.ZUCList.ZUCUpdate;

@@ -1,9 +1,9 @@
 package com.zephyrupdater.server.updater.ExtFilesUpdate;
 
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.FileUtils.ExternalFilesUtils.ExternalFileCore;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgo;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
+import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgo;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.MainServer;
 
 import java.nio.file.Files;

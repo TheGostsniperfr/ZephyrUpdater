@@ -3,7 +3,7 @@ package com.zephyrupdater.server.updater.ExtFilesUpdate;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.zephyrupdater.common.FileUtils.HashUtils.HashAlgoType;
+import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.MainServer;
 
 import java.io.File;

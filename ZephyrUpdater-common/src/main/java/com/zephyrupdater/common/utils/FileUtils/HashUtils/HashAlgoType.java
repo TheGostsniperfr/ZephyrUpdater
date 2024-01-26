@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.FileUtils.HashUtils;
+package com.zephyrupdater.common.utils.FileUtils.HashUtils;
 
 public enum HashAlgoType {
     SHA256("SHA-256"),

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.zephyrupdater.client.ZUCommand.ZUCManager;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.client.ZUProtocol.ZUPStruct;
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;

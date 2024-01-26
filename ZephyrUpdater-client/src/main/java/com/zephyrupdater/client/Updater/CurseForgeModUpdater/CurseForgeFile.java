@@ -2,7 +2,7 @@ package com.zephyrupdater.client.Updater.CurseForgeModUpdater;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.CURSE_KEY;
+import com.zephyrupdater.common.utils.FileUtils.CurseKeys;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,8 +13,8 @@ public class CurseForgeFile {
     private static final String GET_MOD_FILE_URL = "/v1/cf/mods/{modId}/files/{fileId}";
 
     public CurseForgeFile(JsonObject curseModJson){
-        this.fileId = CommonUtil.getValueFromJson(CURSE_KEY.FILE_ID.getKey(), curseModJson, String.class);
-        this.projectId = CommonUtil.getValueFromJson(CURSE_KEY.PROJECT_ID.getKey(), curseModJson, String.class);
+        this.fileId = CommonUtil.getValueFromJson(CurseKeys.FILE_ID.getKey(), curseModJson, String.class);
+        this.projectId = CommonUtil.getValueFromJson(CurseKeys.PROJECT_ID.getKey(), curseModJson, String.class);
     }
 
     public URL getDownloadUrl(String baseUrl){

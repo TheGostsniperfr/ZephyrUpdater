@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.FileUtils.ExternalFilesUtils;
+package com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils;
 
 public enum ExtFileKeys {
     SIZE("size"),

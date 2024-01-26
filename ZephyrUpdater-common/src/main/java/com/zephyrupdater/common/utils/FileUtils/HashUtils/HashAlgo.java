@@ -1,4 +1,4 @@
-package com.zephyrupdater.common.FileUtils.HashUtils;
+package com.zephyrupdater.common.utils.FileUtils.HashUtils;
 
 import java.math.BigInteger;
 import java.nio.file.Files;

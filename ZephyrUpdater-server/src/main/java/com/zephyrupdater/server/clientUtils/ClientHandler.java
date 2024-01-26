@@ -2,7 +2,7 @@ package com.zephyrupdater.server.clientUtils;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.CommonUtil;
-import com.zephyrupdater.common.FileUtils.FileUtils;
+import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCDisconnectionCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCMessageCore;
 import com.zephyrupdater.common.ZUCommandCore.ZUCStructCore;
