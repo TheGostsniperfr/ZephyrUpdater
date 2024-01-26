@@ -1,7 +1,6 @@
 package com.zephyrupdater.client.Updater.JavaUpdater;
 
 import com.zephyrupdater.client.MainClient;
-import com.zephyrupdater.common.OSType;
 import com.zephyrupdater.common.utils.FileUtils.ArchiveExtractor;
 import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import org.apache.commons.io.FileUtils;
@@ -54,7 +53,7 @@ public class JavaUpdater {
 
             System.out.println("Extraction of java archive");
 
-            if (MainClient.CLIENT_OS == OSType.WINDOWS) {
+            if (MainClient.osSpec.isOnWindows()) {
                 ArchiveExtractor.extractZipArchive(destinationFile, JAVA_DIR);
             } else {
                 ArchiveExtractor.extractTarGzArchive(destinationFile, JAVA_DIR);
@@ -99,7 +98,7 @@ public class JavaUpdater {
     }
 
     private static String getOSUrlComplement(){
-        switch (MainClient.CLIENT_OS){
+        switch (MainClient.osSpec.getOsType()){
             case WINDOWS:
                 return "windows-x64_bin.zip";
             case LINUX:
@@ -107,9 +106,7 @@ public class JavaUpdater {
             case MAC:
                 return "macos-aarch64_bin.tar.gz";
             default:
-                throw new IllegalArgumentException("Unsupported OS type: " + MainClient.CLIENT_OS);
+                throw new RuntimeException("Unsupported OS type: " + MainClient.osSpec.getOsType().name());
         }
     }
-
-
 }
