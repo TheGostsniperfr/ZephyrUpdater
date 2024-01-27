@@ -7,7 +7,6 @@ public enum McMKeys {
     VERSIONS("versions"),
 
     /*  VERSION MANIFEST  */
-
     CLIENT("client"),
     ASSET_INDEX("assetIndex"),
     LIBS("libraries"),
@@ -27,12 +26,18 @@ public enum McMKeys {
     A_I_SIZE("size"),
 
     /* CLIENT OBJ  */
-
     CLIENT_URL("url"),
     CLIENT_HASH("sha1"),
-    CLIENT_SIZE("size");
+    CLIENT_SIZE("size"),
 
-
+    /*  NATIVES OBJ  */
+    NATIVES_LINUX("natives-linux"),
+    NATIVES_WIN("natives-windows"),
+    NATIVES_MAC("natives-macos"),
+    NATIVES_URL("url"),
+    NATIVES_HASH("sha1"),
+    NATIVES_SIZE("size"),
+    NATIVES_PATH("path");
 
     private final String key;
 

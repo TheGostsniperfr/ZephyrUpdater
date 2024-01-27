@@ -7,6 +7,7 @@ import java.nio.file.Path;
 
 public class MainClient {
     public static final String GAME_DIR_NAME = ".Arffornia.V.5";
+    public static final String MC_VERSION = "1.20.1";
     public static Path gameDirPath;
     public static OsSpec osSpec;
     public static void main(String[] args) {

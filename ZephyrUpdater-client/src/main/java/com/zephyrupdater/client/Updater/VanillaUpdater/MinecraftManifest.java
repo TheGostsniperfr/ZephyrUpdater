@@ -24,12 +24,12 @@ public class MinecraftManifest {
     private final String mcVersion;
 
     private List<DownloadableFile> downloadableFiles;
-    private List<JsonObject> nativeObjs;
+    private List<JsonObject> nativesObjs;
 
     public MinecraftManifest(String mcVersion){
         this.mcVersion = mcVersion;
         this.downloadableFiles = new ArrayList<>();
-        this.nativeObjs = new ArrayList<>();
+        this.nativesObjs = new ArrayList<>();
 
         versionsManifest = FileUtils.loadJsonFromUrl(VERSIONS_MANIFEST_URL);
         this.versionsArray = this.versionsManifest.get(McMKeys.VERSIONS.getKey()).getAsJsonArray();
@@ -41,6 +41,10 @@ public class MinecraftManifest {
         parseFiles();
     }
 
+    public void checkUpdate(){
+        this.downloadableFiles.forEach(DownloadableFile::checkUpdate);
+    }
+
     private void parseFiles(){
         try{
             System.out.println("Parsing lib files.");
@@ -49,10 +53,14 @@ public class MinecraftManifest {
             parseAssetIndex();
             System.out.println("Parsing client file.");
             parseClient();
+            System.out.println("Parsing natives.");
+            parseNative();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
+
+
 
     private JsonObject getVersionManifest() {
         for (JsonElement version : this.versionsArray) {
@@ -77,7 +85,7 @@ public class MinecraftManifest {
             JsonObject nativeObj = libDownloads.getAsJsonObject(McMKeys.LIB_CLASSIFIERS.getKey());
             JsonObject libArtifact = libDownloads.getAsJsonObject(McMKeys.LIB_ARTIFACT.getKey());
 
-            if(nativeObj != null) { this.nativeObjs.add(nativeObj); }
+            if(nativeObj != null) { this.nativesObjs.add(nativeObj); }
 
             Path filePath = MainClient.gameDirPath
                                 .resolve("libraries/")
@@ -110,12 +118,28 @@ public class MinecraftManifest {
         this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
     }
 
-    private void parseNative(){
-        for(JsonObject nativeObj : this.nativeObjs){
+    private void parseNative() throws MalformedURLException {
+        for(JsonObject classifiersObj : this.nativesObjs){
+            JsonObject nativesObj = null;
+            if(MainClient.osSpec.isOnWindows()){
+                nativesObj = classifiersObj.getAsJsonObject(McMKeys.NATIVES_WIN.getKey());
+            }else if(MainClient.osSpec.isOnMAC()){
+                nativesObj = classifiersObj.getAsJsonObject(McMKeys.NATIVES_MAC.getKey());
+            } else if (MainClient.osSpec.isOnLinux()) {
+                nativesObj = classifiersObj.getAsJsonObject(McMKeys.NATIVES_LINUX.getKey());
+            }
+            if(nativesObj == null) { return; }
 
+            URL url = new URL(CommonUtil.getValueFromJson(McMKeys.NATIVES_URL.getKey(), nativesObj, String.class));
+            Long size = CommonUtil.getValueFromJson(McMKeys.NATIVES_SIZE.getKey(), nativesObj, Long.class);
+            String hash = CommonUtil.getValueFromJson(McMKeys.NATIVES_HASH.getKey(), nativesObj, String.class);
+            Path path = Paths.get("natives/").resolve(Paths.get(
+                                    CommonUtil.getValueFromJson(McMKeys.NATIVES_PATH.getKey(), nativesObj, String.class))
+                                    .getFileName());
+
+            this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
         }
     }
-
 
     public List<DownloadableFile> getDownloadableFiles() {
         return downloadableFiles;

@@ -6,6 +6,7 @@ import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 import com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUpdater;
 import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
+import com.zephyrupdater.client.Updater.VanillaUpdater.MinecraftManifest;
 
 import java.nio.file.Path;
 
@@ -18,11 +19,15 @@ public class UpdaterManager {
         // Update Java
         JavaUpdater.javaUpdate();
 
+        // Update minecraft vanilla files
+        new MinecraftManifest(MainClient.MC_VERSION).checkUpdate();
+
         // Update curse forge mods
         CurseForgeUtils.updateCurseForgeMod(curseModJson, modDirPath);
 
         // Update external files
         ExternalFilesUpdater.checkUpdateExtFiles(extUpdateFilesJson);
+
 
         System.out.println("Successful to update game files");
     }

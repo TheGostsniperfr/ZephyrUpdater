@@ -9,7 +9,8 @@ public class OsSpec {
     private ArchType archType;
 
     public OsSpec(){
-        
+        setOsType();
+        setArchiType();
     }
 
     private void setOsType(){
