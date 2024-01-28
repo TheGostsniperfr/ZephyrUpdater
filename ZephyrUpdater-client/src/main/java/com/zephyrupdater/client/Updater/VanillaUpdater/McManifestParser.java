@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MinecraftManifest {
-    private static final String VERSIONS_MANIFEST_URL = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+public class McManifestParser {
+    private static final String VERSIONS_MANIFEST_URL = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
     private final JsonObject versionsManifest;
     private final JsonArray versionsArray;
     private final JsonObject versionManifest;
@@ -26,7 +26,7 @@ public class MinecraftManifest {
     private List<DownloadableFile> downloadableFiles;
     private List<JsonObject> nativesObjs;
 
-    public MinecraftManifest(String mcVersion){
+    public McManifestParser(String mcVersion){
         this.mcVersion = mcVersion;
         this.downloadableFiles = new ArrayList<>();
         this.nativesObjs = new ArrayList<>();
@@ -41,11 +41,7 @@ public class MinecraftManifest {
         parseFiles();
     }
 
-    public void checkUpdate(){
-        this.downloadableFiles.forEach(DownloadableFile::checkUpdate);
-    }
-
-    private void parseFiles(){
+    public void parseFiles(){
         try{
             System.out.println("Parsing lib files.");
             parseLibs();
@@ -59,9 +55,6 @@ public class MinecraftManifest {
             throw new RuntimeException(e);
         }
     }
-
-
-
     private JsonObject getVersionManifest() {
         for (JsonElement version : this.versionsArray) {
             JsonObject versionObj = version.getAsJsonObject();
@@ -88,8 +81,8 @@ public class MinecraftManifest {
             if(nativeObj != null) { this.nativesObjs.add(nativeObj); }
 
             Path filePath = MainClient.gameDirPath
-                                .resolve("libraries/")
-                                .resolve(CommonUtil.getValueFromJson(McMKeys.LIB_PATH.getKey(), libArtifact, String.class));
+                    .resolve("libraries/")
+                    .resolve(CommonUtil.getValueFromJson(McMKeys.LIB_PATH.getKey(), libArtifact, String.class));
             Long fileSize = CommonUtil.getValueFromJson(McMKeys.LIB_SIZE.getKey(), libArtifact, Long.class);
             String fileHash = CommonUtil.getValueFromJson(McMKeys.LIB_HASH.getKey(), libArtifact, String.class);
             URL fileUrl = new URL(CommonUtil.getValueFromJson(McMKeys.LIB_URL.getKey(), libArtifact, String.class));
@@ -109,7 +102,8 @@ public class MinecraftManifest {
     }
 
     private void parseClient() throws MalformedURLException {
-        JsonObject clientObj = this.versionManifest.getAsJsonObject(McMKeys.CLIENT.getKey());
+        JsonObject downloadsObj = this.versionManifest.getAsJsonObject(McMKeys.DOWNLOADS.getKey());
+        JsonObject clientObj = downloadsObj.getAsJsonObject(McMKeys.CLIENT.getKey());
         URL url = new URL(CommonUtil.getValueFromJson(McMKeys.CLIENT_URL.getKey(), clientObj, String.class));
         Long size = CommonUtil.getValueFromJson(McMKeys.CLIENT_SIZE.getKey(), clientObj, Long.class);
         String hash = CommonUtil.getValueFromJson(McMKeys.CLIENT_HASH.getKey(), clientObj, String.class);
@@ -134,8 +128,8 @@ public class MinecraftManifest {
             Long size = CommonUtil.getValueFromJson(McMKeys.NATIVES_SIZE.getKey(), nativesObj, Long.class);
             String hash = CommonUtil.getValueFromJson(McMKeys.NATIVES_HASH.getKey(), nativesObj, String.class);
             Path path = Paths.get("natives/").resolve(Paths.get(
-                                    CommonUtil.getValueFromJson(McMKeys.NATIVES_PATH.getKey(), nativesObj, String.class))
-                                    .getFileName());
+                            CommonUtil.getValueFromJson(McMKeys.NATIVES_PATH.getKey(), nativesObj, String.class))
+                    .getFileName());
 
             this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
         }

@@ -1,5 +1,7 @@
 package com.zephyrupdater.common;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -10,7 +12,7 @@ public class OsSpec {
 
     public OsSpec(){
         setOsType();
-        setArchiType();
+        setArchType();
     }
 
     private void setOsType(){
@@ -26,7 +28,7 @@ public class OsSpec {
         }
     }
 
-    private void setArchiType(){
+    private void setArchType(){
         String arch = System.getProperty("os.arch").toLowerCase();
         if (arch.contains("amd64") || arch.contains("x86_64")) {
             archType = ArchType.AMD64;
@@ -43,11 +45,16 @@ public class OsSpec {
         }
     }
 
+    public void printSpec(){
+        System.out.println("OS: " + this.getOsType());
+        System.out.println("Arch: " + this.getArchType());
+    }
+
     public OSType getOsType() {
         return osType;
     }
 
-    public ArchType getArchiType() {
+    public ArchType getArchType() {
         return archType;
     }
 
@@ -66,13 +73,21 @@ public class OsSpec {
 
 
     public Path getAppdataPath() {
+        Path appdataPath;
         if (isOnWindows()) {
-            return Paths.get(System.getenv("APPDATA"));
+            appdataPath = Paths.get(System.getenv("APPDATA"));
         } else if (isOnLinux() || isOnMAC()) {
-            return Paths.get(System.getProperty("user.home"));
+            appdataPath = Paths.get(System.getProperty("user.home"));
+        }else{
+            throw new RuntimeException("Unsupported os: " + getOsType().name());
         }
 
-        throw new RuntimeException("Unsupported os: " + getOsType().name());
+        try {
+            Files.createDirectories(appdataPath.getParent());
+            return appdataPath;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Boolean isOnWindows(){

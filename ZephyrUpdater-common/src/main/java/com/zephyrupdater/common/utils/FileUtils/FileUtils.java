@@ -9,10 +9,7 @@ import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgo;
 import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,12 +54,28 @@ public class FileUtils {
         }
     }
 
-    public static JsonObject loadJsonFromUrl(URL url){
+    public static JsonObject loadJsonFromUrl(URL url)  {
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            return loadJsonFromStream(conn.getInputStream());
-        } catch (Exception e){
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                Gson gson = new Gson();
+                return gson.fromJson(response.toString(), JsonObject.class);
+            } else {
+                throw new IOException("Failed to load json from URL. Response code: " + responseCode);
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

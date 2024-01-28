@@ -6,12 +6,12 @@ import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.client.Updater.CurseForgeModUpdater.CurseForgeUtils;
 import com.zephyrupdater.client.Updater.ExternalFilesUpdater.ExternalFilesUpdater;
 import com.zephyrupdater.client.Updater.JavaUpdater.JavaUpdater;
-import com.zephyrupdater.client.Updater.VanillaUpdater.MinecraftManifest;
+import com.zephyrupdater.client.Updater.VanillaUpdater.McVanillaUpdater;
 
 import java.nio.file.Path;
 
 public class UpdaterManager {
-    private static final Path modDirPath = MainClient.gameDirPath.resolve("mods");
+        private static final Path modDirPath = MainClient.gameDirPath.resolve("mods");
 
     public static void update(JsonArray extUpdateFilesJson, JsonObject curseModJson){
         System.out.println("Starting to update game files:");
@@ -19,8 +19,8 @@ public class UpdaterManager {
         // Update Java
         JavaUpdater.javaUpdate();
 
-        // Update minecraft vanilla files
-        new MinecraftManifest(MainClient.MC_VERSION).checkUpdate();
+        // Update Minecraft vanilla files
+        McVanillaUpdater.checkUpdate(MainClient.GAME_VERSION);
 
         // Update curse forge mods
         CurseForgeUtils.updateCurseForgeMod(curseModJson, modDirPath);

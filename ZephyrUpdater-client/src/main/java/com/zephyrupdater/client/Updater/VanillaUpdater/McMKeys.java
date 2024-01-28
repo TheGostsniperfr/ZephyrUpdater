@@ -7,9 +7,14 @@ public enum McMKeys {
     VERSIONS("versions"),
 
     /*  VERSION MANIFEST  */
-    CLIENT("client"),
+    DOWNLOADS("downloads"),
     ASSET_INDEX("assetIndex"),
     LIBS("libraries"),
+
+    /*  DOWNLOADS OBJ  */
+
+    CLIENT("client"),
+
 
     /*  LIBS OBJ  */
     LIB_DOWNLOADS("downloads"),
@@ -26,6 +31,7 @@ public enum McMKeys {
     A_I_SIZE("size"),
 
     /* CLIENT OBJ  */
+
     CLIENT_URL("url"),
     CLIENT_HASH("sha1"),
     CLIENT_SIZE("size"),
