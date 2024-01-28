@@ -47,7 +47,7 @@ public class DownloadableFile {
 
     public Boolean checkUpdate(){
         if(needToBeUpdate()){
-            System.out.println("Downloading: " + this.getFileName());
+            System.out.println("Downloading: " + this.getFileName() + " at: " + this.getFilePath());
             downloadMod();
             return true;
         }

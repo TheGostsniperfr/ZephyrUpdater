@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.MainClient;
 import com.zephyrupdater.common.CommonUtil;
+import com.zephyrupdater.common.OsSpec;
 import com.zephyrupdater.common.utils.FileUtils.DownloadableFile;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
@@ -37,8 +38,6 @@ public class McManifestParser {
         if(this.versionManifest == null){
             System.err.println("Unknown minecraft version: " + this.mcVersion);
         }
-
-        parseFiles();
     }
 
     public void parseFiles(){
@@ -50,7 +49,7 @@ public class McManifestParser {
             System.out.println("Parsing client file.");
             parseClient();
             System.out.println("Parsing natives.");
-            parseNative();
+            parseNatives();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -78,6 +77,7 @@ public class McManifestParser {
             JsonObject nativeObj = libDownloads.getAsJsonObject(McMKeys.LIB_CLASSIFIERS.getKey());
             JsonObject libArtifact = libDownloads.getAsJsonObject(McMKeys.LIB_ARTIFACT.getKey());
 
+            //Check if the lib contain a natives (older manifest)
             if(nativeObj != null) { this.nativesObjs.add(nativeObj); }
 
             Path filePath = MainClient.gameDirPath
@@ -86,6 +86,10 @@ public class McManifestParser {
             Long fileSize = CommonUtil.getValueFromJson(McMKeys.LIB_SIZE.getKey(), libArtifact, Long.class);
             String fileHash = CommonUtil.getValueFromJson(McMKeys.LIB_HASH.getKey(), libArtifact, String.class);
             URL fileUrl = new URL(CommonUtil.getValueFromJson(McMKeys.LIB_URL.getKey(), libArtifact, String.class));
+
+            //Check if the lib is a natives (newer manifest)
+            String fileName = filePath.getFileName().toString();
+            if(fileName.contains("natives") && !isValidNatives(fileName)) { continue; }
 
             this.downloadableFiles.add(new DownloadableFile(filePath, fileUrl, fileSize, fileHash, HashAlgoType.SHA1));
         }
@@ -104,15 +108,16 @@ public class McManifestParser {
     private void parseClient() throws MalformedURLException {
         JsonObject downloadsObj = this.versionManifest.getAsJsonObject(McMKeys.DOWNLOADS.getKey());
         JsonObject clientObj = downloadsObj.getAsJsonObject(McMKeys.CLIENT.getKey());
-        URL url = new URL(CommonUtil.getValueFromJson(McMKeys.CLIENT_URL.getKey(), clientObj, String.class));
+        String urlStr = CommonUtil.getValueFromJson(McMKeys.CLIENT_URL.getKey(), clientObj, String.class);
+        URL url = new URL(urlStr);
         Long size = CommonUtil.getValueFromJson(McMKeys.CLIENT_SIZE.getKey(), clientObj, Long.class);
         String hash = CommonUtil.getValueFromJson(McMKeys.CLIENT_HASH.getKey(), clientObj, String.class);
-        Path path = Paths.get(MainClient.gameDirPath + url.getFile());
+        Path path = MainClient.gameDirPath.resolve(urlStr.substring(urlStr.lastIndexOf("/") + 1));
 
         this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
     }
 
-    private void parseNative() throws MalformedURLException {
+    private void parseNatives() throws MalformedURLException {
         for(JsonObject classifiersObj : this.nativesObjs){
             JsonObject nativesObj = null;
             if(MainClient.osSpec.isOnWindows()){
@@ -133,6 +138,27 @@ public class McManifestParser {
 
             this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
         }
+    }
+
+
+    private Boolean isValidNatives(String nativesName){
+        if (nativesName.contains("natives-macos") && !MainClient.osSpec.isOnMAC()
+                || nativesName.contains("natives-windows") && !MainClient.osSpec.isOnWindows()
+                || nativesName.contains("natives-linux") && !MainClient.osSpec.isOnLinux()) {
+            return false;
+        }
+
+        for(OsSpec.ArchType archType : OsSpec.ArchType.values()){
+            if (nativesName.contains(archType.name().toLowerCase())) {
+                if (archType != MainClient.osSpec.getArchType()) {
+                    return false;
+                }
+
+                break;
+            }
+        }
+
+        return true;
     }
 
     public List<DownloadableFile> getDownloadableFiles() {
