@@ -1,22 +1,12 @@
 package com.zephyrupdater.client;
 
-import com.zephyrupdater.client.Updater.McUpdaterManager;
-import com.zephyrupdater.common.OsSpec;
-
-import java.nio.file.Path;
+import com.zephyrupdater.client.games.gameList.McGameManager;
 
 public class MainClient {
-    public static Path gameDirPath;
-    public static OsSpec osSpec;
-
-    public static McUpdaterManager arfforniaV5Updater;
     public static void main(String[] args) {
-        osSpec = new OsSpec();
-        osSpec.printSpec();
+        ZephyrUpdater zephyrUpdater = new ZephyrUpdater();
+        zephyrUpdater.addGame(new McGameManager(".Arffornia_V.5", "1.20.1", "17.0.9", zephyrUpdater));
 
-        arfforniaV5Updater = new McUpdaterManager(".Arffornia_V.5", "1.20.1", osSpec);
-
-
-        AppClient.launchClient();
+        zephyrUpdater.updateCurrentGame();
     }
 }
