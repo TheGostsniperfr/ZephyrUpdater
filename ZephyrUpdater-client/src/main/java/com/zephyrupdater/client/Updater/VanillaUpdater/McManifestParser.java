@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.MainClient;
+import com.zephyrupdater.client.Updater.McUpdaterManager;
 import com.zephyrupdater.common.CommonUtil;
 import com.zephyrupdater.common.OsSpec;
 import com.zephyrupdater.common.utils.FileUtils.DownloadableFile;
@@ -26,9 +27,10 @@ public class McManifestParser {
 
     private List<DownloadableFile> downloadableFiles;
     private List<JsonObject> nativesObjs;
+    private final McUpdaterManager mcUpdaterManager;
 
-    public McManifestParser(String mcVersion){
-        this.mcVersion = mcVersion;
+    public McManifestParser(McUpdaterManager mcUpdaterManager){
+        this.mcUpdaterManager = mcUpdaterManager;
         this.downloadableFiles = new ArrayList<>();
         this.nativesObjs = new ArrayList<>();
 
@@ -36,7 +38,7 @@ public class McManifestParser {
         this.versionsArray = this.versionsManifest.get(McMKeys.VERSIONS.getKey()).getAsJsonArray();
         this.versionManifest = getVersionManifest();
         if(this.versionManifest == null){
-            System.err.println("Unknown minecraft version: " + this.mcVersion);
+            System.err.println("Unknown minecraft version: " + this.mcUpdaterManager.getMcVersion());
         }
     }
 
@@ -46,10 +48,11 @@ public class McManifestParser {
             parseLibs();
             System.out.println("Parsing asset index file.");
             parseAssetIndex();
-            System.out.println("Parsing client file.");
-            parseClient();
             System.out.println("Parsing natives.");
             parseNatives();
+            System.out.println("Parsing client file.");
+            parseClient();
+
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +83,7 @@ public class McManifestParser {
             //Check if the lib contain a natives (older manifest)
             if(nativeObj != null) { this.nativesObjs.add(nativeObj); }
 
-            Path filePath = MainClient.gameDirPath
+            Path filePath = this.mcUpdaterManager.getGameDir()
                     .resolve("libraries/")
                     .resolve(CommonUtil.getValueFromJson(McMKeys.LIB_PATH.getKey(), libArtifact, String.class));
             Long fileSize = CommonUtil.getValueFromJson(McMKeys.LIB_SIZE.getKey(), libArtifact, Long.class);
@@ -100,7 +103,7 @@ public class McManifestParser {
         URL url = new URL(CommonUtil.getValueFromJson(McMKeys.A_I_URL.getKey(), assetIndexObj, String.class));
         Long size = CommonUtil.getValueFromJson(McMKeys.A_I_SIZE.getKey(), assetIndexObj, Long.class);
         String hash = CommonUtil.getValueFromJson(McMKeys.A_I_HASH.getKey(), assetIndexObj, String.class);
-        Path path = Paths.get(MainClient.gameDirPath.resolve("assets/indexes/") + url.getFile());
+        Path path = Paths.get(this.mcUpdaterManager.getGameDir().resolve("assets/indexes/") + url.getFile());
 
         this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
     }
@@ -112,7 +115,7 @@ public class McManifestParser {
         URL url = new URL(urlStr);
         Long size = CommonUtil.getValueFromJson(McMKeys.CLIENT_SIZE.getKey(), clientObj, Long.class);
         String hash = CommonUtil.getValueFromJson(McMKeys.CLIENT_HASH.getKey(), clientObj, String.class);
-        Path path = MainClient.gameDirPath.resolve(urlStr.substring(urlStr.lastIndexOf("/") + 1));
+        Path path = this.mcUpdaterManager.getGameDir().resolve(urlStr.substring(urlStr.lastIndexOf("/") + 1));
 
         this.downloadableFiles.add(new DownloadableFile(path, url, size, hash, HashAlgoType.SHA1));
     }
@@ -120,7 +123,7 @@ public class McManifestParser {
     private void parseNatives() throws MalformedURLException {
         for(JsonObject classifiersObj : this.nativesObjs){
             JsonObject nativesObj = null;
-            if(MainClient.osSpec.isOnWindows()){
+            if(mcUpdaterManager.getOsSpec().isOnWindows()){
                 nativesObj = classifiersObj.getAsJsonObject(McMKeys.NATIVES_WIN.getKey());
             }else if(MainClient.osSpec.isOnMAC()){
                 nativesObj = classifiersObj.getAsJsonObject(McMKeys.NATIVES_MAC.getKey());

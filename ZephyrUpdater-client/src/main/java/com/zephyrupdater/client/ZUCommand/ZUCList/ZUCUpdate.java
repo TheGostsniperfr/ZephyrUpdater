@@ -2,7 +2,7 @@ package com.zephyrupdater.client.ZUCommand.ZUCList;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.client.AppClient;
-import com.zephyrupdater.client.Updater.UpdaterManager;
+import com.zephyrupdater.client.Updater.McUpdaterManager;
 import com.zephyrupdater.client.ZUCommand.ZUCStruct;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 import com.zephyrupdater.common.ZUProtocolCore.ZUPManager;
@@ -23,7 +23,7 @@ public class ZUCUpdate extends ZUCUpdateCore implements ZUCStruct {
     public void executeServerCmd() {
         System.out.println("extFilesjson: " + extFilesJson);
         System.out.println("curseMods: " + curseModJson);
-        new Thread(() -> UpdaterManager.update(this.extFilesJson, this.curseModJson)).start();
+        new Thread(() -> McUpdaterManager.update(this.extFilesJson, this.curseModJson)).start();
         }
 
 
