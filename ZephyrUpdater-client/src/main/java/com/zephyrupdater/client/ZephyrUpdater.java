@@ -1,7 +1,6 @@
 package com.zephyrupdater.client;
 
 import com.zephyrupdater.client.games.GameManagerCore;
-import com.zephyrupdater.client.networkClient.ZephyrNetClient;
 import com.zephyrupdater.client.utils.ZUCache;
 import com.zephyrupdater.common.OsSpec;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
@@ -27,9 +26,6 @@ public class ZephyrUpdater {
 
         this.zuCache = new ZUCache(this);
         this.setCurrentGameIndex(zuCache.getGameIndex());
-
-        // init net:
-        ZephyrNetClient.launchClient(this);
     }
 
     public ZephyrUpdater(){

@@ -1,7 +1,6 @@
 package com.zephyrupdater.client;
 
 import com.zephyrupdater.client.games.gameList.McGameManager;
-import com.zephyrupdater.client.networkClient.ZephyrNetClient;
 
 public class MainClient {
     public static void main(String[] args) {
@@ -12,13 +11,7 @@ public class MainClient {
 
         zephyrUpdater.sendNetCmd("connect 2 2");
 
-        while(ZephyrNetClient.getIsConnect() != true){
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+
 
         zephyrUpdater.updateCurrentGame();
     }
