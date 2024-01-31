@@ -6,6 +6,7 @@ import com.zephyrupdater.client.networkClient.ZUCommand.ZUCList.ZUCMessage;
 import com.zephyrupdater.client.networkClient.ZUCommand.ZUCList.ZUCUpdate;
 import com.zephyrupdater.client.networkClient.ZUCommand.ZUCStruct;
 import com.zephyrupdater.client.networkClient.ZUProtocol.ZUPStruct;
+import com.zephyrupdater.client.networkClient.ZephyrNetClient;
 import com.zephyrupdater.common.ZUCommandCore.ZUCTypes;
 import com.zephyrupdater.common.ZUProtocolCore.ZUProtocolTypesCore.ZUPCommandCore;
 
@@ -33,6 +34,13 @@ public class ZUPCommand extends ZUPCommandCore implements ZUPStruct {
                 break;
             default:
                 throw new IllegalArgumentException();
+        }
+
+        if(ZephyrNetClient.waitForStruct != null && ZephyrNetClient.waitForStruct == this.cmdStructType){
+            System.out.println("Detect waiting struct");
+            ZephyrNetClient.zucStructCache = zucStruct;
+            ZephyrNetClient.waitForStruct = null;
+            return;
         }
 
         zucStruct.executeServerCmd();

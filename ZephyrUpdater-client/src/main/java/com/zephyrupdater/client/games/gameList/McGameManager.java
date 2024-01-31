@@ -2,9 +2,14 @@ package com.zephyrupdater.client.games.gameList;
 
 import com.zephyrupdater.client.ZephyrUpdater;
 import com.zephyrupdater.client.games.GameManagerCore;
+import com.zephyrupdater.client.games.utils.Updater.CurseForgeModUpdater.CurseForgeUtils;
+import com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUpdater;
 import com.zephyrupdater.client.games.utils.Updater.JavaUpdater.JavaUpdater;
 import com.zephyrupdater.client.games.utils.Updater.UpdateProgressSteps;
 import com.zephyrupdater.client.games.utils.Updater.VanillaUpdater.McVanillaUpdater;
+import com.zephyrupdater.client.networkClient.ZUCommand.ZUCList.ZUCUpdate;
+import com.zephyrupdater.client.networkClient.ZephyrNetClient;
+import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;
 
 import java.nio.file.Path;
 
@@ -33,11 +38,13 @@ public class McGameManager extends GameManagerCore {
         // Update Minecraft vanilla files
         McVanillaUpdater.checkUpdate(this);
 
+        ZUCUpdate zucUpdate = (ZUCUpdate) ZephyrNetClient.sendCmdToServerWithResponse(new ZUCUpdateCore("mods"));
+
         // Update curse forge mods
-        //CurseForgeUtils.updateCurseForgeMod(curseModJson, this.getModDirPath());
+        CurseForgeUtils.updateCurseForgeMod(zucUpdate.curseModJson, this.getModDirPath());
 
         // Update external files
-        //ExternalFilesUpdater.checkUpdateExtFiles(extUpdateFilesJson, this.getGameDir());
+        ExternalFilesUpdater.checkUpdateExtFiles(zucUpdate.extFilesJson, this.getGameDir());
 
 
         System.out.println("Successful to update game files");

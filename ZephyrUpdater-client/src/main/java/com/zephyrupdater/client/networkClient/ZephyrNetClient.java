@@ -22,6 +22,8 @@ public class ZephyrNetClient {
     private static Thread listenToServerThread = null;
     private static Boolean isConnect = false;
     public static Boolean fileReady = false;
+    public static ZUCTypes waitForStruct = null;
+    public static ZUCStruct zucStructCache;
     public static ZephyrUpdater zUpdater;
 
     public static void launchClient(ZephyrUpdater zephyrUpdater) {
@@ -42,9 +44,11 @@ public class ZephyrNetClient {
                 }
 
                 ZUPStruct zupStruct = ZUPStruct.getStructFromDataHeader(dataHeader);
-                if(zupStruct != null){
-                    zupStruct.execute();
+                if(zupStruct == null){
+                    continue;
                 }
+
+                zupStruct.execute();
             }
         }catch (Exception e)
         {
@@ -119,6 +123,27 @@ public class ZephyrNetClient {
         if(ZUCTypes.getZUCType(cmd) == ZUCTypes.GET_FILE){
             fileReady = false;
         }
+
         ZUPManager.sendData(getServerSocket(), new ZUPCommandCore(cmd));
+    }
+
+    public static ZUCStruct sendCmdToServerWithResponse(ZUCStructCore cmd){
+        ZUCTypes structToWait = ZUCTypes.getZUCType(cmd);
+        waitForStruct = structToWait;
+        sendCmdToServer(cmd);
+
+        try {
+            while (waitForStruct != null) {
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(ZUCTypes.getZUCType(zucStructCache) != structToWait){
+            throw new RuntimeException("Invalid wait struct receive.");
+        }
+
+        return zucStructCache;
     }
 }

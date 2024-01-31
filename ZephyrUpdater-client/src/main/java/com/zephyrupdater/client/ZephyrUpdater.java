@@ -50,6 +50,7 @@ public class ZephyrUpdater {
 
     public void sendNetCmd(String cmd){
         try {
+            if(cmd.endsWith("\n")) { cmd += "\n"; }
             System.out.write(cmd.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException(e);
