@@ -40,6 +40,24 @@ public class ExternalFileCore {
         }
     }
 
+    public ExternalFileCore(String absStrPathToFile, String baseStrPath, HashAlgoType hashAlgo){
+        Path absPathToFile = Paths.get(absStrPathToFile);
+        Path basePath = Paths.get(baseStrPath);
+
+        if(!Files.exists(absPathToFile)){
+            throw new IllegalArgumentException("No file at: " + absPathToFile);
+        }
+        try {
+            this.size = Files.size(absPathToFile);
+            this.relativeFilePath = FileUtils.getRelativePathFromAbs(absPathToFile, basePath);
+            this.hash = HashAlgo.getHashFromFilePath(absPathToFile, hashAlgo);
+            this.hashAlgoType = hashAlgo;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public String getHash() {
         return hash;
     }
