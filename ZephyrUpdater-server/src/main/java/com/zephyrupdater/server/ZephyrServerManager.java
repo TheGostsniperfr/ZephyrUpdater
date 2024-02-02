@@ -2,10 +2,10 @@ package com.zephyrupdater.server;
 
 import com.sun.net.httpserver.HttpServer;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
-import com.zephyrupdater.server.database.PublicFilesRequest;
+import com.zephyrupdater.server.database.PublicFilesDB;
 import com.zephyrupdater.server.handlers.PublicHandler;
 import com.zephyrupdater.server.handlers.RequestHandler;
-import com.zephyrupdater.server.utils.commands.CmdManager;
+import com.zephyrupdater.server.commands.CmdManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class ZephyrServerManager {
     private static final int SERVER_HTTP_PORT = 8080;
     private final HttpServer server;
-    private final PublicFilesRequest publicFilesRequest;
+    private final PublicFilesDB publicFilesDB;
 
     private final CmdManager cmdManager;
     private Path publicDirPath;
@@ -26,7 +26,7 @@ public class ZephyrServerManager {
         try {
             this.server = HttpServer.create(new InetSocketAddress(SERVER_HTTP_PORT), 0);
             this.initServerDir();
-            this.publicFilesRequest = new PublicFilesRequest(this.cacheDirPath);
+            this.publicFilesDB = new PublicFilesDB(this.cacheDirPath);
             this.initServerContext();
 
             this.cmdManager = new CmdManager(this);
@@ -38,7 +38,7 @@ public class ZephyrServerManager {
 
     private void initServerContext(){
         this.server.createContext("/public/", new PublicHandler(this.publicDirPath));
-        this.server.createContext("/request/", new RequestHandler(this.publicFilesRequest));
+        this.server.createContext("/request/", new RequestHandler(this.publicFilesDB));
     }
 
     private void initServerDir() {
@@ -67,8 +67,8 @@ public class ZephyrServerManager {
         return server;
     }
 
-    public PublicFilesRequest getPublicFilesRequest() {
-        return publicFilesRequest;
+    public PublicFilesDB getPublicFilesDB() {
+        return publicFilesDB;
     }
 
     public Path getPublicDirPath() {

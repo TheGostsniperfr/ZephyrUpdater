@@ -1,4 +1,4 @@
-package com.zephyrupdater.server.utils.commands;
+package com.zephyrupdater.server.commands;
 
 import com.zephyrupdater.server.ZephyrServerManager;
 

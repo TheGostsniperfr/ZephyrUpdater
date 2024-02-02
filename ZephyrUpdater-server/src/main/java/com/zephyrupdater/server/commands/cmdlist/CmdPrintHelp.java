@@ -1,7 +1,7 @@
-package com.zephyrupdater.server.utils.commands.cmdlist;
+package com.zephyrupdater.server.commands.cmdlist;
 
 import com.zephyrupdater.server.ZephyrServerManager;
-import com.zephyrupdater.server.utils.commands.ICmd;
+import com.zephyrupdater.server.commands.ICmd;
 
 import java.util.List;
 

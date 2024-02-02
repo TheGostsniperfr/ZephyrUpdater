@@ -2,7 +2,8 @@ package com.zephyrupdater.server.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.zephyrupdater.server.database.PublicFilesRequest;
+import com.zephyrupdater.server.database.PublicFilesDB;
+import com.zephyrupdater.server.utils.PublicFilesUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,10 +13,10 @@ import static com.zephyrupdater.server.utils.serverUtils.sendRespToConn;
 
 public class RequestHandler implements HttpHandler {
 
-    private final PublicFilesRequest publicFilesRequest;
+    private final PublicFilesDB publicFilesDB;
 
-    public RequestHandler(PublicFilesRequest publicFilesRequest){
-        this.publicFilesRequest = publicFilesRequest;
+    public RequestHandler(PublicFilesDB publicFilesDB){
+        this.publicFilesDB = publicFilesDB;
     }
     @Override
     public void handle(HttpExchange conn) throws IOException {
@@ -26,7 +27,7 @@ public class RequestHandler implements HttpHandler {
             argv = argv.subList(2, argv.size());
             System.out.println("list : " + argv);
 
-            String response = this.publicFilesRequest.getResponseFromRequest(argv.getFirst());
+            String response = PublicFilesUtils.getResponseFromRequest(publicFilesDB, argv.getFirst());
             if(response == null){
                 sendRespToConn(conn, HttpURLConnection.HTTP_BAD_REQUEST, "");
                 return;

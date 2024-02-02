@@ -1,23 +1,23 @@
-package com.zephyrupdater.server.utils.commands.cmdlist;
+package com.zephyrupdater.server.commands.cmdlist;
 
 import com.zephyrupdater.server.ZephyrServerManager;
-import com.zephyrupdater.server.utils.commands.ICmd;
+import com.zephyrupdater.server.commands.ICmd;
 
 import java.util.List;
 
-public class CmdStartServer implements ICmd {
+public class CmdStopServer implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        server.start();
+        server.stop();
     }
 
     @Override
     public String getCmdName() {
-        return "start";
+        return "stop";
     }
 
     @Override
     public String getHelp() {
-        return getCmdName() + ": start the server.";
+        return getCmdName() + ": stop the server.";
     }
 }
