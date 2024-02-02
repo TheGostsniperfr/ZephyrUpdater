@@ -14,7 +14,7 @@ public class ExternalFile extends ExternalFileCore {
     }
 
     private void downloadFile(){
-        ZephyrNetClient.sendCmdToServer(new ZUCGetFile(this.getFileName(), this.getRelativeFilePath()));
+        //ZephyrNetClient.sendCmdToServer(new ZUCGetFile(this.getFileName(), this.getRelativeFilePath()));
     }
 
     private Boolean needToBeUpdate(Path gameDir){
@@ -26,13 +26,6 @@ public class ExternalFile extends ExternalFileCore {
             System.out.println("Starting to download: " + this.getFileName());
             downloadFile();
 
-            while(!ZephyrNetClient.fileReady){
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
 
             System.out.println("Success to download: " + this.getFileName());
         }

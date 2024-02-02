@@ -18,7 +18,7 @@ public class CmdAddRequest implements ICmd {
 
     @Override
     public String getCmdName() {
-        return null;
+        return "addRequest";
     }
 
     @Override

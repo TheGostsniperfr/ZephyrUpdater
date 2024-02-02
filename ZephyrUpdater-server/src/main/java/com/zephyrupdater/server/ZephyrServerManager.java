@@ -58,8 +58,9 @@ public class ZephyrServerManager {
 
     public void stop(){
         System.out.println("Stopping server.");
-        this.server.stop(300);
+        this.server.stop(3);
         System.out.println("Server is correctly stopped");
+        System.exit(0);
     }
 
     public HttpServer getServer() {

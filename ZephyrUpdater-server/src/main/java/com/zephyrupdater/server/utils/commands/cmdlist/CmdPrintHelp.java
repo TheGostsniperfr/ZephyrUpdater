@@ -1,7 +1,6 @@
 package com.zephyrupdater.server.utils.commands.cmdlist;
 
 import com.zephyrupdater.server.ZephyrServerManager;
-import com.zephyrupdater.server.utils.commands.CmdManager;
 import com.zephyrupdater.server.utils.commands.ICmd;
 
 import java.util.List;
@@ -9,9 +8,9 @@ import java.util.List;
 public class CmdPrintHelp implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        for (Class<? extends ICmd> aClass : CmdManager.getAllServerCmdClasses()) {
+        for (ICmd cmdClass : server.getCmdManager().getAllServerCmdClasses()) {
             try {
-                System.out.println(aClass.getDeclaredConstructor().newInstance().getHelp());
+                System.out.println(cmdClass.getHelp());
             } catch (Exception e){
                 e.printStackTrace();
             }
