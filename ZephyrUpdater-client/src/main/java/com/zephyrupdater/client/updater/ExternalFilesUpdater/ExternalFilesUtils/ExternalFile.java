@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUtils;
+package com.zephyrupdater.client.updater.ExternalFilesUpdater.ExternalFilesUtils;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;

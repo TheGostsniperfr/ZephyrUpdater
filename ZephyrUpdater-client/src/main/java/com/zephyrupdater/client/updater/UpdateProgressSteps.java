@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.games.utils.Updater;
+package com.zephyrupdater.client.updater;
 
 public enum UpdateProgressSteps {
     IDLE("Idle"),

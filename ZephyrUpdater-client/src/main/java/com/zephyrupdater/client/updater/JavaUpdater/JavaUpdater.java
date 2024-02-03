@@ -1,7 +1,7 @@
-package com.zephyrupdater.client.games.utils.Updater.JavaUpdater;
+package com.zephyrupdater.client.updater.JavaUpdater;
 
 import com.zephyrupdater.client.games.GameManagerCore;
-import com.zephyrupdater.client.games.utils.Updater.UpdateProgressSteps;
+import com.zephyrupdater.client.updater.UpdateProgressSteps;
 import com.zephyrupdater.common.ZUFile.ZUFileManager;
 import com.zephyrupdater.common.utils.FileUtils.ArchiveExtractor;
 import org.apache.commons.io.FileUtils;

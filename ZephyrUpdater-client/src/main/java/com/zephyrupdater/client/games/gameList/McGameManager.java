@@ -2,11 +2,11 @@ package com.zephyrupdater.client.games.gameList;
 
 import com.zephyrupdater.client.ZephyrUpdater;
 import com.zephyrupdater.client.games.GameManagerCore;
-import com.zephyrupdater.client.games.utils.Updater.CurseForgeModUpdater.CurseForgeUtils;
-import com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUpdater;
-import com.zephyrupdater.client.games.utils.Updater.JavaUpdater.JavaUpdater;
-import com.zephyrupdater.client.games.utils.Updater.UpdateProgressSteps;
-import com.zephyrupdater.client.games.utils.Updater.VanillaUpdater.McVanillaUpdater;
+import com.zephyrupdater.client.updater.CurseForgeModUpdater.CurseForgeUtils;
+import com.zephyrupdater.client.updater.ExternalFilesUpdater.ExternalFilesUpdater;
+import com.zephyrupdater.client.updater.JavaUpdater.JavaUpdater;
+import com.zephyrupdater.client.updater.UpdateProgressSteps;
+import com.zephyrupdater.client.updater.VanillaUpdater.McVanillaUpdater;
 import com.zephyrupdater.client.networkClient.ZUCommand.ZUCList.ZUCUpdate;
 import com.zephyrupdater.client.networkClient.ZephyrNetClient;
 import com.zephyrupdater.common.ZUCommandCore.ZUCList.ZUCUpdateCore;

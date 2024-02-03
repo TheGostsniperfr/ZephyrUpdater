@@ -1,6 +1,7 @@
 package com.zephyrupdater.server.handlers;
 
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.zephyrupdater.server.database.PublicFilesDB;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 
-import static com.zephyrupdater.server.utils.serverUtils.sendRespToConn;
+import static com.zephyrupdater.server.utils.ServerUtils.sendRespToConn;
 
 public class RequestHandler implements HttpHandler {
 
@@ -46,6 +47,8 @@ public class RequestHandler implements HttpHandler {
                 return;
             }
 
+            Headers headers = conn.getResponseHeaders();
+            headers.set("Content-Type", "application/json");
             sendRespToConn(conn, HttpURLConnection.HTTP_OK, responseObj.toString());
         } else {
             sendRespToConn(conn, HttpURLConnection.HTTP_BAD_METHOD, "");

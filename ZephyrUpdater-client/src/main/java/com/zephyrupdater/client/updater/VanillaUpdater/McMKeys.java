@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.games.utils.Updater.VanillaUpdater;
+package com.zephyrupdater.client.updater.VanillaUpdater;
 
 public enum McMKeys {
     /*  VERSIONS MANIFEST  */

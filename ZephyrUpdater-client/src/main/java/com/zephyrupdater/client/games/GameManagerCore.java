@@ -1,7 +1,7 @@
 package com.zephyrupdater.client.games;
 
 import com.zephyrupdater.client.ZephyrUpdater;
-import com.zephyrupdater.client.games.utils.Updater.UpdateProgressSteps;
+import com.zephyrupdater.client.updater.UpdateProgressSteps;
 import com.zephyrupdater.common.OsSpec;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 

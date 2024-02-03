@@ -1,4 +1,4 @@
-package com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUtils;
+package com.zephyrupdater.client.updater.ExternalFilesUpdater.ExternalFilesUtils;
 
 public enum ExtFilesKeys {
     FILE_NAME("filename"),

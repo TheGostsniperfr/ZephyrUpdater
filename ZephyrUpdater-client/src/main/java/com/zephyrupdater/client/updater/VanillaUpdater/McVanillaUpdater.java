@@ -1,7 +1,7 @@
-package com.zephyrupdater.client.games.utils.Updater.VanillaUpdater;
+package com.zephyrupdater.client.updater.VanillaUpdater;
 
 import com.zephyrupdater.client.games.gameList.McGameManager;
-import com.zephyrupdater.client.games.utils.Updater.UpdateProgressSteps;
+import com.zephyrupdater.client.updater.UpdateProgressSteps;
 import com.zephyrupdater.common.utils.FileUtils.DownloadableFile;
 
 import java.util.List;

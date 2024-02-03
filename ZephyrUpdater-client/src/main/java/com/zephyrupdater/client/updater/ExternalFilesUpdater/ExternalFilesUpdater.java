@@ -1,8 +1,8 @@
-package com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater;
+package com.zephyrupdater.client.updater.ExternalFilesUpdater;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUtils.ExternalFile;
+import com.zephyrupdater.client.updater.ExternalFilesUpdater.ExternalFilesUtils.ExternalFile;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
