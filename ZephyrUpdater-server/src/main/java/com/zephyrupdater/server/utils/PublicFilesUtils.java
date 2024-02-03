@@ -1,6 +1,5 @@
 package com.zephyrupdater.server.utils;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.PromptUtils;
 import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class PublicFilesUtils {
     public static void addCurseForgeModToModList(PublicFilesDB publicFilesDB, String requestAlias, String modName, String fileId, String projectId){
-        JsonObject request = PublicFilesUtils.getResponseObjFromRequest(publicFilesDB, requestAlias);
+        JsonObject request = PublicFilesUtils.getRequestObj(publicFilesDB, requestAlias);
         if(request == null){
             System.err.println("Unknown request alias.");
             return;
@@ -45,7 +44,7 @@ public class PublicFilesUtils {
             return;
         }
 
-        if(getResponseObjFromRequest(publicFilesDB, requestAlias) != null){
+        if(getRequestObj(publicFilesDB, requestAlias) != null){
             if(!PromptUtils.getUserChoice("Request Alias already exist. Overwrite ?")){
                 return;
             }
@@ -55,7 +54,7 @@ public class PublicFilesUtils {
         JsonObject newRequest = new JsonObject();
 
         newRequest.addProperty("isPublic", false);
-        newRequest.add("files", getPublicFileArrayObj(targetDir));
+        newRequest.add("files", getPublicFilesObjFromTargetDir(targetDir));
         newRequest.add("curseForgeMods", new JsonObject());
         publicFilesDB.getDB().add(requestAlias, newRequest);
 
@@ -63,31 +62,21 @@ public class PublicFilesUtils {
         System.out.println("Success to add request: " + requestAlias);
     }
 
-    private static JsonArray getPublicFileArrayObj(String targetDir){
+    private static JsonObject getPublicFilesObjFromTargetDir(String targetDir){
         Path targetDirPath = Paths.get(targetDir);
         List<File> files = FileUtils.getRecursiveFilesFromDirPath(targetDirPath);
-        JsonArray publicFileArray = new JsonArray();
+        JsonObject publicFilesObj = new JsonObject();
 
         for (File file : files){
             System.out.println("Adding: " + file.getAbsolutePath().replace(targetDir, ""));
             ExternalFileCore extFile = new ExternalFileCore(file.getAbsolutePath(), targetDir, HashAlgoType.SHA1);
-            publicFileArray.add(extFile.getJson());
+            publicFilesObj.add(extFile.getFileName(), extFile.getJson());
         }
 
-        return publicFileArray;
+        return publicFilesObj;
     }
 
-
-    public static String getResponseFromRequest(PublicFilesDB publicFilesDB, String requestAlias){
-        JsonObject responseObj = getResponseObjFromRequest(publicFilesDB, requestAlias);
-        if(responseObj != null){
-            return responseObj.toString();
-        }
-
-        return null;
-    }
-
-    public static JsonObject getResponseObjFromRequest(PublicFilesDB publicFilesDB, String requestName){
+    public static JsonObject getRequestObj(PublicFilesDB publicFilesDB, String requestName){
         for(String requestAlias : publicFilesDB.getAllRequestAlias()){
             if(requestAlias.equals(requestName)){
                 return publicFilesDB.getDB().getAsJsonObject(requestAlias);
@@ -95,5 +84,27 @@ public class PublicFilesUtils {
         }
 
         return null;
+    }
+
+    public static Boolean isPublicRequest(JsonObject request){
+        System.out.println("Test2.5");
+        System.out.println(request);
+        System.out.println(request.get("isPublic").toString());
+        return request.get("isPublic").getAsBoolean();
+    }
+
+    public static JsonObject getResponseFilesFromRequest(JsonObject request){
+        JsonObject responseObj = new JsonObject();
+        JsonObject curseForgeModsObj = request.getAsJsonObject("curseForgeMods");
+        JsonObject filesObj = request.getAsJsonObject("files");
+
+        if(curseForgeModsObj == null || filesObj == null){
+            return null;
+        }
+
+        responseObj.add("files", filesObj);
+        responseObj.add("curseForgeMods", curseForgeModsObj);
+
+        return responseObj;
     }
 }

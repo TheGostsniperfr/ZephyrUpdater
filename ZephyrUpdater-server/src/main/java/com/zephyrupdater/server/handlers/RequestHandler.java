@@ -1,5 +1,6 @@
 package com.zephyrupdater.server.handlers;
 
+import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.zephyrupdater.server.database.PublicFilesDB;
@@ -25,16 +26,33 @@ public class RequestHandler implements HttpHandler {
         if(requestMethod.equalsIgnoreCase("GET")){
             List<String> argv = List.of(conn.getRequestURI().toString().split("/"));
             argv = argv.subList(2, argv.size());
-            System.out.println("list : " + argv);
+            System.out.println("Receive request from: " + conn.getLocalAddress().getHostName() + " request: " + argv);
 
-            String response = PublicFilesUtils.getResponseFromRequest(publicFilesDB, argv.getFirst());
-            if(response == null){
+            JsonObject requestObj = PublicFilesUtils.getRequestObj(publicFilesDB, argv.getFirst());
+
+            System.out.println("Test1");
+            if(requestObj == null){
                 sendRespToConn(conn, HttpURLConnection.HTTP_BAD_REQUEST, "");
                 return;
             }
 
-            sendRespToConn(conn, HttpURLConnection.HTTP_OK, response);
+            System.out.println("Test2");
+            if(!PublicFilesUtils.isPublicRequest(requestObj)){
+                sendRespToConn(conn, HttpURLConnection.HTTP_FORBIDDEN, "");
+                return;
+            }
+
+            System.out.println("Test3");
+            JsonObject responseObj = PublicFilesUtils.getResponseFilesFromRequest(requestObj);
+            if(responseObj == null){
+                sendRespToConn(conn, HttpURLConnection.HTTP_INTERNAL_ERROR, "");
+                return;
+            }
+
+            System.out.println("Test4");
+            sendRespToConn(conn, HttpURLConnection.HTTP_OK, responseObj.toString());
         } else {
+            System.out.println("Test5");
             sendRespToConn(conn, HttpURLConnection.HTTP_BAD_METHOD, "");
         }
     }
