@@ -7,15 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 
-public class PublicFilesDB {
-    private static final String DB_NAME = "publicFilesDB.json";
+public class DBStruct {
     private final Path dbFilePath;
     private JsonObject db;
 
-    public PublicFilesDB(Path cacheDirPath){
-        this.dbFilePath = cacheDirPath.resolve(DB_NAME);
+    public DBStruct(Path cacheDirPath, String dBFileName){
+        this.dbFilePath = cacheDirPath.resolve(dBFileName);
         FileUtils.createDirIfNotExist(this.dbFilePath.getParent());
         this.loadDB();
+    }
+
+    public void addObj(String propertyName, JsonObject obj){
+        this.db.add(propertyName, obj);
+        this.saveDB();
     }
 
     public void loadDB(){

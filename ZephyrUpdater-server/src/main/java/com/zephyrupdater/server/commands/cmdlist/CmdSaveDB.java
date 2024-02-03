@@ -8,7 +8,7 @@ import java.util.List;
 public class CmdSaveDB implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        server.getPublicFilesDB().saveDB();
+        server.getFilesDB().saveDB();
     }
 
     @Override

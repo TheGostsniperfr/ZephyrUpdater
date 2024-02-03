@@ -2,7 +2,7 @@ package com.zephyrupdater.server.commands.cmdlist;
 
 import com.zephyrupdater.server.ZephyrServerManager;
 import com.zephyrupdater.server.commands.ICmd;
-import com.zephyrupdater.server.utils.PublicFilesUtils;
+import com.zephyrupdater.server.utils.FilesDBUtils;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class CmdAddRequest implements ICmd {
             return;
         }
 
-        PublicFilesUtils.addRequest(server.getPublicFilesDB(), argv.get(0), argv.get(1));
+        FilesDBUtils.addFilesRequest(server.getFilesDB(), argv.get(0), argv.get(1));
     }
 
     @Override

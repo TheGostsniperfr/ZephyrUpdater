@@ -11,24 +11,24 @@ import java.util.Set;
 public class CmdListRequest implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        Set<String> requestAliasSet = server.getPublicFilesDB().getAllRequestAlias();
+        Set<String> requestAliasSet = server.getFilesDB().getAllRequestAlias();
         System.out.println("Found " + requestAliasSet.size() + " request(s).");
 
         int i = 1;
         for(String requestName : requestAliasSet){
-            JsonObject requestObj = server.getPublicFilesDB().getDB().getAsJsonObject(requestName);
+            JsonObject requestObj = server.getFilesDB().getDB().getAsJsonObject(requestName);
 
             JsonElement targetDirObj = requestObj.get("targetDir");
-            JsonElement isPublicObj = requestObj.get("isPublic");
+            JsonElement isSharedObj = requestObj.get("isShared");
 
-            if(targetDirObj == null || isPublicObj == null){
+            if(targetDirObj == null || isSharedObj == null){
                 System.err.println("Invalid request struct: " + requestName);
                 return;
             }
 
             System.out.println((i++)
                     + "> name: " + requestName
-                    + ", isPublic: " + isPublicObj.getAsBoolean()
+                    + ", isShared: " + isSharedObj.getAsBoolean()
                     + ", targetDir: " + targetDirObj.getAsString()
             );
         }

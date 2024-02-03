@@ -20,7 +20,7 @@ public class CmdManager {
         this.addServerCmd(new CmdListRequest());
         this.addServerCmd(new CmdReloadDB());
         this.addServerCmd(new CmdSaveDB());
-        this.addServerCmd(new CmdSetPubicState());
+        this.addServerCmd(new CmdSetSharedState());
 
         this.server = server;
         new Thread(this::listenToConsole).start();

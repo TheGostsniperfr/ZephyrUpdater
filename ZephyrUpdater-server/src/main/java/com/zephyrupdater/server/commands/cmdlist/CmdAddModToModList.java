@@ -2,7 +2,7 @@ package com.zephyrupdater.server.commands.cmdlist;
 
 import com.zephyrupdater.server.ZephyrServerManager;
 import com.zephyrupdater.server.commands.ICmd;
-import com.zephyrupdater.server.utils.PublicFilesUtils;
+import com.zephyrupdater.server.utils.ModListDBUtils;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class CmdAddModToModList implements ICmd {
             return;
         }
 
-        PublicFilesUtils.addCurseForgeModToModList(server.getPublicFilesDB(), argv.get(0), argv.get(1), argv.get(2), argv.get(3));
+        ModListDBUtils.addCurseForgeModToModList(server.getModListDB(), argv.get(0), argv.get(1), argv.get(2), argv.get(3));
     }
 
     @Override

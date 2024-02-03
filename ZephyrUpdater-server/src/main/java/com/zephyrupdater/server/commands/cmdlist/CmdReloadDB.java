@@ -8,7 +8,7 @@ import java.util.List;
 public class CmdReloadDB implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        server.getPublicFilesDB().loadDB();
+        server.getFilesDB().loadDB();
     }
 
     @Override
