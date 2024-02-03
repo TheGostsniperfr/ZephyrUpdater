@@ -83,8 +83,8 @@ public class FileUtils {
 
     public static JsonObject loadJsonFromUrl(String url){
         try{
-            return loadJsonFromUrl(new URL(url));
-        } catch (MalformedURLException e) {
+            return loadJsonFromUrl(new URI(url).toURL());
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
