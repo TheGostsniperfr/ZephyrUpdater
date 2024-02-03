@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class PublicFilesDB {
     private static final String DB_NAME = "publicFilesDB.json";
-
     private final Path dbFilePath;
     private JsonObject db;
 
@@ -18,7 +17,6 @@ public class PublicFilesDB {
         FileUtils.createDirIfNotExist(this.dbFilePath.getParent());
         this.loadDB();
     }
-
 
     public void loadDB(){
         if(!Files.exists(this.dbFilePath)){

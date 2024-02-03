@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class CmdManager {
     private final ZephyrServerManager server;
-    private List<ICmd> registeredCmd;
+    private final List<ICmd> registeredCmd;
     public CmdManager(ZephyrServerManager server){
         this.registeredCmd = new ArrayList<>();
         this.addServerCmd(new CmdAddModToModList());
@@ -28,15 +28,15 @@ public class CmdManager {
 
             cmd = cmd.replace("  ", " ");
             List<String> argv = List.of(cmd.split(" "));
-
             if (argv.isEmpty()) {
                 continue;
             }
 
-            ICmd cmdClass = findCmdByName(argv.get(0));
+            ICmd cmdClass = findCmdByName(argv.getFirst());
 
             if(cmdClass == null) {
                 System.out.println(new CmdPrintHelp().getHelp());
+                continue;
             }
 
             try {

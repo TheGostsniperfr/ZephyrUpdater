@@ -2,13 +2,13 @@ package com.zephyrupdater.server.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.zephyrupdater.common.PromptUtils;
 import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 import com.zephyrupdater.common.utils.FileUtils.HashUtils.HashAlgoType;
 import com.zephyrupdater.server.database.PublicFilesDB;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -36,41 +36,47 @@ public class PublicFilesUtils {
         modList.add(modName, tmpObj);
 
         publicFilesDB.saveDB();
-        System.out.println("Success to add: " + modName);
+        System.out.println("Success to add mod: " + modName);
     }
 
     public static void addRequest(PublicFilesDB publicFilesDB, String requestAlias, String targetDir){
-        Path targetDirPath = Paths.get(targetDir);
-
-        if(!Files.exists(targetDirPath) || Files.isDirectory(targetDirPath)){
+        if(!FileUtils.isValidTargetDirPath(targetDir)){
             System.err.println("Invalid target folder");
             return;
         }
 
         if(getResponseObjFromRequest(publicFilesDB, requestAlias) != null){
-            System.err.println("Request Alias already exist.");
-            return;
+            if(!PromptUtils.getUserChoice("Request Alias already exist. Overwrite ?")){
+                return;
+            }
         }
 
         System.out.print("Creating new request:\nAlias: " + requestAlias + "\nTarget dir: " + targetDir);
         JsonObject newRequest = new JsonObject();
-        List<File> files = FileUtils.getRecursiveFilesFromDirPath(targetDirPath);
 
+        newRequest.addProperty("isPublic", false);
+        newRequest.add("files", getPublicFileArrayObj(targetDir));
+        newRequest.add("curseForgeMods", new JsonObject());
+        publicFilesDB.getDB().add(requestAlias, newRequest);
+
+        publicFilesDB.saveDB();
+        System.out.println("Success to add request: " + requestAlias);
+    }
+
+    private static JsonArray getPublicFileArrayObj(String targetDir){
+        Path targetDirPath = Paths.get(targetDir);
+        List<File> files = FileUtils.getRecursiveFilesFromDirPath(targetDirPath);
         JsonArray publicFileArray = new JsonArray();
+
         for (File file : files){
             System.out.println("Adding: " + file.getAbsolutePath().replace(targetDir, ""));
             ExternalFileCore extFile = new ExternalFileCore(file.getAbsolutePath(), targetDir, HashAlgoType.SHA1);
-            publicFileArray.add(extFile.getJson().toString());
+            publicFileArray.add(extFile.getJson());
         }
 
-        newRequest.addProperty("isPublic", false);
-        newRequest.add("files", publicFileArray);
-        newRequest.add("curseForgeMods", new JsonObject());
-
-        publicFilesDB.getDB().add(requestAlias, newRequest);
-
-        System.out.println("Success to add: " + requestAlias);
+        return publicFileArray;
     }
+
 
     public static String getResponseFromRequest(PublicFilesDB publicFilesDB, String requestAlias){
         JsonObject responseObj = getResponseObjFromRequest(publicFilesDB, requestAlias);

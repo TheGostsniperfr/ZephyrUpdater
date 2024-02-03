@@ -24,6 +24,6 @@ public class CmdAddRequest implements ICmd {
 
     @Override
     public String getHelp() {
-        return getCmdName() + ": add a new request to database.";
+        return getCmdName() + " [request alias] [target folder]: add a new request to database.";
     }
 }

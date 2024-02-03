@@ -13,6 +13,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class FileUtils {
             throw new RuntimeException("Error to read stream ");
         }
 
-        System.out.println("raw data: " + byteArrayOutputStream.toString(StandardCharsets.UTF_8));
+        //System.out.println("raw data: " + byteArrayOutputStream.toString(StandardCharsets.UTF_8));
         return JsonParser.parseString(byteArrayOutputStream.toString(StandardCharsets.UTF_8)).getAsJsonObject();
     }
 
@@ -150,5 +151,13 @@ public class FileUtils {
         }
 
         return HashAlgo.getHashFromFilePath(absFilePath, hashAlgoType).equals(hash);
+    }
+
+    public static Boolean isValidTargetDirPath(Path targetDirPath){
+        return Files.exists(targetDirPath) && Files.isDirectory(targetDirPath);
+    }
+
+    public static Boolean isValidTargetDirPath(String targetDirStrPath){
+        return isValidTargetDirPath(Paths.get(targetDirStrPath));
     }
 }

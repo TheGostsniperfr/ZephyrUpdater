@@ -8,9 +8,11 @@ import java.util.List;
 public class CmdPrintHelp implements ICmd {
     @Override
     public void execute(ZephyrServerManager server, List<String> argv) {
-        for (ICmd cmdClass : server.getCmdManager().getAllServerCmdClasses()) {
+        List<ICmd> cmdList = server.getCmdManager().getAllServerCmdClasses();
+        System.out.println("Found " + cmdList.size() + " commands:");
+        for (int i = 0; i < cmdList.size() ; i++) {
             try {
-                System.out.println(cmdClass.getHelp());
+                System.out.println((i + 1) + ": " + cmdList.get(i).getHelp());
             } catch (Exception e){
                 e.printStackTrace();
             }

@@ -74,8 +74,8 @@ public class ExternalFileCore {
     }
     public JsonObject getJson(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(ExtFileKeys.SIZE.getKey(), this.size);
         jsonObject.addProperty(ExtFileKeys.RELATIVE_FILE_PATH.getKey(), this.relativeFilePath.toString());
+        jsonObject.addProperty(ExtFileKeys.SIZE.getKey(), this.size);
         jsonObject.addProperty(ExtFileKeys.HASH.getKey(), this.hash);
         jsonObject.addProperty(ExtFileKeys.HASH_ALGO.getKey(), this.hashAlgoType.getKey());
 

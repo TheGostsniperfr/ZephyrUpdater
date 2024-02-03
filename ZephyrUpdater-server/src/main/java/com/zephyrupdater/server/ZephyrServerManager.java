@@ -17,7 +17,6 @@ public class ZephyrServerManager {
     private static final int SERVER_HTTP_PORT = 8080;
     private final HttpServer server;
     private final PublicFilesDB publicFilesDB;
-
     private final CmdManager cmdManager;
     private Path publicDirPath;
     private Path cacheDirPath;

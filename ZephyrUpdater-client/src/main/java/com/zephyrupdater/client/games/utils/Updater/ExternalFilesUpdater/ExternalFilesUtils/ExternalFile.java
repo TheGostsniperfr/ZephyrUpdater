@@ -1,8 +1,6 @@
 package com.zephyrupdater.client.games.utils.Updater.ExternalFilesUpdater.ExternalFilesUtils;
 
 import com.google.gson.JsonObject;
-import com.zephyrupdater.client.networkClient.ZUCommand.ZUCList.ZUCGetFile;
-import com.zephyrupdater.client.networkClient.ZephyrNetClient;
 import com.zephyrupdater.common.utils.FileUtils.ExternalFilesUtils.ExternalFileCore;
 import com.zephyrupdater.common.utils.FileUtils.FileUtils;
 
