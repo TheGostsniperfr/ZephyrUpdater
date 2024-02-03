@@ -30,29 +30,24 @@ public class RequestHandler implements HttpHandler {
 
             JsonObject requestObj = PublicFilesUtils.getRequestObj(publicFilesDB, argv.getFirst());
 
-            System.out.println("Test1");
             if(requestObj == null){
                 sendRespToConn(conn, HttpURLConnection.HTTP_BAD_REQUEST, "");
                 return;
             }
 
-            System.out.println("Test2");
             if(!PublicFilesUtils.isPublicRequest(requestObj)){
                 sendRespToConn(conn, HttpURLConnection.HTTP_FORBIDDEN, "");
                 return;
             }
 
-            System.out.println("Test3");
             JsonObject responseObj = PublicFilesUtils.getResponseFilesFromRequest(requestObj);
             if(responseObj == null){
                 sendRespToConn(conn, HttpURLConnection.HTTP_INTERNAL_ERROR, "");
                 return;
             }
 
-            System.out.println("Test4");
             sendRespToConn(conn, HttpURLConnection.HTTP_OK, responseObj.toString());
         } else {
-            System.out.println("Test5");
             sendRespToConn(conn, HttpURLConnection.HTTP_BAD_METHOD, "");
         }
     }

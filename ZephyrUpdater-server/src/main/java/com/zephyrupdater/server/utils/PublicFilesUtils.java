@@ -54,6 +54,7 @@ public class PublicFilesUtils {
         JsonObject newRequest = new JsonObject();
 
         newRequest.addProperty("isPublic", false);
+        newRequest.addProperty("targetDir", targetDir);
         newRequest.add("files", getPublicFilesObjFromTargetDir(targetDir));
         newRequest.add("curseForgeMods", new JsonObject());
         publicFilesDB.getDB().add(requestAlias, newRequest);
@@ -87,7 +88,6 @@ public class PublicFilesUtils {
     }
 
     public static Boolean isPublicRequest(JsonObject request){
-        System.out.println("Test2.5");
         System.out.println(request);
         System.out.println(request.get("isPublic").toString());
         return request.get("isPublic").getAsBoolean();
@@ -106,5 +106,17 @@ public class PublicFilesUtils {
         responseObj.add("curseForgeMods", curseForgeModsObj);
 
         return responseObj;
+    }
+
+    public static void setPublicStateRequest(PublicFilesDB publicFilesDB, Boolean newState, String requestAlias){
+        JsonObject requestObj = getRequestObj(publicFilesDB, requestAlias);
+        if(requestObj == null){
+            System.out.println("Invalid request alias: " + requestAlias);
+            return;
+        }
+
+        requestObj.addProperty("isPublic", newState.toString());
+        publicFilesDB.saveDB();
+        System.out.println("Success to set: " + requestAlias + " isPublic: " + newState);
     }
 }

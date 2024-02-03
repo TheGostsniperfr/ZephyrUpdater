@@ -17,6 +17,10 @@ public class CmdManager {
         this.addServerCmd(new CmdPrintHelp());
         this.addServerCmd(new CmdStartServer());
         this.addServerCmd(new CmdStopServer());
+        this.addServerCmd(new CmdListRequest());
+        this.addServerCmd(new CmdReloadDB());
+        this.addServerCmd(new CmdSaveDB());
+        this.addServerCmd(new CmdSetPubicState());
 
         this.server = server;
         new Thread(this::listenToConsole).start();
