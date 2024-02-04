@@ -24,6 +24,6 @@ public class CmdAddModToModList implements ICmd {
 
     @Override
     public String getHelp() {
-        return getCmdName() + ": add a mod to the mod list.";
+        return getCmdName() + " [request alias] [mod name] [file id] [project id]: add a mod to the mod list.";
     }
 }

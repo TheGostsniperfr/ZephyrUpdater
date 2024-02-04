@@ -21,7 +21,7 @@ public class ModListHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange conn) throws IOException {
         JsonObject requestObj = ServerUtils.getRequestObjFromConn(conn, this.modListDB);
-        JsonObject responseObj = requestObj.getAsJsonObject("modList");
+        JsonObject responseObj = requestObj.getAsJsonObject("mods");
 
         if(responseObj == null){
             sendRespToConn(conn, HttpURLConnection.HTTP_INTERNAL_ERROR, "");

@@ -11,7 +11,7 @@ public class ModListDBUtils {
             return;
         }
 
-        JsonObject modList = request.getAsJsonObject("modList");
+        JsonObject modList = request.getAsJsonObject("mods");
 
         if(modList == null) { modList = new JsonObject(); }
 
@@ -27,5 +27,18 @@ public class ModListDBUtils {
 
         modListDB.saveDB();
         System.out.println("Success to add mod: " + modName);
+    }
+
+    public static void addRequest(ModListDB modListDB, String requestAlias){
+        if (DBStructUtils.isRequestAlreadyExist(modListDB, requestAlias)){
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("isShared", false);
+        jsonObject.add("mods", new JsonObject());
+
+        modListDB.addObj(requestAlias, jsonObject);
+        System.out.println("Success to add a new mod list.");
     }
 }

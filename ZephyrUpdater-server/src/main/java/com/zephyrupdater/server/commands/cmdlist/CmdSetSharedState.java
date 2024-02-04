@@ -15,27 +15,20 @@ public class CmdSetSharedState implements ICmd {
             return;
         }
 
-        DBStruct db;
-        if(argv.get(1).trim().equals("modList")){
-            db = server.getModListDB();
-        } else if (argv.get(1).trim().equals("files")) {
-            db = server.getFilesDB();
-        } else{
-            System.out.println("Invalid database name.");
-            return;
-        }
+        DBStruct db = DBStructUtils.getDBByName(server, argv.getFirst());
+        if(db == null) { return; }
 
-        Boolean newState = argv.get(0).trim().equalsIgnoreCase("true");
+        Boolean newState = argv.get(1).trim().equalsIgnoreCase("true");
         DBStructUtils.setIsShared(db, newState, argv.get(2));
     }
 
     @Override
     public String getCmdName() {
-        return "setPublicState";
+        return "setSharedState";
     }
 
     @Override
     public String getHelp() {
-        return getCmdName() + " [true|false] [modList|files] [request alias]: set the shared statue of a request.";
+        return getCmdName() + " [modList|files] [true|false] [request alias]: set the shared statue of a request.";
     }
 }

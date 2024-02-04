@@ -40,9 +40,9 @@ public class ZephyrServerManager {
     }
 
     private void initServerContext(){
-        this.server.createContext("/public/", new PublicHandler(this.publicDirPath));
-        this.server.createContext("/files/", new FilesHandler(this.filesDB));
-        this.server.createContext("/modlist/", new ModListHandler(this.modListDB));
+        this.server.createContext("/public/", new PublicHandler(this.publicDirPath)); //base url of public repo for download files
+        this.server.createContext("/files/", new FilesHandler(this.filesDB)); //base url for request files
+        this.server.createContext("/modlist/", new ModListHandler(this.modListDB)); //base url for request a modList
     }
 
     private void initServerDir() {
@@ -66,12 +66,12 @@ public class ZephyrServerManager {
         System.out.println("Saving files database.");
         this.filesDB.saveDB();
         System.out.println("Saving modList database.");
-        this.filesDB.saveDB();
+        this.modListDB.saveDB();
 
         System.out.println("Stopping http server.");
         this.server.stop(3);
 
-        System.out.println("Server is correctly stopped");
+        System.out.println("Server is correctly stopped.");
         System.exit(0);
     }
 

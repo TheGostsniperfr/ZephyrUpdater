@@ -25,7 +25,7 @@ public class FilesDBUtils {
         System.out.print("Creating new request:\nAlias: " + requestAlias + "\nTarget dir: " + targetDir);
 
         JsonObject newRequest = new JsonObject();
-        newRequest.addProperty("isPublic", false);
+        newRequest.addProperty("isShared", false);
         newRequest.addProperty("targetDir", targetDir);
         newRequest.add("files", getPublicFilesObjFromTargetDir(targetDir));
 

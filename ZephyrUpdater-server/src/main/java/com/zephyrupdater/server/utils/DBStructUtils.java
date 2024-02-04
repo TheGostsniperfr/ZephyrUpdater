@@ -2,6 +2,7 @@ package com.zephyrupdater.server.utils;
 
 import com.google.gson.JsonObject;
 import com.zephyrupdater.common.PromptUtils;
+import com.zephyrupdater.server.ZephyrServerManager;
 import com.zephyrupdater.server.database.DBStruct;
 
 public class DBStructUtils {
@@ -16,7 +17,6 @@ public class DBStructUtils {
     }
 
     public static Boolean isSharedRequest(JsonObject request){
-        System.out.println(request.get("isShared").toString());
         return request.get("isShared").getAsBoolean();
     }
 
@@ -32,11 +32,22 @@ public class DBStructUtils {
         System.out.println("Success to set: " + requestAlias + " isShared: " + newState);
     }
 
-    public static Boolean isRequestAlreadyExist(DBStruct db, String requestAlias){
-        if(DBStructUtils.getRequestObj(db, requestAlias) != null){
+    public static Boolean isRequestAlreadyExist(DBStruct db, String requestAlias) {
+        if (DBStructUtils.getRequestObj(db, requestAlias) != null) {
             return !PromptUtils.getUserChoice("Request Alias already exist. Overwrite ?");
         }
 
         return false;
+    }
+
+    public static DBStruct getDBByName(ZephyrServerManager server, String targetName){
+        if(targetName.trim().equalsIgnoreCase("files")){
+            return server.getFilesDB();
+        } else if (targetName.trim().equalsIgnoreCase("modList")) {
+            return server.getModListDB();
+        } else {
+            System.out.println("Invalid database name.");
+            return null;
+        }
     }
 }
